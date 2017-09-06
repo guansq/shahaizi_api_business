@@ -333,35 +333,10 @@ class UsersLogic extends Model
             return array('status'=>-1, 'msg'=>'缺少参数');
         }
 
-        $user = M('users')->cache(true,10)->where('user_id', $user_id)->find();
+        $user = M('seller')->cache(true,10)->where('seller_id', $user_id)->find();
         if (!$user) {
             return false;
         }
-
-        $activityLogic = new ActivityLogic;             //获取能使用优惠券个数
-        $user['coupon_count'] = $activityLogic->getUserCouponNum($user_id, 0);
-        
-        $user['collect_count'] = M('goods_collect')->where('user_id', $user_id)->count(); //获取商品收藏数量
-        $user['focus_count']   = M('store_collect')->where('user_id', $user_id)->count(); //获取商家关注数量
-        $user['visit_count']   = M('goods_visit')->where('user_id', $user_id)->count();   //商品访问记录数
-        $user['return_count']  = M('return_goods')->where(['user_id'=>$user_id, 'status'=>['<',2]])->count();   //退换货数量
-        
-        $user['waitPay']     = M('order')->where("user_id = $user_id ".C('WAITPAY'))->count(); //待付款数量
-        $user['waitSend']    = M('order')->where("user_id = $user_id ".C('WAITSEND'))->count(); //待发货数量
-        $user['waitReceive'] = M('order')->where("user_id = $user_id ".C('WAITRECEIVE'))->count(); //待收货数量
-        $user['order_count'] = $user['waitPay'] + $user['waitSend'] + $user['waitReceive'];
-        
-        $messageLogic = new \app\common\logic\MessageLogic();
-        $user['message_count'] = $messageLogic->getUserMessageCount();
-        
-        $commentLogic = new CommentLogic;
-        $user['comment_count'] = $commentLogic->getHadCommentNum($user_id); //已评论数
-        $user['uncomment_count'] = $commentLogic->getWaitCommentNum($user_id); //待评论数
-        $user['serve_comment_count'] = $commentLogic->getWaitServiceCommentNum($user_id); //服务未评价数
-        
-        $cartLogic = new CartLogic();
-        $cartLogic->setUserId($user_id);
-        $user['cart_goods_num'] = $cartLogic->getUserCartGoodsNum(); //购物车商品数量
         
         return ['status' => 1, 'msg' => '获取成功', 'result' => $user];
     }
@@ -576,7 +551,7 @@ class UsersLogic extends Model
             return false;
         }
 
-        $row = M('users')->where('user_id', $user_id)->save($data);
+        $row = M('seller')->where('seller_id', $user_id)->save($data);
         return $row !== false;
     }
 
@@ -701,7 +676,7 @@ class UsersLogic extends Model
      * @param $confirm_password 确认新 密码
      */
     public function passwordForApp($user_id,$old_password,$new_password,$is_update=true){
-        $user = M('users')->where('user_id', $user_id)->find();
+        $user = M('seller')->where('seller_id', $user_id)->find();
         if(strlen($new_password) < 6){
             return array('status'=>-1,'msg'=>'密码不能低于6位字符','result'=>'');
         }
@@ -710,7 +685,7 @@ class UsersLogic extends Model
             return array('status'=>-1,'msg'=>'旧密码错误','result'=>'');
         }
 
-        $row = M('users')->where("user_id='{$user_id}'")->update(array('password'=>$new_password));
+        $row = M('seller')->where("seller_id='{$user_id}'")->update(array('password'=>$new_password));
         if(!$row){
             return array('status'=>-1,'msg'=>'密码修改失败','result'=>'');
         }

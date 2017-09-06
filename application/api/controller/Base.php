@@ -179,20 +179,21 @@ class Base extends Controller {
                 $this->ajaxReturn($return);
             }
             $this->user = $return['result'];
-            $this->user_id = $this->user['user_id'];                    
+            $this->user_id = $this->user['seller_id'];
              // 更新最后一次操作时间 如果用户一直操作 则一直不超时
-            M('users')->where("user_id",$this->user_id)->save(array('last_login'=>time()));
+            M('seller')->where("seller_id",$this->user_id)->save(array('last_login'=>time()));
             
         } elseif (in_array($controller_name, array_keys($check_session_arr)) && in_array($action_name, $check_session_arr[$controller_name])) {
             if ($this->token) {
-                $this->user = M('users')->where("token",$this->token)->find();
+                $this->user = M('seller')->where("token",$this->token)->find();
             }
+            dump($this->user);die;
             !$this->user && $this->user = session('user');
-            $this->user && $this->user_id = $this->user['user_id'];
+            $this->user && $this->user_id = $this->user['seller_id'];
             
         } else {
-            $this->user = M('users')->where("token", $this->token)->find();
-            $this->user && ($this->user_id = $this->user['user_id']);
+            $this->user = M('seller')->where("token", $this->token)->find();
+            $this->user && ($this->user_id = $this->user['seller_id']);
         }
         session('user', $this->user);
     }
@@ -203,7 +204,7 @@ class Base extends Controller {
             return ['status'=>-100, 'msg'=>'请先登录[无token]'];
         }
 
-        $user = M('users')->where("token", $token)->find();
+        $user = M('seller')->where("token", $token)->find();
         if (empty($user)) {
             return ['status'=>-101, 'msg'=>'登录超时[token错误]'];
         }
