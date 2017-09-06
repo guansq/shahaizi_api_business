@@ -59,7 +59,7 @@ class UsersLogic extends Model
     	$result = array();
         if (!$username || !$password)
            $result= array('status'=>0,'msg'=>'请填写账号或密码');
-        $user = M('users')->where("mobile='{$username}' OR email='{$username}'")->find();
+        $user = M('seller')->where("mobile='{$username}'")->find();
         if (!$user) {
             $result = array('status'=>-1,'msg'=>'账号不存在!');
         } elseif ($password != $user['password']) {
@@ -69,14 +69,10 @@ class UsersLogic extends Model
         } /* elseif (!capache([], SESSION_ID, $capache)) {
             $result = array('status'=>-4,'msg'=>'图形验证码错误！');
         } */  else {
-            //查询用户信息之后, 查询用户的登记昵称
-            $levelId = $user['level'];
-            $levelName = M("user_level")->where("level_id = {$levelId}")->getField("level_name");
-            $user['level_name'] = $levelName;
             $user['token'] = md5(time().mt_rand(1,999999999));
             $data = ['token' => $user['token'], 'last_login' => time()];
             $push_id && $data['push_id'] = $push_id;
-            M('users')->where("user_id", $user['user_id'])->save($data);
+            M('seller')->where("seller_id", $user['seller_id'])->save($data);
             $result = array('status'=>1,'msg'=>'登陆成功','result'=>$user);
         }
         return $result;
@@ -216,7 +212,7 @@ class UsersLogic extends Model
         if($password2 != $password)
             return array('status'=>-1,'msg'=>'两次输入密码不一致','result'=>'');
         //验证是否存在用户名
-        if(get_user_info($username,1)||get_user_info($username,2))
+        if(get_user_info($username,2))
             return array('status'=>-1,'msg'=>'账号已存在','result'=>'');
 
         $map['password'] = $password;
@@ -245,14 +241,14 @@ class UsersLogic extends Model
         $map['token'] = md5(time().mt_rand(1,999999999));
         $map['last_login'] = time();
         
-        $user_id = M('users')->add($map);
+        $user_id = M('seller')->add($map);
         if(!$user_id)
             return array('status'=>-1,'msg'=>'注册失败','result'=>'');
 
         $pay_points = tpCache('basic.reg_integral'); // 会员注册赠送积分
         if($pay_points > 0)
             accountLog($user_id, 0,$pay_points, '会员注册赠送积分'); // 记录日志流水
-        $user = M('users')->where("user_id = {$user_id}")->find();
+        $user = M('seller')->where("seller_id = {$user_id}")->find();
 //        // 会员注册送优惠券
 //        $coupon = M('coupon')->where("send_end_time > ".time()." and ((createnum - send_num) > 0 or createnum = 0) and type = 2")->select();
 //        if(!empty($coupon)){

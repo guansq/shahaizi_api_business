@@ -58,7 +58,7 @@ class UsersLogic extends Model
      */
     public function addUser($user)
     {
-		$user_count = Db::name('users')
+		$user_count = Db::name('seller')
 				->where(function($query) use ($user){
 					if ($user['email']) {
 						$query->where('email',$user['email']);
@@ -78,18 +78,6 @@ class UsersLogic extends Model
     	if(!$user_id){
     		return array('status'=>-1,'msg'=>'添加失败');
     	}else{
-    		$pay_points = tpCache('basic.reg_integral'); // 会员注册赠送积分
-    		if($pay_points > 0)
-    			accountLog($user_id, 0 , $pay_points , '会员注册赠送积分'); // 记录日志流水
-    		// 会员注册送优惠券
-//    		$coupon = M('coupon')->where("send_end_time > ".time()." and ((createnum - send_num) > 0 or createnum = 0) and type = 2")->select();
-//    		if(!empty($coupon)){
-//    			foreach ($coupon as $key => $val)
-//    			{
-//    				M('coupon_list')->add(array('cid'=>$val['id'],'type'=>$val['type'],'uid'=>$user_id,'send_time'=>time()));
-//    				M('Coupon')->where("id = {$val['id']}")->setInc('send_num'); // 优惠券领取数量加一
-//    			}
-//    		}
     		return array('status'=>1,'msg'=>'添加成功','user_id'=>$user_id);
     	}
     }   
