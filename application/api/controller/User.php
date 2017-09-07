@@ -332,10 +332,10 @@ class User extends Base {
         //是否开启注册验证码机制
         if(check_mobile($username)){
             //校验验证码
-            /*$result = MsgService::verifyCaptcha($username,'reg',$code);
+            $result = MsgService::verifyCaptcha($username,'reg',$code);
             if($result['status'] != 1){
                 returnJson(-1,'验证码输入有误');
-            }*/
+            }
             //$res = $this->userLogic->check_validate_code($code, $username  , $type , $session_id , $scene);
             //if($res['status'] != 1) exit(json_encode($res));
         }
