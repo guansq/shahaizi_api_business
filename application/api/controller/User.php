@@ -32,13 +32,64 @@ class User extends Base {
         parent::__construct();
         $this->userLogic = new UsersLogic();
     }
+    /**
+     * @api      {GET} /index.php?m=Api&c=User&a=getMyInfo     获取商家信息
+     * @apiName  getMyInfo
+     * @apiGroup User
+     * @apiParam {String} username          用户名.
+     * @apiParam {String} password          密码.
+     * @apiParam {String} unique_id         手机端唯一标识 类似web pc端sessionid.
+     * @apiSuccessExample {json}    Success-Response:
+     *           Http/1.1   200 OK
+    {
+        "status": 1,
+        "msg": "登陆成功",
+        "result": {
+        "user_id": "1",
+        "email": "398145059@qq.com",
+        "password": "e10adc3949ba59abbe56e057f20f883e",
+        "sex": "1",
+        "birthday": "2015-12-30",
+        "user_money": "9999.39",
+        "frozen_money": "0.00",
+        "pay_points": "5281",
+        "address_id": "3",
+        "reg_time": "1245048540",
+        "last_login": "1444134213",
+        "last_ip": "127.0.0.1",
+        "qq": "3981450598",
+        "mobile": "13800138000",
+        "mobile_validated": "0",
+        "oauth": "",
+        "openid": null,
+        "head_pic": "/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg",
+        "province": "19",
+        "city": "236",
+        "district": "2339",
+        "email_validated": "1",
+        "nickname": "的广泛地"
+        "token": "9f3de86be794f81cdfa5ff3f30b99257"        // 用于 app 登录
+    }
+    }
+     * @apiErrorExample {json}  Error-Response:
+     *           Http/1.1   404 NOT FOUND
+    {
+    "status": -1,
+    "msg": "请填写账号或密码",
+    "result": ""
+    }
+     */
+    public function getMyInfo ()
+    {
+        echo $this ->user_id;die;
+    }
 
     public function test(){
         echo '11111111111';
     }
 
     /**
-     * @api      {POST} index.php?m=Api&c=User&a=login     用户登录
+     * @api      {POST} /index.php?m=Api&c=User&a=login     用户登录
      * @apiName  login
      * @apiGroup User
      * @apiParam {String} username          用户名.
@@ -289,85 +340,6 @@ class User extends Base {
             //if($res['status'] != 1) exit(json_encode($res));
         }
         $data = $this->userLogic->reg($username,$password , $password, $push_id);
-        exit(json_encode($data));
-    }
-
-    /**
-     * @api      {POST} index.php?m=Api&c=User&a=userInfo   获取用户信息done
-     * @apiName  info
-     * @apiGroup User
-     * @apiParam {String}   token           token.
-     * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-    {
-    "status": 1,
-    "msg": "获取成功",
-    "result": {
-    "user_id": 146,
-    "email": "",
-    "password": "90600d68b0f56d90c4c34284d8dfd138",
-    "sex": 0,
-    "birthday": 0,
-    "user_money": "0.00",
-    "frozen_money": "0.00",
-    "distribut_money": "0.00",
-    "pay_points": "0.0000",
-    "address_id": 0,
-    "reg_time": 1504596640,
-    "last_login": 1504602255,
-    "last_ip": "",
-    "qq": "",
-    "mobile": "18451847701",
-    "mobile_validated": 1,
-    "oauth": "",
-    "openid": null,
-    "unionid": null,
-    "head_pic": null,
-    "province": 0,
-    "city": 0,
-    "district": 0,
-    "email_validated": 0,
-    "nickname": "18451847701",
-    "level": 1,
-    "discount": "1.00",
-    "total_amount": "0.00",
-    "is_lock": 0,
-    "is_distribut": 1,
-    "first_leader": 0,
-    "second_leader": 0,
-    "third_leader": 0,
-    "fourth_leader": null,
-    "fifth_leader": null,
-    "sixth_leader": null,
-    "seventh_leader": null,
-    "token": "a279c833cebe5fb963ccba311e27c394",
-    "address": null,
-    "pay_passwd": null,
-    "pre_pay_points": "0.0000",
-    "optional": "0.0000",
-    "vipid": 0,
-    "paypoint": "0.00",
-    "coupon_count": 0,
-    "collect_count": 0,
-    "focus_count": 0,
-    "visit_count": 0,
-    "return_count": 0,
-    "waitPay": 0,
-    "waitSend": 0,
-    "waitReceive": 0,
-    "order_count": 0,
-    "message_count": 0,
-    "comment_count": 0,
-    "uncomment_count": 0,
-    "serve_comment_count": 0,
-    "cart_goods_num": 0
-    }
-    }
-     *
-     */
-    public function userInfo(){
-        //$user_id = I('user_id/d');
-        $data = $this->userLogic->getApiUserInfo($this->user_id);
         exit(json_encode($data));
     }
 

@@ -119,7 +119,7 @@ define({ "api": [
     "groupTitle": "Comment",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.com/comment/commentInfo"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//comment/commentInfo"
       }
     ]
   },
@@ -188,7 +188,7 @@ define({ "api": [
     "groupTitle": "Comment",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.com/comment/sendCommentInfo"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//comment/sendCommentInfo"
       }
     ]
   },
@@ -223,7 +223,7 @@ define({ "api": [
     "groupTitle": "Common",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.com/index/sendCaptcha"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index/sendCaptcha"
       }
     ]
   },
@@ -259,7 +259,7 @@ define({ "api": [
     "groupTitle": "DriverPack",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=DriverPack&a=getDriverDetail"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=DriverPack&a=getDriverDetail"
       }
     ]
   },
@@ -283,7 +283,7 @@ define({ "api": [
     "groupTitle": "DriverPack",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=PackLine&a=getLocalLine"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=PackLine&a=getLocalLine"
       }
     ]
   },
@@ -337,7 +337,7 @@ define({ "api": [
     "groupTitle": "File",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?a=A/file/uploadImg"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?a=A/file/uploadImg"
       }
     ]
   },
@@ -373,7 +373,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.com/index.php?m=Api&c=LocalTalent&a=getIndexLocalTalent"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=LocalTalent&a=getIndexLocalTalent"
       }
     ]
   },
@@ -409,7 +409,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=HotGuide&a=getIndexHotGuide"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=HotGuide&a=getIndexHotGuide"
       }
     ]
   },
@@ -445,7 +445,7 @@ define({ "api": [
     "groupTitle": "Index",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=NewAction&a=getIndexNewAction"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=NewAction&a=getIndexNewAction"
       }
     ]
   },
@@ -469,7 +469,7 @@ define({ "api": [
     "groupTitle": "PackLine",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=PackLine&a=getQualityLine"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=PackLine&a=getQualityLine"
       }
     ]
   },
@@ -510,7 +510,7 @@ define({ "api": [
     "groupTitle": "Recommend",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comrecommend/showMyRecommInfo"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/recommend/showMyRecommInfo"
       }
     ]
   },
@@ -622,7 +622,7 @@ define({ "api": [
     "groupTitle": "Recommend",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comrecommend/showMyRecommList"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/recommend/showMyRecommList"
       }
     ]
   },
@@ -658,7 +658,7 @@ define({ "api": [
     "groupTitle": "Talent",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=api&c=LocalTalent&a=getLocalTalentDetail"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=api&c=LocalTalent&a=getLocalTalentDetail"
       }
     ]
   },
@@ -700,7 +700,7 @@ define({ "api": [
     "groupTitle": "Talent",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.com/index.php?m=Api&c=LocalTalent&a=getLocalTalentList"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=LocalTalent&a=getLocalTalentList"
       }
     ]
   },
@@ -724,15 +724,15 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=User&a=forgetPassword"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=User&a=forgetPassword"
       }
     ]
   },
   {
-    "type": "POST",
-    "url": "index.php?m=Api&c=User&a=userInfo",
-    "title": "获取用户信息done",
-    "name": "info",
+    "type": "GET",
+    "url": "/index.php?m=Api&c=User&a=getMyInfo",
+    "title": "个人信息",
+    "name": "getMyInfo",
     "group": "User",
     "parameter": {
       "fields": {
@@ -741,8 +741,43 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "token",
-            "description": "<p>token.</p>"
+            "field": "username",
+            "description": "<p>用户名.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>密码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "unique_id",
+            "description": "<p>手机端唯一标识 类似web pc端sessionid.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pushToken",
+            "description": "<p>消息推送token.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "capache",
+            "description": "<p>图形验证码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "push_id",
+            "description": "<p>推送id，相当于第三方的reg_id.</p>"
           }
         ]
       }
@@ -751,7 +786,16 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": 1,\n\"msg\": \"获取成功\",\n\"result\": {\n\"user_id\": 146,\n\"email\": \"\",\n\"password\": \"90600d68b0f56d90c4c34284d8dfd138\",\n\"sex\": 0,\n\"birthday\": 0,\n\"user_money\": \"0.00\",\n\"frozen_money\": \"0.00\",\n\"distribut_money\": \"0.00\",\n\"pay_points\": \"0.0000\",\n\"address_id\": 0,\n\"reg_time\": 1504596640,\n\"last_login\": 1504602255,\n\"last_ip\": \"\",\n\"qq\": \"\",\n\"mobile\": \"18451847701\",\n\"mobile_validated\": 1,\n\"oauth\": \"\",\n\"openid\": null,\n\"unionid\": null,\n\"head_pic\": null,\n\"province\": 0,\n\"city\": 0,\n\"district\": 0,\n\"email_validated\": 0,\n\"nickname\": \"18451847701\",\n\"level\": 1,\n\"discount\": \"1.00\",\n\"total_amount\": \"0.00\",\n\"is_lock\": 0,\n\"is_distribut\": 1,\n\"first_leader\": 0,\n\"second_leader\": 0,\n\"third_leader\": 0,\n\"fourth_leader\": null,\n\"fifth_leader\": null,\n\"sixth_leader\": null,\n\"seventh_leader\": null,\n\"token\": \"a279c833cebe5fb963ccba311e27c394\",\n\"address\": null,\n\"pay_passwd\": null,\n\"pre_pay_points\": \"0.0000\",\n\"optional\": \"0.0000\",\n\"vipid\": 0,\n\"paypoint\": \"0.00\",\n\"coupon_count\": 0,\n\"collect_count\": 0,\n\"focus_count\": 0,\n\"visit_count\": 0,\n\"return_count\": 0,\n\"waitPay\": 0,\n\"waitSend\": 0,\n\"waitReceive\": 0,\n\"order_count\": 0,\n\"message_count\": 0,\n\"comment_count\": 0,\n\"uncomment_count\": 0,\n\"serve_comment_count\": 0,\n\"cart_goods_num\": 0\n}\n}",
+          "content": "      Http/1.1   200 OK\n{\n    \"status\": 1,\n    \"msg\": \"登陆成功\",\n    \"result\": {\n    \"user_id\": \"1\",\n    \"email\": \"398145059@qq.com\",\n    \"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n    \"sex\": \"1\",\n    \"birthday\": \"2015-12-30\",\n    \"user_money\": \"9999.39\",\n    \"frozen_money\": \"0.00\",\n    \"pay_points\": \"5281\",\n    \"address_id\": \"3\",\n    \"reg_time\": \"1245048540\",\n    \"last_login\": \"1444134213\",\n    \"last_ip\": \"127.0.0.1\",\n    \"qq\": \"3981450598\",\n    \"mobile\": \"13800138000\",\n    \"mobile_validated\": \"0\",\n    \"oauth\": \"\",\n    \"openid\": null,\n    \"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n    \"province\": \"19\",\n    \"city\": \"236\",\n    \"district\": \"2339\",\n    \"email_validated\": \"1\",\n    \"nickname\": \"的广泛地\"\n    \"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "      Http/1.1   404 NOT FOUND\n{\n\"status\": -1,\n\"msg\": \"请填写账号或密码\",\n\"result\": \"\"\n}",
           "type": "json"
         }
       ]
@@ -761,13 +805,13 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=User&a=userInfo"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=getMyInfo"
       }
     ]
   },
   {
     "type": "POST",
-    "url": "index.php?m=Api&c=User&a=login",
+    "url": "/index.php?m=Api&c=User&a=login",
     "title": "用户登录",
     "name": "login",
     "group": "User",
@@ -842,7 +886,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=User&a=login"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=login"
       }
     ]
   },
@@ -879,7 +923,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=User&a=password"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=User&a=password"
       }
     ]
   },
@@ -946,7 +990,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.com/index.php?m=Api&c=User&a=reg"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=reg"
       }
     ]
   },
@@ -1013,7 +1057,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=User&a=thirdLogin"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=User&a=thirdLogin"
       }
     ]
   },
@@ -1097,7 +1141,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://shahaizi.api.business.dev.comindex.php?m=Api&c=User&a=updateUserInfo"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=User&a=updateUserInfo"
       }
     ]
   }
