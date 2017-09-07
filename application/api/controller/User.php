@@ -503,7 +503,7 @@ class User extends Base {
         } else {
             //校验验证码
             $result = MsgService::verifyCaptcha($mobile,'resetpwd',$code);
-            if($result['code'] != 2000){
+            if($result['status'] != 1){
                 returnJson(-1,'验证码输入有误');
             }
             //修改密码
