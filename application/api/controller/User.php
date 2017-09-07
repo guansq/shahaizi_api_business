@@ -525,7 +525,7 @@ class User extends Base {
         //$consignee = I('consignee', '');
         $code = I('code');
 
-        $user = M('users')->where("mobile",$mobile)->find();
+        $user = M('seller')->where("mobile",$mobile)->find();
         if (!$user) {
             $this->ajaxReturn(['status'=>-1,'msg'=>'该手机号码没有关联账户']);
         } else {
