@@ -535,7 +535,7 @@ class User extends Base {
                 returnJson(-1,'验证码输入有误');
             }
             //修改密码
-            M('users')->where("user_id",$user['user_id'])->save(array('password'=>$password));
+            M('seller')->where("seller_id",$user['seller_id'])->save(array('password'=>$password));
             $this->ajaxReturn(['status'=>1,'msg'=>'密码已重置,请重新登录']);
         }
     }
