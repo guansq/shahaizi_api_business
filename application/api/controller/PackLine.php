@@ -11,6 +11,7 @@ class PackLine{
      * @api {GET}   index.php?m=Api&c=PackLine&a=getQualityLine     得到精品路线
      * @apiName     getQualityLine
      * @apiGroup    PackLine
+     *
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
      *{

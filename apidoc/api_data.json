@@ -229,6 +229,161 @@
   },
   {
     "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=auth_img",
+    "title": "认证图片",
+    "name": "DriveImg",
+    "group": "DriverPack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "name",
+            "description": "<p>认证名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "must_info",
+            "description": "<p>必填信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "non_mand",
+            "description": "<p>非必填信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "car_check_img",
+            "description": "<p>车检证</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "driver_img",
+            "description": "<p>驾驶证</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "drv_hold_img",
+            "description": "<p>手持身份证正面照</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "drv_front_img",
+            "description": "<p>身份证正面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "drv_back_img",
+            "description": "<p>身份证反面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "guide_img",
+            "description": "<p>导游证</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "boat_img",
+            "description": "<p>游艇驾驶证</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "auth_status",
+            "description": "<p>认证状态</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"name\": \"羊1\",\n     \"auth_status\": \"认证通过\",\n     \"img\": {\n     \"must_info\": [\n     {\n         \"title\": \"车检证\",\n         \"car_check_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"驾驶证\",\n         \"driver_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"手持身份证正面照\",\n         \"drv_hold_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"添加身份证正面\",\n         \"drv_front_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"添加身份证反面\",\n         \"drv_back_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     }\n     ],\n     \"non_mand\": [\n     {\n         \"title\": \"导游证\",\n         \"guide_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"title\": \"游艇驾驶证\",\n         \"boat_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     }\n     ]\n     }\n     }\n     }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "DriverPack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=auth_img"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=index",
+    "title": "司导首页",
+    "name": "getDriver",
+    "group": "DriverPack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"is_seller_auth\": 0,\n     \"is_drv_auth\": 1,\n     \"is_home_auth\": 0\n }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "DriverPack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=index"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "index.php?m=Api&c=DriverPack&a=getDriverDetail",
     "title": "司导详情",
     "name": "getDriverDetail",
@@ -731,7 +886,7 @@
   {
     "type": "GET",
     "url": "/index.php?m=Api&c=User&a=getMyInfo",
-    "title": "个人信息",
+    "title": "获取商家信息",
     "name": "getMyInfo",
     "group": "User",
     "parameter": {
@@ -757,27 +912,6 @@
             "optional": false,
             "field": "unique_id",
             "description": "<p>手机端唯一标识 类似web pc端sessionid.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "pushToken",
-            "description": "<p>消息推送token.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "capache",
-            "description": "<p>图形验证码.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "push_id",
-            "description": "<p>推送id，相当于第三方的reg_id.</p>"
           }
         ]
       }
@@ -786,7 +920,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "      Http/1.1   200 OK\n{\n    \"status\": 1,\n    \"msg\": \"登陆成功\",\n    \"result\": {\n    \"user_id\": \"1\",\n    \"email\": \"398145059@qq.com\",\n    \"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n    \"sex\": \"1\",\n    \"birthday\": \"2015-12-30\",\n    \"user_money\": \"9999.39\",\n    \"frozen_money\": \"0.00\",\n    \"pay_points\": \"5281\",\n    \"address_id\": \"3\",\n    \"reg_time\": \"1245048540\",\n    \"last_login\": \"1444134213\",\n    \"last_ip\": \"127.0.0.1\",\n    \"qq\": \"3981450598\",\n    \"mobile\": \"13800138000\",\n    \"mobile_validated\": \"0\",\n    \"oauth\": \"\",\n    \"openid\": null,\n    \"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n    \"province\": \"19\",\n    \"city\": \"236\",\n    \"district\": \"2339\",\n    \"email_validated\": \"1\",\n    \"nickname\": \"的广泛地\"\n    \"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n}\n}",
+          "content": "      Http/1.1   200 OK\n{\n\"status\": 1,\n\"msg\": \"登陆成功\",\n\"result\": {\n\"user_id\": \"1\",\n\"email\": \"398145059@qq.com\",\n\"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n\"sex\": \"1\",\n\"birthday\": \"2015-12-30\",\n\"user_money\": \"9999.39\",\n\"frozen_money\": \"0.00\",\n\"pay_points\": \"5281\",\n\"address_id\": \"3\",\n\"reg_time\": \"1245048540\",\n\"last_login\": \"1444134213\",\n\"last_ip\": \"127.0.0.1\",\n\"qq\": \"3981450598\",\n\"mobile\": \"13800138000\",\n\"mobile_validated\": \"0\",\n\"oauth\": \"\",\n\"openid\": null,\n\"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n\"province\": \"19\",\n\"city\": \"236\",\n\"district\": \"2339\",\n\"email_validated\": \"1\",\n\"nickname\": \"的广泛地\"\n\"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n}\n}",
           "type": "json"
         }
       ]

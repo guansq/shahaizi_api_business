@@ -146,6 +146,7 @@ class Base extends Controller {
        
         // 判断哪些控制器的 哪些方法需要登录验证的
         $check_arr = [
+            'pack'      => ['index','auth_img'],
             'cart'      => ['cart2','cart3', 'cart4'],
             'distribut' => ['add_goods', 'goods_list', 'index', 'lower_list', 'my_store', 'order_list', 'rebate_log', 'store'],
             'goods'     => ['collectGoodsOrNo'], 
@@ -153,7 +154,7 @@ class Base extends Controller {
             'order'     => ['add_comment', 'ajaxZan', 'cancel_order', 'checkType', 'comment', 'complain_handle', 'conmment_add', 'delComment', 
                 'del_order', 'dispute', 'dispute_apply', 'dispute_info', 'dispute_list', 'expose', 'expose_info', 'expose_list', 'expose_info',
                 'get_complain_talk', 'order_confirm', 'order_detail', 'order_list', 'publish_complain_talk', 'reply_add', 'return_goods',
-                'return_goods_cancel', 'return_goods_index', 'return_goods_info', 'return_goods_list', 'return_goods_refund'],
+                'return_goods_cancel', 'return_goods_index', 'return_goods_info', 'return_goods_list', 'return_goods_refund','workstation'],
 	        'payment'   => ['alipay_sign'],
             'store'     => ['collectStoreOrNo'],
             'user'      => ['account', 'account_list', 'addAddress', 'add_comment', 'add_service_comment', 'cancelOrder', 'clear_message',

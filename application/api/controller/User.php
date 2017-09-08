@@ -42,33 +42,33 @@ class User extends Base {
      * @apiSuccessExample {json}    Success-Response:
      *           Http/1.1   200 OK
     {
-        "status": 1,
-        "msg": "登陆成功",
-        "result": {
-        "user_id": "1",
-        "email": "398145059@qq.com",
-        "password": "e10adc3949ba59abbe56e057f20f883e",
-        "sex": "1",
-        "birthday": "2015-12-30",
-        "user_money": "9999.39",
-        "frozen_money": "0.00",
-        "pay_points": "5281",
-        "address_id": "3",
-        "reg_time": "1245048540",
-        "last_login": "1444134213",
-        "last_ip": "127.0.0.1",
-        "qq": "3981450598",
-        "mobile": "13800138000",
-        "mobile_validated": "0",
-        "oauth": "",
-        "openid": null,
-        "head_pic": "/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg",
-        "province": "19",
-        "city": "236",
-        "district": "2339",
-        "email_validated": "1",
-        "nickname": "的广泛地"
-        "token": "9f3de86be794f81cdfa5ff3f30b99257"        // 用于 app 登录
+    "status": 1,
+    "msg": "登陆成功",
+    "result": {
+    "user_id": "1",
+    "email": "398145059@qq.com",
+    "password": "e10adc3949ba59abbe56e057f20f883e",
+    "sex": "1",
+    "birthday": "2015-12-30",
+    "user_money": "9999.39",
+    "frozen_money": "0.00",
+    "pay_points": "5281",
+    "address_id": "3",
+    "reg_time": "1245048540",
+    "last_login": "1444134213",
+    "last_ip": "127.0.0.1",
+    "qq": "3981450598",
+    "mobile": "13800138000",
+    "mobile_validated": "0",
+    "oauth": "",
+    "openid": null,
+    "head_pic": "/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg",
+    "province": "19",
+    "city": "236",
+    "district": "2339",
+    "email_validated": "1",
+    "nickname": "的广泛地"
+    "token": "9f3de86be794f81cdfa5ff3f30b99257"        // 用于 app 登录
     }
     }
      * @apiErrorExample {json}  Error-Response:
@@ -81,7 +81,9 @@ class User extends Base {
      */
     public function getMyInfo ()
     {
-        echo $this ->user_id;die;
+        $seller_info = M("seller") -> field("seller_id,sex,nickname,language,img_url") ->where("seller_id = ".$this -> user_id) -> find();
+
+        jsonData(1,"返回成功",$seller_info);
     }
 
     public function test(){

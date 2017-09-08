@@ -33,6 +33,11 @@ if(!function_exists('resultArray')){
     }
 }
 
+function jsonData ($result,$msg,$data)
+{
+    exit(json_encode(resultArray($result, $msg, $data)));
+}
+
 // 接口返回json 数据
 if(!function_exists('returnJson')){
     function returnJson($result = 0, $msg = '', $data = []){
