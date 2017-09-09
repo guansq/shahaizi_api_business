@@ -30,8 +30,8 @@ class Base extends Controller {
             $test_str = 'POST'.print_r($_POST,true);
             $test_str .= 'GET'.print_r($_GET,true);
             file_put_contents('a.html', $test_str);            
-        }    
-        
+        }
+
         $this->checkToken(); // 检查token        
         //$this->user = M('users')->where('user_id', $this->user_id)->find();
         
@@ -50,7 +50,7 @@ class Base extends Controller {
             setcookie('token',$_REQUEST["token"]);
         }
         Session::start();
-        
+
         //file_put_contents("/data/virtualhost/tp-shop.cn/test6/a.html", $c);
         
         $local_sign = $this->getSign();
@@ -58,11 +58,11 @@ class Base extends Controller {
         
      //    if('www.tp-shop.cn' == $api_secret_key)
      //           exit(json_encode(array('status'=>-1,'msg'=>'请到后台修改php文件Application/Api/Conf/config.php 文件内的秘钥','data'=>'' )));
-            
+
         // 不参与签名验证的方法
         //@modify by wangqh. add notify
         if(!in_array(strtolower(ACTION_NAME), array('getservertime','group_list','getconfig','alipaynotify', 'notify', 'goodslist','search','goodsthumimages','login','favourite','homepage')))
-        {        
+        {
             if($local_sign != $_POST['sign'])
             {    
                 $json_arr = array('status'=>-1,'msg'=>'签名失败!!!','result'=>'' );
@@ -74,7 +74,7 @@ class Base extends Controller {
                 $json_arr = array('status'=>-1,'msg'=>'请求超时!!!','result'=>'' );
                 //exit(json_encode($json_arr));
             }
-        }       
+        }
     }
     
     /**
@@ -143,10 +143,10 @@ class Base extends Controller {
         if (empty($this->token)) {
             $this->token = $_COOKIE['token'];
         }
-       
+
         // 判断哪些控制器的 哪些方法需要登录验证的
         $check_arr = [
-            'pack'      => ['index','auth_img'],
+            'pack'      => ['index','auth_img','auth_img_up'],
             'cart'      => ['cart2','cart3', 'cart4'],
             'distribut' => ['add_goods', 'goods_list', 'index', 'lower_list', 'my_store', 'order_list', 'rebate_log', 'store'],
             'goods'     => ['collectGoodsOrNo'], 
@@ -154,7 +154,7 @@ class Base extends Controller {
             'order'     => ['add_comment', 'ajaxZan', 'cancel_order', 'checkType', 'comment', 'complain_handle', 'conmment_add', 'delComment', 
                 'del_order', 'dispute', 'dispute_apply', 'dispute_info', 'dispute_list', 'expose', 'expose_info', 'expose_list', 'expose_info',
                 'get_complain_talk', 'order_confirm', 'order_detail', 'order_list', 'publish_complain_talk', 'reply_add', 'return_goods',
-                'return_goods_cancel', 'return_goods_index', 'return_goods_info', 'return_goods_list', 'return_goods_refund','workstation'],
+                'return_goods_cancel', 'return_goods_index', 'return_goods_info', 'return_goods_list', 'return_goods_refund','workstation','singleWork','air_status','myOrder'],
 	        'payment'   => ['alipay_sign'],
             'store'     => ['collectStoreOrNo'],
             'user'      => ['account', 'account_list', 'addAddress', 'add_comment', 'add_service_comment', 'cancelOrder', 'clear_message',
@@ -162,7 +162,7 @@ class Base extends Controller {
                 'getCollectStoreData', 'getCouponList', 'getOrderList', 'getUserCollectStore', 'logout', 'message',
                 'message_switch', 'orderConfirm', 'password', 'points', 'points_list', 'recharge_list', 'return_goods','return_goods_info',
                 'return_goods_list','return_goods_status','service_comment','setDefaultAddress','updateUserInfo','upload_headpic','userInfo',
-                'visit_log','withdrawals','withdrawals_list'],
+                'visit_log','withdrawals','withdrawals_list','getMine'],
         ];
         
         // 保留状态的检查组
@@ -207,7 +207,7 @@ class Base extends Controller {
 
         $user = M('seller')->where("token", $token)->find();
         if (empty($user)) {
-            return ['status'=>-101, 'msg'=>'登录超时[token错误]'];
+            return ['status'=>-101, 'msg'=>'登录超时[token错误]',result => (object)[]];
         }
         
         // 登录超过72分钟 则为登录超时 需要重新登录.  //这个时间可以自己设置 可以设置为 20分钟

@@ -32,14 +32,14 @@ class UsersLogic extends Model
     public function login($username,$password){
     	$result = array();
         if(!$username || !$password)
-           $result= array('status'=>0,'msg'=>'请填写账号或密码');
+           $result= array('status'=>0,'msg'=>'请填写账号或密码','result'=>[]);
         $user = M('users')->where("mobile='{$username}' OR email='{$username}'")->find();
         if(!$user){
-           $result = array('status'=>-1,'msg'=>'账号不存在!');
+           $result = array('status'=>-1,'msg'=>'账号不存在!','result'=>[]);
         }elseif(encrypt($password) != $user['password']){
-           $result = array('status'=>-2,'msg'=>'密码错误!');
+           $result = array('status'=>-2,'msg'=>'密码错误!','result'=>[]);
         }elseif($user['is_lock'] == 1){
-           $result = array('status'=>-3,'msg'=>'账号异常已被锁定！！！');
+           $result = array('status'=>-3,'msg'=>'账号异常已被锁定！！！','result'=>[]);
         }else{
             //查询用户信息之后, 查询用户的登记昵称
             $levelId = $user['level'];
@@ -58,14 +58,14 @@ class UsersLogic extends Model
     public function app_login($username, $password, $capache, $push_id=0){
     	$result = array();
         if (!$username || !$password)
-           $result= array('status'=>0,'msg'=>'请填写账号或密码');
+           $result= array('status'=>0,'msg'=>'请填写账号或密码','result'=>(object)[]);
         $user = M('seller')->where("mobile='{$username}'")->find();
         if (!$user) {
-            $result = array('status'=>-1,'msg'=>'账号不存在!');
+            $result = array('status'=>-1,'msg'=>'账号不存在!','result'=>(object)[]);
         } elseif ($password != $user['password']) {
-            $result = array('status'=>-2,'msg'=>'密码错误!');
+            $result = array('status'=>-2,'msg'=>'密码错误!','result'=>(object)[]);
         } elseif ($user['is_lock'] == 1) {
-            $result = array('status'=>-3,'msg'=>'账号异常已被锁定！！！');
+            $result = array('status'=>-3,'msg'=>'账号异常已被锁定！！！','result'=>(object)[]);
         } /* elseif (!capache([], SESSION_ID, $capache)) {
             $result = array('status'=>-4,'msg'=>'图形验证码错误！');
         } */  else {

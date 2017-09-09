@@ -28,12 +28,317 @@ class Order extends Base
     }
 
     /**
+     * @api {GET}   /index.php?m=Api&c=Order&a=WorkStation     获取我的工作台
+     * @apiName     PackWorkStation
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {int} page 分页数
+     * @apiParam {int} status 状态
+
+     * @apiSuccess  {string} per_page 当前页数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+    *    "status": 1,
+    *    "msg": "返回成功",
+    *    "result": {
+    *    "total": 9,
+    *    "per_page": 2,
+    *    "current_page": "3",
+    *    "data": [
+    *    {
+    *       "air_id": 7,
+    *       "user_id": 20,
+    *       "seller_id": 20,
+    *       "customer_name": "俄罗斯",
+    *       "customer_phone": 1322222222,
+    *       "use_car_num": 10,
+    *       "work_at": 22,
+    *       "work_pointlng": 123.021,
+    *       "work_pointlat": 36.25,
+    *       "work_address": "江苏省苏州市",
+    *       "dest_pointlng": 125.236,
+    *       "dest_pointlat": 36.23,
+    *       "dest_address": "英格兰",
+    *       "status": 1,
+    *       "is_comment": 2,
+    *       "pay_way": 1,
+    *       "total_price": 100,
+    *       "real_price": "100.00",
+    *       "is_pay": 1,
+    *       "pay_time": 1504858382,
+    *       "start_time": 1504858382,
+    *       "end_time": 1504858382,
+    *       "drv_name": "醉生梦死",
+    *       "drv_id": 3,
+    *       "drv_code": "121540215",
+    *       "req_car_id": 11245,
+    *       "req_car_type": "1",
+    *       "con_car_id": 1,
+    *       "con_car_type": "2",
+    *       "type": 1,
+    *       "mile_length": 100,
+    *       "discount_id": 23,
+    *       "create_at": 1504858382,
+    *       "update_at": 1504858382
+    *    },
+    *    {
+    *       "air_id": 8,
+    *       "user_id": 20,
+    *       "seller_id": 20,
+    *       "customer_name": "美国",
+    *       "customer_phone": 1322222222,
+    *       "use_car_num": 10,
+    *       "work_at": 22,
+    *       "work_pointlng": 123.021,
+    *       "work_pointlat": 36.25,
+    *       "work_address": "江苏省苏州市",
+    *       "dest_pointlng": 125.236,
+    *       "dest_pointlat": 36.23,
+    *       "dest_address": "英格兰",
+    *       "status": 1,
+    *       "is_comment": 2,
+    *       "pay_way": 1,
+    *       "total_price": 100,
+    *       "real_price": "100.00",
+    *       "is_pay": 1,
+    *       "pay_time": 1504858382,
+    *       "start_time": 1504858382,
+    *       "end_time": 1504858382,
+    *       "drv_name": "醉生梦死",
+    *       "drv_id": 3,
+    *       "drv_code": "121540215",
+    *       "req_car_id": 11245,
+    *       "req_car_type": "1",
+    *       "con_car_id": 1,
+    *       "con_car_type": "2",
+    *       "type": 1,
+    *       "mile_length": 100,
+    *       "discount_id": 23,
+    *       "create_at": 1504858382,
+    *       "update_at": 1504858382
+    *    }
+    *    ]
+    *    }
+    *    }
+     */
+    /**
      * 获取我的工作台
      * @param $seller_id
      */
     public function workstation ()
     {
         model("common/WorkStation") -> getMyWorkStation($this -> user_id);
+    }
+
+
+    /**
+     * @api {GET}   /index.php?m=Api&c=Order&a=myOrder    获取我的订单
+     * @apiName     PackMyOrder
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {int} page 分页数
+     * @apiParam {int} status 状态
+
+     * @apiSuccess  {string} per_page 当前页数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *    "status": 1,
+     *    "msg": "返回成功",
+     *    "result": {
+     *    "data": [
+     *    {
+     *          "air_id": 3,
+     *          "user_id": 20,
+     *          "seller_id": 20,
+     *          "allot_seller_id": ",18,19,20,",
+     *          "customer_name": "中国",
+     *          "customer_phone": 1322222222,
+     *          "use_car_num": 10,
+     *          "work_at": 22,
+     *          "work_pointlng": 123.021,
+     *          "work_pointlat": 36.25,
+     *          "work_address": "江苏省苏州市",
+     *          "dest_pointlng": 125.236,
+     *          "dest_pointlat": 36.23,
+     *          "dest_address": "英格兰",
+     *          "status": 1,
+     *          "pay_way": 1,
+     *          "total_price": 100,
+     *          "real_price": "100.00",
+     *          "is_pay": 1,
+     *          "pay_time": 1504858382,
+     *          "start_time": "2017-09-08 周五 16:13",
+     *          "end_time": 1504858382,
+     *          "drv_name": "醉生梦死",
+     *          "drv_id": 3,
+     *          "drv_code": "121540215",
+     *          "req_car_id": 11245,
+     *          "req_car_type": "1",
+     *          "con_car_id": 1,
+     *          "con_car_type": "2",
+     *          "type": 1,
+     *          "mile_length": 100,
+     *          "discount_id": 23,
+     *          "create_at": 1504858382,
+     *          "update_at": 1504858382
+     *    },
+     *    {
+     *          "air_id": 4,
+     *          "user_id": 20,
+     *          "seller_id": 20,
+     *          "allot_seller_id": ",18,19,20,",
+     *          "customer_name": "日本",
+     *          "customer_phone": 1322222222,
+     *          "use_car_num": 10,
+     *          "work_at": 22,
+     *          "work_pointlng": 123.021,
+     *          "work_pointlat": 36.25,
+     *          "work_address": "江苏省苏州市",
+     *          "dest_pointlng": 125.236,
+     *          "dest_pointlat": 36.23,
+     *          "dest_address": "英格兰",
+     *          "status": 1,
+     *          "pay_way": 1,
+     *          "total_price": 100,
+     *          "real_price": "100.00",
+     *          "is_pay": 1,
+     *          "pay_time": 1504858382,
+     *          "start_time": "2017-09-08 周五 16:13",
+     *          "end_time": 1504858382,
+     *          "drv_name": "醉生梦死",
+     *          "drv_id": 3,
+     *          "drv_code": "121540215",
+     *          "req_car_id": 11245,
+     *          "req_car_type": "1",
+     *          "con_car_id": 1,
+     *          "con_car_type": "2",
+     *          "type": 1,
+     *          "mile_length": 100,
+     *          "discount_id": 23,
+     *          "create_at": 1504858382,
+     *          "update_at": 1504858382
+     *    }
+     *    ]
+     *    }
+     *    }
+     */
+    public function myOrder ()
+    {
+        model("common/WorkStation") -> orderList($this -> user_id);
+    }
+
+    /**
+     * @api {GET}   /index.php?m=Api&c=Order&a=singleWork  获取详细订单
+     * @apiName     PackSingleWork
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {int} air_id air_id值
+
+     * @apiSuccess  {string} per_page 当前页数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *    "status": 1,
+     *    "msg": "返回成功",
+     *    "result": {
+     *    "total": 9,
+     *    "per_page": 2,
+     *    "current_page": "3",
+     *    "data": [
+     *    {
+     *      "status": 1,
+     *      "msg": "返回成功",
+     *      "result": {
+     *      "data": {
+     *      "air_id": 3,
+     *      "user_id": 20,
+     *      "seller_id": 20,
+     *      "allot_seller_id": ",18,19,20,",
+     *      "customer_name": "中国",
+     *      "customer_phone": 1322222222,
+     *      "use_car_num": 10,
+     *      "work_at": 22,
+     *      "work_pointlng": 123.021,
+     *      "work_pointlat": 36.25,
+     *      "work_address": "江苏省苏州市",
+     *      "dest_pointlng": 125.236,
+     *      "dest_pointlat": 36.23,
+     *      "dest_address": "英格兰",
+     *      "status": 1,
+     *      "pay_way": 1,
+     *      "total_price": 100,
+     *      "real_price": "100.00",
+     *      "is_pay": 1,
+     *      "pay_time": 1504858382,
+     *      "start_time": "2017-09-08 周五 16:13",
+     *      "end_time": 1504858382,
+     *      "drv_name": "醉生梦死",
+     *      "drv_id": 3,
+     *      "drv_code": "121540215",
+     *      "req_car_id": 11245,
+     *      "req_car_type": "1",
+     *      "con_car_id": 1,
+     *      "con_car_type": "2",
+     *      "type": 1,
+     *      "mile_length": 100,
+     *      "discount_id": 23,
+     *      "create_at": 1504858382,
+     *      "update_at": 1504858382
+     *  }
+     *  }
+     *  }
+     */
+    public function singleWork ()
+    {
+        model("common/WorkStation") -> getMyWorkSingleStation($this -> user_id);
+    }
+
+
+    /**
+     * @api {POST}   /index.php?m=Api&c=Order&a=air_status  接单按钮
+     * @apiName     PackAcceptOrder
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {int} air_id 要被接单的air_id值
+
+     * @apiSuccess  {string} per_page 当前页数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "接单成功!",
+     *      "result": {}
+     * }
+     *  }
+     */
+    public function air_status ()
+    {
+        model("common/WorkStation") -> statusAir($this -> user_id);
+    }
+    /**
+     * @api {POST}   /index.php?m=Api&c=Order&a=order_refuse  接单按钮
+     * @apiName     OrderRefuse
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {string} air_id 已拒绝
+
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "已拒绝!",
+     *      "result": {}
+     * }
+     *  }
+     */
+    /**
+     * 订单拒绝
+     */
+    public function order_refuse()
+    {
+        model("common/WorkStation") -> order_refuse($this -> user_id);
     }
 
     /*

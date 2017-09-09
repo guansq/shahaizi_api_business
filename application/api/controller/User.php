@@ -32,61 +32,108 @@ class User extends Base {
         parent::__construct();
         $this->userLogic = new UsersLogic();
     }
+
     /**
-     * @api      {GET} /index.php?m=Api&c=User&a=getMyInfo     获取商家信息
+     * @api    {GET} /index.php?m=Api&c=User&a=getMyInfo     获取商家个人信息
      * @apiName  getMyInfo
      * @apiGroup User
-     * @apiParam {String} username          用户名.
-     * @apiParam {String} password          密码.
-     * @apiParam {String} unique_id         手机端唯一标识 类似web pc端sessionid.
+     * @apiParam {String} token   token值
      * @apiSuccessExample {json}    Success-Response:
-     *           Http/1.1   200 OK
-    {
-    "status": 1,
-    "msg": "登陆成功",
-    "result": {
-    "user_id": "1",
-    "email": "398145059@qq.com",
-    "password": "e10adc3949ba59abbe56e057f20f883e",
-    "sex": "1",
-    "birthday": "2015-12-30",
-    "user_money": "9999.39",
-    "frozen_money": "0.00",
-    "pay_points": "5281",
-    "address_id": "3",
-    "reg_time": "1245048540",
-    "last_login": "1444134213",
-    "last_ip": "127.0.0.1",
-    "qq": "3981450598",
-    "mobile": "13800138000",
-    "mobile_validated": "0",
-    "oauth": "",
-    "openid": null,
-    "head_pic": "/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg",
-    "province": "19",
-    "city": "236",
-    "district": "2339",
-    "email_validated": "1",
-    "nickname": "的广泛地"
-    "token": "9f3de86be794f81cdfa5ff3f30b99257"        // 用于 app 登录
-    }
-    }
-     * @apiErrorExample {json}  Error-Response:
-     *           Http/1.1   404 NOT FOUND
-    {
-    "status": -1,
-    "msg": "请填写账号或密码",
-    "result": ""
-    }
+     *  Http/1.1   200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "返回成功",
+     *      "result": {
+     *      "seller_id": 20,
+     *      "sex": "",
+     *      "nickname": "13222222222",
+     *      "language": "",
+     *      "head_pic": "",
+     *      "briefing": ""
+     *      }
+     *      }
+     *   @apiErrorExample {json}  Error-Response:
+     *  Http/1.1   404 NOT FOUND
+     * {
+     *     "status": -1,
+     *     "msg": "请填写账号或密码",
+     *     "result": ""
+     * }
      */
     public function getMyInfo ()
     {
-        $seller_info = M("seller") -> field("seller_id,sex,nickname,language,img_url") ->where("seller_id = ".$this -> user_id) -> find();
-
-        jsonData(1,"返回成功",$seller_info);
+        $seller_info = M("seller")
+            -> field("seller_id,sex,nickname,language,head_pic, briefing")
+            ->where("seller_id = ".$this -> user_id)
+            -> find();
+        jsonData(1,"返回成功",removeNull($seller_info));
     }
 
-    public function test(){
+    /**
+     * @api      {GET} /index.php?m=Api&c=User&a=getMine   我的
+     * @apiName  getMine
+     * @apiGroup User
+     * @apiParam {String} token   token值
+     * @apiSuccessExample {json}    Success-Response:
+     *  Http/1.1   200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "登陆成功",
+     *      "result": {
+     *      "user_id": "1",
+     *      "email": "398145059@qq.com",
+     *      "password": "e10adc3949ba59abbe56e057f20f883e",
+     *      "sex": "1",
+     *      "birthday": "2015-12-30",
+     *      "user_money": "9999.39",
+     *      "frozen_money": "0.00",
+     *      "pay_points": "5281",
+     *      "address_id": "3",
+     *      "reg_time": "1245048540",
+     *      "last_login": "1444134213",
+     *      "last_ip": "127.0.0.1",
+     *      "qq": "3981450598",
+     *      "mobile": "13800138000",
+     *      "mobile_validated": "0",
+     *      "oauth": "",
+     *      "openid": null,
+     *      "head_pic": "/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg",
+     *      "province": "19",
+     *      "city": "236",
+     *      "district": "2339",
+     *      "email_validated": "1",
+     *      "nickname": "的广泛地"
+     *      "token": "9f3de86be794f81cdfa5ff3f30b99257"        // 用于 app 登录
+     *      "paypoint": "0.00",
+     *      "comment_count": 0,
+     *      "order_count": 0,
+     *      "star": 0
+     * }
+     * }
+     * @apiErrorExample {json}  Error-Response:
+     *  Http/1.1
+     *  {
+     *      "status": -1,
+     *      "msg": "请填写账号或密码",
+     *      "result": ""
+     *  }
+     */
+    public function getMine ()
+    {
+        $seller_info = M("seller") -> field("password",ture) ->where("seller_id = ".$this -> user_id) -> find();
+        $comment_count = M("pack_comment") -> field("COUNT(pack_comment) comment") ->where("seller_id = ".$this -> user_id) -> count();
+        $order_count = M("pack_order") -> field("COUNT(pack_order) pack_order") ->where("seller_id = ".$this -> user_id) -> count();
+        $comment_count ? '' : $comment_count = 0;
+        $star_sum = M("pack_comment") -> field("SUM(star) star") ->where("seller_id = ".$this -> user_id) -> count();
+        $seller_info["comment_count"] = $comment_count["comment"] ? $comment_count["comment"] : 0;
+        $seller_info["order_count"] = $order_count ? $order_count["pack_order"] : 0;
+        $seller_info["star"] = $comment_count == 0 ? 0 : round($star_sum["star"]/$comment_count);
+        $seller_info["level"] = 1;
+        jsonData(1,"返回成功", $seller_info);
+    }
+
+    public function test()
+    {
         echo '11111111111';
     }
 
@@ -148,7 +195,7 @@ class User extends Base {
         $unique_id = I("unique_id"); // 唯一id  类似于 pc 端的session id
         $push_id = I('push_id', '');
         $data = $this->userLogic->app_login($username, $password, $capache, $push_id);
-        
+
         if($data['status'] != 1){
             $this->ajaxReturn($data);
         }

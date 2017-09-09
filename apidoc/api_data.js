@@ -260,78 +260,15 @@ define({ "api": [
             "group": "Success 200",
             "type": "string",
             "optional": false,
-            "field": "must_info",
-            "description": "<p>必填信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "non_mand",
-            "description": "<p>非必填信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "car_check_img",
-            "description": "<p>车检证</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "driver_img",
-            "description": "<p>驾驶证</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "drv_hold_img",
-            "description": "<p>手持身份证正面照</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "drv_front_img",
-            "description": "<p>身份证正面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "drv_back_img",
-            "description": "<p>身份证反面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "guide_img",
-            "description": "<p>导游证</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "boat_img",
-            "description": "<p>游艇驾驶证</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "string",
-            "optional": false,
-            "field": "auth_status",
-            "description": "<p>认证状态</p>"
+            "field": "auth_info",
+            "description": "<p>认证失败信息</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"name\": \"羊1\",\n     \"auth_status\": \"认证通过\",\n     \"img\": {\n     \"must_info\": [\n     {\n         \"title\": \"车检证\",\n         \"car_check_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"驾驶证\",\n         \"driver_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"手持身份证正面照\",\n         \"drv_hold_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"添加身份证正面\",\n         \"drv_front_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"添加身份证反面\",\n         \"drv_back_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     }\n     ],\n     \"non_mand\": [\n     {\n         \"title\": \"导游证\",\n         \"guide_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"title\": \"游艇驾驶证\",\n         \"boat_img\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     }\n     ]\n     }\n     }\n     }",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"name\": \"羊1\",\n     \"auth_status\": 1,\n     \"auth_info\": \"\",\n     \"status_text\": \"认证通过\",\n     \"img\": {\n     {\n         \"title\": \"车检证\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"驾驶证\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"手持身份证正面照\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"身份证正面\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"is_must\": 1,\n         \"title\": \"身份证反面\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n   {\n         \"title\": \"导游证\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     },\n     {\n         \"title\": \"游艇驾驶证\",\n         \"img_url\": \"http://f10.baidu.com/it/u=4227954,1443099975&fm=76\"\n     }\n     }\n     }\n     }",
           "type": "json"
         }
       ]
@@ -342,6 +279,103 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=auth_img"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=auth_img_up",
+    "title": "认证图片上传",
+    "name": "DriverUploadImg",
+    "group": "DriverPack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_check_img",
+            "description": "<p>车见证</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "driver_img",
+            "description": "<p>驾驶证</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "drv_hold_img",
+            "description": "<p>手持身份证正面照</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "drv_front_img",
+            "description": "<p>身份证正面</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "drv_back_img",
+            "description": "<p>身份证反面</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "guide_img",
+            "description": "<p>导游证</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "boat_img",
+            "description": "<p>游艇驾驶证</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "name",
+            "description": "<p>认证名称</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n\"status\": 1,\n\"msg\": \"上传成功\",\n\"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "DriverPack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=auth_img_up"
       }
     ]
   },
@@ -601,6 +635,284 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=NewAction&a=getIndexNewAction"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Order&a=order_refuse",
+    "title": "接单按钮",
+    "name": "OrderRefuse",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>已拒绝</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"已拒绝!\",\n     \"result\": {}\n}\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=order_refuse"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Order&a=air_status",
+    "title": "接单按钮",
+    "name": "PackAcceptOrder",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>要被接单的air_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>当前页数</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"接单成功!\",\n     \"result\": {}\n}\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=air_status"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Order&a=myOrder",
+    "title": "获取我的订单",
+    "name": "PackMyOrder",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "page",
+            "description": "<p>分页数</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "status",
+            "description": "<p>状态</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>当前页数</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n   \"status\": 1,\n   \"msg\": \"返回成功\",\n   \"result\": {\n   \"data\": [\n   {\n         \"air_id\": 3,\n         \"user_id\": 20,\n         \"seller_id\": 20,\n         \"allot_seller_id\": \",18,19,20,\",\n         \"customer_name\": \"中国\",\n         \"customer_phone\": 1322222222,\n         \"use_car_num\": 10,\n         \"work_at\": 22,\n         \"work_pointlng\": 123.021,\n         \"work_pointlat\": 36.25,\n         \"work_address\": \"江苏省苏州市\",\n         \"dest_pointlng\": 125.236,\n         \"dest_pointlat\": 36.23,\n         \"dest_address\": \"英格兰\",\n         \"status\": 1,\n         \"pay_way\": 1,\n         \"total_price\": 100,\n         \"real_price\": \"100.00\",\n         \"is_pay\": 1,\n         \"pay_time\": 1504858382,\n         \"start_time\": \"2017-09-08 周五 16:13\",\n         \"end_time\": 1504858382,\n         \"drv_name\": \"醉生梦死\",\n         \"drv_id\": 3,\n         \"drv_code\": \"121540215\",\n         \"req_car_id\": 11245,\n         \"req_car_type\": \"1\",\n         \"con_car_id\": 1,\n         \"con_car_type\": \"2\",\n         \"type\": 1,\n         \"mile_length\": 100,\n         \"discount_id\": 23,\n         \"create_at\": 1504858382,\n         \"update_at\": 1504858382\n   },\n   {\n         \"air_id\": 4,\n         \"user_id\": 20,\n         \"seller_id\": 20,\n         \"allot_seller_id\": \",18,19,20,\",\n         \"customer_name\": \"日本\",\n         \"customer_phone\": 1322222222,\n         \"use_car_num\": 10,\n         \"work_at\": 22,\n         \"work_pointlng\": 123.021,\n         \"work_pointlat\": 36.25,\n         \"work_address\": \"江苏省苏州市\",\n         \"dest_pointlng\": 125.236,\n         \"dest_pointlat\": 36.23,\n         \"dest_address\": \"英格兰\",\n         \"status\": 1,\n         \"pay_way\": 1,\n         \"total_price\": 100,\n         \"real_price\": \"100.00\",\n         \"is_pay\": 1,\n         \"pay_time\": 1504858382,\n         \"start_time\": \"2017-09-08 周五 16:13\",\n         \"end_time\": 1504858382,\n         \"drv_name\": \"醉生梦死\",\n         \"drv_id\": 3,\n         \"drv_code\": \"121540215\",\n         \"req_car_id\": 11245,\n         \"req_car_type\": \"1\",\n         \"con_car_id\": 1,\n         \"con_car_type\": \"2\",\n         \"type\": 1,\n         \"mile_length\": 100,\n         \"discount_id\": 23,\n         \"create_at\": 1504858382,\n         \"update_at\": 1504858382\n   }\n   ]\n   }\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=myOrder"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Order&a=singleWork",
+    "title": "获取详细订单",
+    "name": "PackSingleWork",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>air_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>当前页数</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n   \"status\": 1,\n   \"msg\": \"返回成功\",\n   \"result\": {\n   \"total\": 9,\n   \"per_page\": 2,\n   \"current_page\": \"3\",\n   \"data\": [\n   {\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"data\": {\n     \"air_id\": 3,\n     \"user_id\": 20,\n     \"seller_id\": 20,\n     \"allot_seller_id\": \",18,19,20,\",\n     \"customer_name\": \"中国\",\n     \"customer_phone\": 1322222222,\n     \"use_car_num\": 10,\n     \"work_at\": 22,\n     \"work_pointlng\": 123.021,\n     \"work_pointlat\": 36.25,\n     \"work_address\": \"江苏省苏州市\",\n     \"dest_pointlng\": 125.236,\n     \"dest_pointlat\": 36.23,\n     \"dest_address\": \"英格兰\",\n     \"status\": 1,\n     \"pay_way\": 1,\n     \"total_price\": 100,\n     \"real_price\": \"100.00\",\n     \"is_pay\": 1,\n     \"pay_time\": 1504858382,\n     \"start_time\": \"2017-09-08 周五 16:13\",\n     \"end_time\": 1504858382,\n     \"drv_name\": \"醉生梦死\",\n     \"drv_id\": 3,\n     \"drv_code\": \"121540215\",\n     \"req_car_id\": 11245,\n     \"req_car_type\": \"1\",\n     \"con_car_id\": 1,\n     \"con_car_type\": \"2\",\n     \"type\": 1,\n     \"mile_length\": 100,\n     \"discount_id\": 23,\n     \"create_at\": 1504858382,\n     \"update_at\": 1504858382\n }\n }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=singleWork"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Order&a=WorkStation",
+    "title": "获取我的工作台",
+    "name": "PackWorkStation",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "page",
+            "description": "<p>分页数</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "status",
+            "description": "<p>状态</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>当前页数</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n   \"status\": 1,\n   \"msg\": \"返回成功\",\n   \"result\": {\n   \"total\": 9,\n   \"per_page\": 2,\n   \"current_page\": \"3\",\n   \"data\": [\n   {\n      \"air_id\": 7,\n      \"user_id\": 20,\n      \"seller_id\": 20,\n      \"customer_name\": \"俄罗斯\",\n      \"customer_phone\": 1322222222,\n      \"use_car_num\": 10,\n      \"work_at\": 22,\n      \"work_pointlng\": 123.021,\n      \"work_pointlat\": 36.25,\n      \"work_address\": \"江苏省苏州市\",\n      \"dest_pointlng\": 125.236,\n      \"dest_pointlat\": 36.23,\n      \"dest_address\": \"英格兰\",\n      \"status\": 1,\n      \"is_comment\": 2,\n      \"pay_way\": 1,\n      \"total_price\": 100,\n      \"real_price\": \"100.00\",\n      \"is_pay\": 1,\n      \"pay_time\": 1504858382,\n      \"start_time\": 1504858382,\n      \"end_time\": 1504858382,\n      \"drv_name\": \"醉生梦死\",\n      \"drv_id\": 3,\n      \"drv_code\": \"121540215\",\n      \"req_car_id\": 11245,\n      \"req_car_type\": \"1\",\n      \"con_car_id\": 1,\n      \"con_car_type\": \"2\",\n      \"type\": 1,\n      \"mile_length\": 100,\n      \"discount_id\": 23,\n      \"create_at\": 1504858382,\n      \"update_at\": 1504858382\n   },\n   {\n      \"air_id\": 8,\n      \"user_id\": 20,\n      \"seller_id\": 20,\n      \"customer_name\": \"美国\",\n      \"customer_phone\": 1322222222,\n      \"use_car_num\": 10,\n      \"work_at\": 22,\n      \"work_pointlng\": 123.021,\n      \"work_pointlat\": 36.25,\n      \"work_address\": \"江苏省苏州市\",\n      \"dest_pointlng\": 125.236,\n      \"dest_pointlat\": 36.23,\n      \"dest_address\": \"英格兰\",\n      \"status\": 1,\n      \"is_comment\": 2,\n      \"pay_way\": 1,\n      \"total_price\": 100,\n      \"real_price\": \"100.00\",\n      \"is_pay\": 1,\n      \"pay_time\": 1504858382,\n      \"start_time\": 1504858382,\n      \"end_time\": 1504858382,\n      \"drv_name\": \"醉生梦死\",\n      \"drv_id\": 3,\n      \"drv_code\": \"121540215\",\n      \"req_car_id\": 11245,\n      \"req_car_type\": \"1\",\n      \"con_car_id\": 1,\n      \"con_car_type\": \"2\",\n      \"type\": 1,\n      \"mile_length\": 100,\n      \"discount_id\": 23,\n      \"create_at\": 1504858382,\n      \"update_at\": 1504858382\n   }\n   ]\n   }\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=WorkStation"
       }
     ]
   },
@@ -885,8 +1197,54 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/index.php?m=Api&c=User&a=getMine",
+    "title": "我的",
+    "name": "getMine",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " Http/1.1   200 OK\n{\n     \"status\": 1,\n     \"msg\": \"登陆成功\",\n     \"result\": {\n     \"user_id\": \"1\",\n     \"email\": \"398145059@qq.com\",\n     \"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n     \"sex\": \"1\",\n     \"birthday\": \"2015-12-30\",\n     \"user_money\": \"9999.39\",\n     \"frozen_money\": \"0.00\",\n     \"pay_points\": \"5281\",\n     \"address_id\": \"3\",\n     \"reg_time\": \"1245048540\",\n     \"last_login\": \"1444134213\",\n     \"last_ip\": \"127.0.0.1\",\n     \"qq\": \"3981450598\",\n     \"mobile\": \"13800138000\",\n     \"mobile_validated\": \"0\",\n     \"oauth\": \"\",\n     \"openid\": null,\n     \"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n     \"province\": \"19\",\n     \"city\": \"236\",\n     \"district\": \"2339\",\n     \"email_validated\": \"1\",\n     \"nickname\": \"的广泛地\"\n     \"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n     \"paypoint\": \"0.00\",\n     \"comment_count\": 0,\n     \"order_count\": 0,\n     \"star\": 0\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "Http/1.1\n{\n    \"status\": -1,\n    \"msg\": \"请填写账号或密码\",\n    \"result\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=getMine"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/index.php?m=Api&c=User&a=getMyInfo",
-    "title": "获取商家信息",
+    "title": "获取商家个人信息",
     "name": "getMyInfo",
     "group": "User",
     "parameter": {
@@ -896,22 +1254,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "username",
-            "description": "<p>用户名.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "password",
-            "description": "<p>密码.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "unique_id",
-            "description": "<p>手机端唯一标识 类似web pc端sessionid.</p>"
+            "field": "token",
+            "description": "<p>token值</p>"
           }
         ]
       }
@@ -920,7 +1264,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "      Http/1.1   200 OK\n{\n\"status\": 1,\n\"msg\": \"登陆成功\",\n\"result\": {\n\"user_id\": \"1\",\n\"email\": \"398145059@qq.com\",\n\"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n\"sex\": \"1\",\n\"birthday\": \"2015-12-30\",\n\"user_money\": \"9999.39\",\n\"frozen_money\": \"0.00\",\n\"pay_points\": \"5281\",\n\"address_id\": \"3\",\n\"reg_time\": \"1245048540\",\n\"last_login\": \"1444134213\",\n\"last_ip\": \"127.0.0.1\",\n\"qq\": \"3981450598\",\n\"mobile\": \"13800138000\",\n\"mobile_validated\": \"0\",\n\"oauth\": \"\",\n\"openid\": null,\n\"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n\"province\": \"19\",\n\"city\": \"236\",\n\"district\": \"2339\",\n\"email_validated\": \"1\",\n\"nickname\": \"的广泛地\"\n\"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n}\n}",
+          "content": " Http/1.1   200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"seller_id\": 20,\n     \"sex\": \"\",\n     \"nickname\": \"13222222222\",\n     \"language\": \"\",\n     \"head_pic\": \"\",\n     \"briefing\": \"\"\n     }\n     }",
           "type": "json"
         }
       ]
@@ -929,7 +1273,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "      Http/1.1   404 NOT FOUND\n{\n\"status\": -1,\n\"msg\": \"请填写账号或密码\",\n\"result\": \"\"\n}",
+          "content": " Http/1.1   404 NOT FOUND\n{\n    \"status\": -1,\n    \"msg\": \"请填写账号或密码\",\n    \"result\": \"\"\n}",
           "type": "json"
         }
       ]

@@ -48,7 +48,13 @@ class Pack extends Base {
             $seller["is_seller_auth"] = 0;
 
         if($drv_data["drv_id"] !=0 )
-            $seller["is_drv_auth"] = 1;
+        {
+            $driver_apply = M("pack_driver_apply") -> where("drv_id = ".$drv_data["drv_id"]) -> find();
+            if($driver_apply["auth_status"]==1)
+                $seller["is_drv_auth"] = 1;
+            else
+                $seller["is_drv_auth"] = 1;
+        }
         else
             $seller["is_drv_auth"] = 0;
 
@@ -65,17 +71,7 @@ class Pack extends Base {
      * @apiGroup    DriverPack
      * @apiParam {string} token token值
      * @apiSuccess  {string} name 认证名称
-     * @apiSuccess  {string} must_info 必填信息
-     * @apiSuccess  {string} non_mand 非必填信息
-     * @apiSuccess  {string} car_check_img 车检证
-     * @apiSuccess  {string} driver_img 驾驶证
-     * @apiSuccess  {string} drv_hold_img 手持身份证正面照
-     * @apiSuccess  {string} drv_front_img 身份证正面
-     * @apiSuccess  {string} drv_back_img 身份证反面
-     * @apiSuccess  {string} guide_img 导游证
-     * @apiSuccess  {string} boat_img 游艇驾驶证
-     * @apiSuccess  {string} auth_status 认证状态
-     *
+     * @apiSuccess  {string} auth_info 认证失败信息
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
      * {
@@ -83,9 +79,10 @@ class Pack extends Base {
      *      "msg": "返回成功",
      *      "result": {
      *      "name": "羊1",
-     *      "auth_status": "认证通过",
+     *      "auth_status": 1,
+     *      "auth_info": "",
+     *      "status_text": "认证通过",
      *      "img": {
-     *      "must_info": [
      *      {
      *          "title": "车检证",
      *          "img_url": "http://f10.baidu.com/it/u=4227954,1443099975&fm=76"
@@ -102,17 +99,15 @@ class Pack extends Base {
      *      },
      *      {
      *          "is_must": 1,
-     *          "title": "添加身份证正面",
+     *          "title": "身份证正面",
      *          "img_url": "http://f10.baidu.com/it/u=4227954,1443099975&fm=76"
      *      },
      *      {
      *          "is_must": 1,
-     *          "title": "添加身份证反面",
+     *          "title": "身份证反面",
      *          "img_url": "http://f10.baidu.com/it/u=4227954,1443099975&fm=76"
-     *      }
-     *      ],
-     *      "non_mand": [
-     *      {
+     *      },
+     *    {
      *          "title": "导游证",
      *          "img_url": "http://f10.baidu.com/it/u=4227954,1443099975&fm=76"
      *      },
@@ -120,12 +115,36 @@ class Pack extends Base {
      *          "title": "游艇驾驶证",
      *          "img_url": "http://f10.baidu.com/it/u=4227954,1443099975&fm=76"
      *      }
-     *      ]
      *      }
      *      }
      *      }
      */
     public function auth_img(){
         model("common/PackApply") -> getImgInfo($this->user_id);
+    }
+
+    /**
+     * @api {POST}   /index.php?m=Api&c=Pack&a=auth_img_up     认证图片上传
+     * @apiName     DriverUploadImg
+     * @apiGroup    DriverPack
+     * @apiParam {string} car_check_img 车见证
+     * @apiParam {string} driver_img 驾驶证
+     * @apiParam {string} drv_hold_img 手持身份证正面照
+     * @apiParam {string} drv_front_img 身份证正面
+     * @apiParam {string} drv_back_img 身份证反面
+     * @apiParam {string} guide_img 导游证
+     * @apiParam {string} boat_img 游艇驾驶证
+     * @apiParam {string} token token值
+     * @apiSuccess  {string} name 认证名称
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     * "status": 1,
+     * "msg": "上传成功",
+     * "result": {}
+     * }
+     */
+    public function auth_img_up(){
+        model("common/PackApply") -> upload($this->user_id);
     }
 }

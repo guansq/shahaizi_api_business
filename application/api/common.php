@@ -84,3 +84,29 @@ if(!function_exists('validateFile')){
         return true;
     }
 }
+if(!function_exists('removeNull')){
+    function  removeNull($array)
+    {
+        if($array)
+        {
+            array_walk($array,function ($v,$k) use (&$result){
+                if($v)
+                    $result[$k] = $v;
+                else
+                    $result[$k] = '';
+            });
+            return $result;
+        }
+    }
+}
+
+/**
+ * 司导日期转换
+ * @param $date
+ */
+function packDateFormat($date)
+{
+    $week = ["周一","周二","周三","周四","周五","周六","周日"];
+    $week_date = date("w",$date);
+    return date("Y-m-d", $date)." ".$week[$week_date-1]." ".date("H:i", $date);
+}
