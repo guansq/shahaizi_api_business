@@ -24,7 +24,7 @@ class Pack extends Base {
 
     }
     /**
-     * @api {GET}   /index.php?m=Api&c=Pack&a=index     司导首页
+     * @api {GET}   /index.php?m=Api&c=Pack&a=index     司导首页done
      * @apiName     getDriver
      * @apiGroup    DriverPack
      * @apiParam {string} token token值
@@ -66,7 +66,7 @@ class Pack extends Base {
 
     }
     /**
-     * @api {GET}   /index.php?m=Api&c=Pack&a=auth_img     认证图片
+     * @api {GET}   /index.php?m=Api&c=Pack&a=auth_img     认证图片done
      * @apiName     DriveImg
      * @apiGroup    DriverPack
      * @apiParam {string} token token值
@@ -124,7 +124,7 @@ class Pack extends Base {
     }
 
     /**
-     * @api {POST}   /index.php?m=Api&c=Pack&a=auth_img_up     认证图片上传
+     * @api {POST}   /index.php?m=Api&c=Pack&a=auth_img_up     认证图片上传done
      * @apiName     DriverUploadImg
      * @apiGroup    DriverPack
      * @apiParam {string} car_check_img 车见证

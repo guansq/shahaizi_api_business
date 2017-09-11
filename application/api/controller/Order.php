@@ -28,7 +28,7 @@ class Order extends Base
     }
 
     /**
-     * @api {GET}   /index.php?m=Api&c=Order&a=WorkStation     获取我的工作台
+     * @api {GET}   /index.php?m=Api&c=Order&a=WorkStation     获取我的工作台done
      * @apiName     PackWorkStation
      * @apiGroup    Mine
      * @apiParam {string} token token值
@@ -133,7 +133,7 @@ class Order extends Base
 
 
     /**
-     * @api {GET}   /index.php?m=Api&c=Order&a=myOrder    获取我的订单
+     * @api {GET}   /index.php?m=Api&c=Order&a=myOrder    获取我的订单done
      * @apiName     PackMyOrder
      * @apiGroup    Mine
      * @apiParam {string} pagesize 页面值
@@ -231,7 +231,7 @@ class Order extends Base
     }
 
     /**
-     * @api {GET}   /index.php?m=Api&c=Order&a=singleWork  获取详细订单
+     * @api {GET}   /index.php?m=Api&c=Order&a=singleWork  获取详细订单done
      * @apiName     PackSingleWork
      * @apiGroup    Mine
      * @apiParam {string} token token值
@@ -298,7 +298,7 @@ class Order extends Base
 
 
     /**
-     * @api {POST}   /index.php?m=Api&c=Order&a=air_status  接单按钮
+     * @api {POST}   /index.php?m=Api&c=Order&a=air_status  接单按钮done
      * @apiName     PackAcceptOrder
      * @apiGroup    Mine
      * @apiParam {string} token token值
@@ -319,7 +319,7 @@ class Order extends Base
         model("common/WorkStation") -> statusAir($this -> user_id);
     }
     /**
-     * @api {POST}   /index.php?m=Api&c=Order&a=order_refuse  接单按钮
+     * @api {POST}   /index.php?m=Api&c=Order&a=order_refuse  拒绝按钮done
      * @apiName     OrderRefuse
      * @apiGroup    Mine
      * @apiParam {string} token token值

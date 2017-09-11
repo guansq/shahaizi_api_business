@@ -26,4 +26,29 @@ class Users extends Model
         //TODO:自定义的初始化
     }
 
+    public function  updateUser ($seller_id)
+    {
+        $head_pic = I("head_pic");
+        $nickname = I("nickname");
+        $sex = I("sex");
+        $language = I("language");
+        $briefing = I("briefing");
+        $img_url = I("img_url");
+
+        $head_pic && $data["head_pic"] = $head_pic;
+        $nickname && $data["nickname"] = $nickname;
+        $sex && $data["sex"] = $sex;
+        $language && $data["language"] = $language;
+        $briefing && $data["briefing"] = $briefing;
+        $img_url && $data["img_url"] = $img_url;
+
+        if($data)
+        {
+            M("seller") -> where("seller_id = $seller_id") -> save($data);
+            jsonData(1,"修改成功！",[]);
+        }
+        else
+            jsonData(4004,"请至少填写一个信息！",[]);
+    }
+
 }

@@ -34,7 +34,7 @@ class User extends Base {
     }
 
     /**
-     * @api    {GET} /index.php?m=Api&c=User&a=getMyInfo     获取商家个人信息
+     * @api    {GET} /index.php?m=Api&c=User&a=getMyInfo     获取商家个人信息done
      * @apiName  getMyInfo
      * @apiGroup User
      * @apiParam {String} token   token值
@@ -70,7 +70,7 @@ class User extends Base {
     }
 
     /**
-     * @api      {GET} /index.php?m=Api&c=User&a=getMine   我的
+     * @api      {GET} /index.php?m=Api&c=User&a=getMine   我的done
      * @apiName  getMine
      * @apiGroup User
      * @apiParam {String} token   token值
@@ -132,16 +132,35 @@ class User extends Base {
         jsonData(1,"返回成功", $seller_info);
     }
 
+
+    /**
+     * @api      {POST} /index.php?m=Api&c=User&a=updateInfo   更新用户信息done
+     * @apiName  postUpdateInfo
+     * @apiGroup User
+     * @apiParam {String} token  token值
+     * @apiParam {String} nickname   昵称
+     * @apiParam {int} sex   性别 0 保密 1 男 2 女
+     * @apiParam {String} language   语言
+     * @apiParam {String} briefing   简介
+     * @apiParam {String} img_url   多个用| 隔开
+     * @apiSuccessExample {json}    Success-Response:
+     *  Http/1.1   200 OK
+     * {
+     *  "status": 1,
+     *  "msg": "修改成功！",
+     *  "result": {}
+     *  }
+     */
     /**
      * 更改用户信息
      */
     public function updateInfo()
     {
-
+        model("common/users") -> updateUser($this -> user_id);
     }
 
     /**
-     * @api      {POST} /index.php?m=Api&c=User&a=login     用户登录
+     * @api      {POST} /index.php?m=Api&c=User&a=login     用户登录done
      * @apiName  login
      * @apiGroup User
      * @apiParam {String} username          用户名.
@@ -305,7 +324,7 @@ class User extends Base {
     }
 
     /**
-     * @api     {POST} /index.php?m=Api&c=User&a=reg            用户注册
+     * @api     {POST} /index.php?m=Api&c=User&a=reg            用户注册done
      * @apiName   reg
      * @apiGroup  User
      * @apiParam {String} username         手机号/用户名.
@@ -396,7 +415,7 @@ class User extends Base {
     }
 
     /**
-     * @api {POST}  index.php?m=Api&c=User&a=updateUserInfo     更改用户信息
+     * @api {POST}  index.php?m=Api&c=User&a=updateUserInfo     更改用户信息done
      * @apiName     updateUserInfo
      * @apiGroup    User
      * @apiParam    {String}    [nickname]      昵称
