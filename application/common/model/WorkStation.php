@@ -18,8 +18,8 @@ class WorkStation extends Model
     public function getMyWorkStation ($seller_id)
     {
         $where[]= "allot_seller_id like '%,".$seller_id.",%'";
-
-        $data = $this->where(implode(" AND ",$where)) -> paginate(2);
+        $pagesize = I("pagesize");
+        $data = $this->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 2);
         $read = $this -> is_read ($seller_id);
         foreach ($data as $key => $val)
         {
@@ -39,14 +39,29 @@ class WorkStation extends Model
     {
         $where[]= "seller_id = $seller_id";
 
-        $this -> order_status() && $where[]= $this -> order_status();
+        $status = I("status");
+        $pagesize = I("pagesize");
+        $this -> order_status($status) && $where[]= $this -> order_status($status);
 
-        $data = $this->where(implode(" AND ",$where)) -> paginate(2);
-        foreach ($data as $key => $val)
+        $data = $this -> order("air_id desc")->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 2);
+
+        if(trim($status) == "3,4")
         {
-            $val["start_time"] = packDateFormat($val["start_time"]);
-            $result[$key] = $val;
+            $status_arr = ["3" => "wait_confirm","4" => "wait_start"];
+            foreach ($data as $key => $val)
+            {
+                $val["start_time"] = packDateFormat($val["start_time"]);
+                $result[$status_arr[$val["status"]]][] = $val;
+            }
+        }else
+        {
+            foreach ($data as $key => $val)
+            {
+                $val["start_time"] = packDateFormat($val["start_time"]);
+                $result[$key] = $val;
+            }
         }
+
         if(!$result)
             $result  = ["data" =>[] ];
         else
@@ -55,28 +70,48 @@ class WorkStation extends Model
 
     }
 
-    public function order_status ()
+    //进行中单独处理数据
+    public function statusThree ($status)
     {
-        $status = I("status");
-        if($status === 0) // 未付款
+
+    }
+
+    public function order_status ($status)
+    {
+        if($status == "" && $status !== 0)
+            $status = 7;
+        if($status == 7) //全部订单
         {
-            $where = "is_pay = 0 AND order_status = 0";
-        }elseif ($status == 1) //已付款,待派单
+            $where = "is_pay = 1 AND status >= 3 ";
+        }else
         {
-            $where = "is_pay = 1 AND order_status = 1";
-        }elseif ($status == 2)//待接单
-        {
-            $where = "is_pay = 1 AND order_status = 2";
-        }elseif($status == 3)//进行中
-        {
-            $where = "is_pay = 1 AND order_status in (3,4)";
-        }elseif($status == 5)//待评价
-        {
-            $where = "is_pay = 1 AND order_status = 5";
-        }elseif($status == 6)//已完成
-        {
-            $where = "is_pay = 1 AND order_status = 6";
+            $where = "is_pay = 1 AND status in(".$status.")";
         }
+//        if($status === 0) // 未付款
+//        {
+//            $where = "is_pay = 0 AND status = 0";
+//        }elseif ($status == 1) //已付款,待派单
+//        {
+//            $where = "is_pay = 1 AND status = 1";
+//        }elseif ($status == 2)//待接单
+//        {
+//            $where = "is_pay = 1 AND status = 2";
+//        }elseif($status == 3)//进行中
+//        {
+//            $where = "is_pay = 1 AND status == 3";
+//        }elseif($status == 4)//进行中
+//        {
+//            $where = "is_pay = 1 AND status == 4";
+//        }elseif($status == 5)//待评价
+//        {
+//            $where = "is_pay = 1 AND status = 5";
+//        }elseif($status == 6)//已完成
+//        {
+//            $where = "is_pay = 1 AND status = 6";
+//        }elseif($status == 7)
+//        {
+//            $where = "is_pay = 1 AND status >= 3 ";
+//        }
 
         return $where;
     }
@@ -124,7 +159,7 @@ class WorkStation extends Model
     public function getMyWorkSingleStation ($seller_id)
     {
         $air_id = I("air_id");
-        if(!$air_id)
+        if(empty(trim($air_id)))
             jsonData(4004,"air_id不能为空",[]);
 
 //        $where[]= "seller_id = $seller_id";
@@ -133,7 +168,7 @@ class WorkStation extends Model
         $data = $this->where($whereCondition) -> find();
         $data && $data["start_time"] = packDateFormat($data["start_time"]);
         if(!$data)
-            $data  = ["data" =>[] ];
+            $data  = [];
         else
             $data  = ["data" =>$data];
         jsonData(1,"返回成功",$data);

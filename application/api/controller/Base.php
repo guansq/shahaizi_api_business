@@ -162,7 +162,7 @@ class Base extends Controller {
                 'getCollectStoreData', 'getCouponList', 'getOrderList', 'getUserCollectStore', 'logout', 'message',
                 'message_switch', 'orderConfirm', 'password', 'points', 'points_list', 'recharge_list', 'return_goods','return_goods_info',
                 'return_goods_list','return_goods_status','service_comment','setDefaultAddress','updateUserInfo','upload_headpic','userInfo',
-                'visit_log','withdrawals','withdrawals_list','getMine'],
+                'visit_log','withdrawals','withdrawals_list','getMine','updateInfo'],
         ];
         
         // 保留状态的检查组

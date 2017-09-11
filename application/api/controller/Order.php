@@ -136,9 +136,10 @@ class Order extends Base
      * @api {GET}   /index.php?m=Api&c=Order&a=myOrder    获取我的订单
      * @apiName     PackMyOrder
      * @apiGroup    Mine
+     * @apiParam {string} pagesize 页面值
      * @apiParam {string} token token值
      * @apiParam {int} page 分页数
-     * @apiParam {int} status 状态
+     * @apiParam {int} status 状态 3,4 表示状态的数据
 
      * @apiSuccess  {string} per_page 当前页数
      * @apiSuccessExample {json}    Success-Response

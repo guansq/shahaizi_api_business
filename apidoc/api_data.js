@@ -750,6 +750,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
+            "field": "pagesize",
+            "description": "<p>页面值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
             "field": "token",
             "description": "<p>token值</p>"
           },
@@ -765,7 +772,7 @@ define({ "api": [
             "type": "int",
             "optional": false,
             "field": "status",
-            "description": "<p>状态</p>"
+            "description": "<p>状态 3,4 表示状态的数据</p>"
           }
         ]
       }
@@ -1345,7 +1352,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "      Http/1.1   200 OK\n{\n\"status\": 1,\n\"msg\": \"登陆成功\",\n\"result\": {\n\"user_id\": \"1\",\n\"email\": \"398145059@qq.com\",\n\"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n\"sex\": \"1\",\n\"birthday\": \"2015-12-30\",\n\"user_money\": \"9999.39\",\n\"frozen_money\": \"0.00\",\n\"pay_points\": \"5281\",\n\"address_id\": \"3\",\n\"reg_time\": \"1245048540\",\n\"last_login\": \"1444134213\",\n\"last_ip\": \"127.0.0.1\",\n\"qq\": \"3981450598\",\n\"mobile\": \"13800138000\",\n\"mobile_validated\": \"0\",\n\"oauth\": \"\",\n\"openid\": null,\n\"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n\"province\": \"19\",\n\"city\": \"236\",\n\"district\": \"2339\",\n\"email_validated\": \"1\",\n\"nickname\": \"的广泛地\"\n\"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n}\n}",
+          "content": "Http/1.1   200 OK\n{\n  \"status\": 1,\n  \"msg\": \"登陆成功\",\n  \"result\": {\n  \"user_id\": \"1\",\n  \"email\": \"398145059@qq.com\",\n  \"password\": \"e10adc3949ba59abbe56e057f20f883e\",\n  \"sex\": \"1\",\n  \"birthday\": \"2015-12-30\",\n  \"user_money\": \"9999.39\",\n  \"frozen_money\": \"0.00\",\n  \"pay_points\": \"5281\",\n  \"address_id\": \"3\",\n  \"reg_time\": \"1245048540\",\n  \"last_login\": \"1444134213\",\n  \"last_ip\": \"127.0.0.1\",\n  \"qq\": \"3981450598\",\n  \"mobile\": \"13800138000\",\n  \"mobile_validated\": \"0\",\n  \"oauth\": \"\",\n  \"openid\": null,\n  \"head_pic\": \"/Public/upload/head_pic/2015/12-28/56812d56854d0.jpg\",\n  \"province\": \"19\",\n  \"city\": \"236\",\n  \"district\": \"2339\",\n  \"email_validated\": \"1\",\n  \"nickname\": \"的广泛地\"\n  \"token\": \"9f3de86be794f81cdfa5ff3f30b99257\"        // 用于 app 登录\n  }\n  }",
           "type": "json"
         }
       ]
@@ -1354,7 +1361,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "      Http/1.1   404 NOT FOUND\n{\n\"status\": -1,\n\"msg\": \"请填写账号或密码\",\n\"result\": \"\"\n}",
+          "content": " Http/1.1   404 NOT FOUND\n{\n   \"status\": -1,\n   \"msg\": \"请填写账号或密码\",\n   \"result\": \"\"\n}",
           "type": "json"
         }
       ]
