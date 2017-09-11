@@ -50,12 +50,11 @@ class WorkStation extends Model
         $status = trim(I("status"));
         $pagesize = I("pagesize");
         $this -> order_status($status) && $where[]= $this -> order_status($status);
-
-        $data = $this -> order("air_id desc")->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 2);
+        $data = $this -> order("air_id desc") -> where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 2);
+        $time = time();
 
         if($status == "3,4") //进行中
         {
-            $time = time();
             foreach ($data as $key => $val)
             {
                 $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
@@ -72,6 +71,7 @@ class WorkStation extends Model
                     $result["wait_confirm"][] = $val;
                 }
             }
+
         }else
         {
             foreach ($data as $key => $val)
@@ -88,11 +88,16 @@ class WorkStation extends Model
                 $result[$key] = $val;
             }
         }
-
+        $result_num["wait_start_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> count();
+        $result_num["wait_confirm_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> count();
         if(!$result)
             $result  = ["data" =>[] ];
         else
             $result  = ["data" =>$result ];
+
+        $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
+        $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
+
         jsonData(1,"返回成功",$result);
 
     }
@@ -131,11 +136,11 @@ class WorkStation extends Model
             $where = "is_pay = 1 AND status = 2";
         }else if($status == 3)//进行中-待开始
         {
-            $where = "is_pay = 1 AND status = 3 AND start_time > '$time'";
+            $where = "is_pay = 1 AND status = 3 AND start_time > $time";
 
         }else if($status == 4)//进行中-待确认
         {
-            $where = "is_pay = 1 AND status = 3 AND start_time <= '$time'";
+            $where = "is_pay = 1 AND status = 3 AND start_time <= $time";
         }else if($status == 5)//待评价
         {
             $where = "is_pay = 1 AND status = 5";
