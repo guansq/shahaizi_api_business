@@ -193,10 +193,14 @@ class PackApply extends Model
         $all_car_info = M("pack_car_info") -> where("seller_id = $user_id") -> select();
         foreach($all_car_info as $key => $val)
         {
-            $val["car_img"] = explode("|",$val["car_img"]);
+            $car_info = getCarInfoName($val["brand_id"], $val["car_type_id"]);
+            $val["brand_name"] = $car_info["brand_name"];
+            $val["car_type_name"] = $car_info["car_type_name"];
+            $car_img = explode("|",$val["car_img"]);
+            $val["car_img"] = $car_img ? $car_img : [];
             $result[] = $val;
         }
-        dataJson(1,"返回成功",$all_car_info);
+        dataJson(1,"返回成功",$result);
     }
 
     /**
@@ -229,10 +233,15 @@ class PackApply extends Model
         else
             $car_info = removeNull($car_info);
 
-        $result = getCarInfoName($car_info["brand_id"],$car_info["car_type_id"]);
-        $car_info["brand_name"] = $result["brand_name"];
-        $car_info["car_type_name"] = $result["car_type_name"];
-        dataJson(1,"返回成功",$car_info);
+        if($car_info)
+        {
+            $result = getCarInfoName($car_info["brand_id"],$car_info["car_type_id"]);
+            $car_info["brand_name"] = $result["brand_name"];
+            $car_info["car_type_name"] = $result["car_type_name"];
+            $car_img = explode("|",$car_info["car_img"]);
+            $car_info["car_img"] = array_filter($car_img) ? $car_img : [];
+        }
+        dataJson(1,"返回成功", $car_info);
     }
 
     /**
@@ -242,7 +251,8 @@ class PackApply extends Model
     {
         $air_id = I("air_id");
 //        $pack_order_data = M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
-
+        if(!$air_id)
+            dataJson(4004,"air_id不能为0或空",[]);
         $status = 5; //待评价
         $time = time();
 
@@ -260,11 +270,59 @@ class PackApply extends Model
     public function overtime_recharge ($seller_id)
     {
         $air_id = I("air_id");
+        if(!$air_id)
+            dataJson(4004,"air_id不能为空！",[]);
+
         $pack_order_data = M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
+
         if($pack_order_data["status"] == 3 && $pack_order_data["type"] != 1 && $pack_order_data["type"] != 2) //订单进行中并且非接机送机
         {
+            $overtime_data = diffHour($pack_order_data["start_time"], $pack_order_data["end_time"]);
+            $pack_order["add_time_long"] = $overtime_data["overtime_hour"];
+            $pack_order["add_recharge"] = $overtime_data["charge"];
 
+            M("pack_order") -> where("air_id = $air_id AND seller_id = $seller_id") -> save($pack_order);
+            dataJson(1,"申请成功！",[]);
+        }else
+        {
+            dataJson(4004,"接送机不能申请加班！",[]);
         }
     }
 
+    /**
+     * 司导帮助中心
+     */
+    public function help_center ()
+    {
+        $pagesize = I("pagesize");
+        $pagesize = $pagesize ? $pagesize : 10;
+        $article = M("article") -> where("cat_id = 22") -> paginate($pagesize);
+        dataJson(1,"返回成功！",$article);
+    }
+
+    /**
+     * 发布线路
+     */
+    public function publish_line ($seller_id)
+    {
+       $line_title = I("line_title");
+       $line_price = I("line_price");
+       $line_price = I("line_price");
+       $brand_id = I("brand_id");
+       $car_type_id = I("car_type_id");
+       $cover_img = I("cover_img");
+       $bright_dot = I("bright_dot");
+       $line_detail = I("line_detail");
+    }
+
+    public function line_detail ($line_detail)
+    {
+        [
+            "abstracts" => 11111,
+            "port_num" =>
+            [
+                "cover_img" => "http://www.shaihaizi.com/111.jpg",
+            ]
+        ];
+    }
 }

@@ -24,7 +24,9 @@ class WorkStation extends Model
 
         foreach ($data as $key => $val)
         {
-            $val["start_time"] = packDateFormat($val["start_time"]);
+            $val["start_time_detail"] = packDateFormat($val["start_time"]);
+            $val["start_time"] = date("Y-m-d",$val["start_time"]);
+            $val["end_time"] = date("Y-m-d",$val["end_time"]);
             $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
             $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
             $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
@@ -67,7 +69,9 @@ class WorkStation extends Model
                 if($val["status"] == 3)
                     $val["status"] = $this -> time_status($val["start_time"]);
 
-                $val["start_time"] = packDateFormat($val["start_time"]);
+                $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                $val["start_time"] = date("Y-m-d",$val["start_time"]);
+                $val["end_time"] = date("Y-m-d",$val["end_time"]);
 
                 $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
                 $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
@@ -98,6 +102,9 @@ class WorkStation extends Model
         {
             $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
             $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+            $val["start_time_detail"] = packDateFormat($val["start_time"]);
+            $val["start_time"] = date("Y-m-d",$val["start_time"]);
+            $val["end_time"] = date("Y-m-d",$val["end_time"]);
             $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
             $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
             $val["status"] = $status;
@@ -214,6 +221,28 @@ class WorkStation extends Model
         jsonData(1,"已拒绝",[]);
     }
 
+    /**
+     * 订单已读
+     */
+    public function order_readed ($seller_id, $air_id)
+    {
+        $where = "seller_id = $seller_id AND air_id = $air_id";
+        $data =
+            [
+                "seller_id" => $seller_id,
+                "air_id" => $air_id,
+                "is_read" => 1,
+                "is_refuse" => 0
+            ];
+        $pack_midstat = M("pack_midstat") -> where($where) -> find();
+        if($pack_midstat)
+            M("pack_midstat") -> where($where)-> save($data);
+        else
+            M("pack_midstat")-> add($data);
+
+        jsonData(1,"已拒绝",[]);
+    }
+
     public function getMyWorkSingleStation ($seller_id)
     {
         $air_id = I("air_id");
@@ -224,7 +253,10 @@ class WorkStation extends Model
         $where[]= "air_id = $air_id";
         $whereCondition = implode(" AND ",$where);
         $data = $this->where($whereCondition) -> find();
-        $data && $data["start_time"] = packDateFormat($data["start_time"]);
+        $data["start_time"] = date("Y-m-d",$data["start_time"]);
+        $data["end_time"] = date("Y-m-d",$data["end_time"]);
+        $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
+        $this->order_readed($seller_id,$air_id);
         if(!$data)
             $data  = [];
         else

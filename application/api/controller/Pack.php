@@ -316,4 +316,118 @@ class Pack extends Base {
     {
         model("common/PackApply") -> getMyCarInfo($this -> user_id);
     }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=confirmOrder  确认订单done
+     * @apiName     DriverConfirmOrder
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} air_id air_id值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "订单确认成功！",
+     *      "result": {}
+     * }
+     */
+    public function confirmOrder()
+    {
+        model("common/PackApply") -> confirmOrder($this -> user_id);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=helpCenter&pagesize=   司导-帮助中心done
+     * @apiName     DriverHelpCenter
+     * @apiGroup    Pack
+     * @apiParam {string} pagesize 显示条数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *  "status": 1,
+     *  "msg": "返回成功！",
+     *  "result": {
+     *  "total": 2,
+     *  "per_page": 10,
+     *  "current_page": 1,
+     *  "data": [
+     *  {
+     *      "article_id": 15,
+     *      "cat_id": 22,
+     *      "title": "当地人服务安全吗",
+     *      "content": "&lt;p&gt;安全的&lt;/p&gt;",
+     *      "author": "",
+     *      "author_email": "",
+     *      "keywords": "",
+     *      "article_type": 2,
+     *      "is_open": 0,
+     *      "add_time": 1505266952,
+     *      "file_url": "",
+     *      "open_type": 0,
+     *      "link": "",
+     *      "description": "",
+     *      "click": 1188,
+     *      "publish_time": 1505318400,
+     *      "thumb": ""
+     *  },
+     *  {
+     *      "article_id": 16,
+     *      "cat_id": 22,
+     *      "title": "如何购买当地人服务？",
+     *      "content": "&lt;p&gt;请联系客服人员咨询&lt;/p&gt;",
+     *      "author": "",
+     *      "author_email": "",
+     *      "keywords": "",
+     *      "article_type": 2,
+     *      "is_open": 0,
+     *      "add_time": 1505267021,
+     *      "file_url": "",
+     *      "open_type": 0,
+     *      "link": "",
+     *      "description": "",
+     *      "click": 1118,
+     *      "publish_time": 1505318400,
+     *      "thumb": ""
+     *   }
+     *      ]
+     *  }
+     *  }
+     */
+    /**
+     * 帮助中心
+     */
+    public function helpCenter ()
+    {
+        model("common/PackApply") -> help_center();
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=overtime   申请加班done
+     * @apiName     DriverOvertime
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} air_id air_id值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "申请成功！",
+     *      "result": {}
+     * }
+     */
+    /**
+     * 申请加班
+     */
+    public function overtime ()
+    {
+          model("common/PackApply") -> overtime_recharge($this -> user_id);
+    }
+
+    /**
+     * 发布线路
+     */
+    public function publishLine ()
+    {
+        model("common/PackApply") -> publish_line($this -> user_id);
+    }
 }

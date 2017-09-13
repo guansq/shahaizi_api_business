@@ -115,8 +115,8 @@ if(!function_exists('removeNull')){
 function packDateFormat($date)
 {
     $week = ["周一","周二","周三","周四","周五","周六","周日"];
-    $week_date = date("w","1496419200");
-    date("Y-m-d", $date)." ".$week[$week_date-1].date("Y-m-d", $date);
+    $week_date = date("w",$date);
+    return date("Y-m-d", $date)." ".$week[$week_date-1].date("Y-m-d", $date);
 }
 
 function  getCarInfoName($brand_id = 0, $type_id = 0)
@@ -127,9 +127,14 @@ function  getCarInfoName($brand_id = 0, $type_id = 0)
     return $pack_info;
 }
 
-function  diffHour ($startdate, $enddate = 0)
+function  diffHour ($startDate,$endData)
 {
-    $overtime = M("config") -> where("inc_type = 'overtime'") -> select();
-    print_r($overtime);die;
-   return  floor((strtotime($enddate)-strtotime($startdate))%86400/3600);
+    $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
+    $go_off_time = $config["go_off_time"];
+    $current_date = date("Y-m-d",$startDate);
+    $go_off_time_concat = $current_date." ".$go_off_time;//下班时间
+    $end_date_data = date("Y-m-d H:i:s",$endData); //结束时间
+    $hour_num  = round((strtotime($end_date_data)-strtotime($go_off_time_concat))%86400/3600);
+    $price = $hour_num * $config["charge"];
+   return  ["overtime_hour" => $hour_num,"charge" => $price];
 }

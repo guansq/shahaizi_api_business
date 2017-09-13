@@ -146,7 +146,7 @@ class Base extends Controller {
 
         // 判断哪些控制器的 哪些方法需要登录验证的
         $check_arr = [
-            'pack'      => ['index','auth_img','auth_img_up','actionCar',"getMyCar","delMyCar","getMyCarInfo"],
+            'pack'      => ['index','auth_img','auth_img_up','actionCar',"getMyCar","delMyCar","getMyCarInfo","overtime","publishLine","confirmOrder"],
             'cart'      => ['cart2','cart3', 'cart4'],
             'distribut' => ['add_goods', 'goods_list', 'index', 'lower_list', 'my_store', 'order_list', 'rebate_log', 'store'],
             'goods'     => ['collectGoodsOrNo'], 
@@ -162,7 +162,7 @@ class Base extends Controller {
                 'getCollectStoreData', 'getCouponList', 'getOrderList', 'getUserCollectStore', 'logout', 'message',
                 'message_switch', 'orderConfirm', 'password', 'points', 'points_list', 'recharge_list', 'return_goods','return_goods_info',
                 'return_goods_list','return_goods_status','service_comment','setDefaultAddress','updateUserInfo','upload_headpic','userInfo',
-                'visit_log','withdrawals','withdrawals_list','getMine','updateInfo'],
+                'visit_log','withdrawals','withdrawals_list','getMine','updateInfo','getMyInfo'],
         ];
         
         // 保留状态的检查组

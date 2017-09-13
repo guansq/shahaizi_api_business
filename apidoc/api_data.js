@@ -417,66 +417,6 @@ define({ "api": [
     ]
   },
   {
-    "type": "GET",
-    "url": "index.php?m=Api&c=DriverPack&a=getDriverDetail",
-    "title": "司导详情",
-    "name": "getDriverDetail",
-    "group": "DriverPack",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "optional": false,
-            "field": "drv_id",
-            "description": "<p>{String}    司导ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response",
-          "content": "Http/1.1 200 OK\n{\n \"head_pic\" : \"http://xxx.jpg\",//司导头像\n \"putonghua\" : \"\",//普通话\n \"language\" : \"\",//精通外语\n \"putonghua\" : \"\",//东京\n \"putonghua\" : \"\",//职业\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/DriverPack.php",
-    "groupTitle": "DriverPack",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=DriverPack&a=getDriverDetail"
-      }
-    ]
-  },
-  {
-    "type": "GET",
-    "url": "index.php?m=Api&c=PackLine&a=getLocalLine",
-    "title": "得到当地司导",
-    "name": "getLocalLine",
-    "group": "DriverPack",
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n\"drv_id\"   : \"11\",//司导ID\n\"head_pic\" : \"http://xxx.jpg\",//司导图片\n\"user_name\" : \"司导姓名\",\n\"comment_level\" : \"1\",//评价等级\n\"local\" : \"\",//位置\n\"level\" : \"\",//等级\n\"grade\" : \"\",//评分\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/DriverPack.php",
-    "groupTitle": "DriverPack",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=PackLine&a=getLocalLine"
-      }
-    ]
-  },
-  {
     "type": "POST",
     "url": "index.php?a=A/file/uploadImg",
     "title": "上传图片",
@@ -1054,6 +994,50 @@ define({ "api": [
     ]
   },
   {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=confirmOrder",
+    "title": "确认订单done",
+    "name": "DriverConfirmOrder",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>air_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"订单确认成功！\",\n     \"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=confirmOrder"
+      }
+    ]
+  },
+  {
     "type": "POST",
     "url": "/index.php?m=Api&c=Pack&a=delMyCar",
     "title": "删除车辆done",
@@ -1131,6 +1115,87 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getMyCar"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=helpCenter&pagesize=",
+    "title": "司导-帮助中心done",
+    "name": "DriverHelpCenter",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n \"status\": 1,\n \"msg\": \"返回成功！\",\n \"result\": {\n \"total\": 2,\n \"per_page\": 10,\n \"current_page\": 1,\n \"data\": [\n {\n     \"article_id\": 15,\n     \"cat_id\": 22,\n     \"title\": \"当地人服务安全吗\",\n     \"content\": \"&lt;p&gt;安全的&lt;/p&gt;\",\n     \"author\": \"\",\n     \"author_email\": \"\",\n     \"keywords\": \"\",\n     \"article_type\": 2,\n     \"is_open\": 0,\n     \"add_time\": 1505266952,\n     \"file_url\": \"\",\n     \"open_type\": 0,\n     \"link\": \"\",\n     \"description\": \"\",\n     \"click\": 1188,\n     \"publish_time\": 1505318400,\n     \"thumb\": \"\"\n },\n {\n     \"article_id\": 16,\n     \"cat_id\": 22,\n     \"title\": \"如何购买当地人服务？\",\n     \"content\": \"&lt;p&gt;请联系客服人员咨询&lt;/p&gt;\",\n     \"author\": \"\",\n     \"author_email\": \"\",\n     \"keywords\": \"\",\n     \"article_type\": 2,\n     \"is_open\": 0,\n     \"add_time\": 1505267021,\n     \"file_url\": \"\",\n     \"open_type\": 0,\n     \"link\": \"\",\n     \"description\": \"\",\n     \"click\": 1118,\n     \"publish_time\": 1505318400,\n     \"thumb\": \"\"\n  }\n     ]\n }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=helpCenter&pagesize="
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=overtime",
+    "title": "申请加班done",
+    "name": "DriverOvertime",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>air_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"申请成功！\",\n     \"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=overtime"
       }
     ]
   },
@@ -1332,6 +1397,54 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503/recommend/showMyRecommList"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Sms&a=getCountry",
+    "title": "获得国家区号done",
+    "name": "GetCountry",
+    "group": "SmsInfo",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"发送成功\",\n     \"result\": []\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Sms.php",
+    "groupTitle": "SmsInfo",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Sms&a=getCountry"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Sms&a=getCountry",
+    "title": "获得国家区号done",
+    "name": "GetCountry",
+    "group": "SmsInfo",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": [\n     {\n     \"id\": 214,\n     \"country\": \"中国\",\n     \"mobile_prefix\": \"86\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 215,\n     \"country\": \"香港\",\n     \"mobile_prefix\": \"852\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 216,\n     \"country\": \"澳门\",\n     \"mobile_prefix\": \"853\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 217,\n     \"country\": \"台湾\",\n     \"mobile_prefix\": \"886\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 218,\n     \"country\": \"马来西亚\",\n     \"mobile_prefix\": \"60\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 219,\n     \"country\": \"印度尼西亚\",\n     \"mobile_prefix\": \"62\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 220,\n     \"country\": \"菲律宾\",\n     \"mobile_prefix\": \"63\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 402,\n     \"country\": \"瓦努阿图\",\n     \"mobile_prefix\": \"678\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 403,\n     \"country\": \"斐济\",\n     \"mobile_prefix\": \"679\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 404,\n     \"country\": \"科克群岛\",\n     \"mobile_prefix\": \"682\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 405,\n     \"country\": \"纽埃岛\",\n     \"mobile_prefix\": \"683\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 406,\n     \"country\": \"东萨摩亚\",\n     \"mobile_prefix\": \"684\",\n     \"area\": \"大洋洲\"\n     }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Sms.php",
+    "groupTitle": "SmsInfo",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Sms&a=getCountry"
       }
     ]
   },
