@@ -124,6 +124,63 @@ class Pack extends Base {
     }
 
     /**
+     * @api {GET}   /index.php?m=Api&c=Pack&a=actionCar     新增/修改车辆done
+     * @apiName     CarInfo
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} [car_id] 修改时传入
+     * @apiParam  {string} car_img 车辆图片，多个以|分隔
+     * @apiParam  {string} brand_id  车辆品牌id
+     * @apiParam  {string} car_type_id  车型id
+     * @apiParam  {string} seat_num  座位数
+     * @apiParam  {string} car_year  汽车年限
+     * @apiParam  {string} is_customer_insurance  是否有保险
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1  200 OK
+     * {
+     *   "status": 1,
+     *   "msg": "返回成功！",
+     *   "result": {}
+     *  }
+     */
+    /**
+     * 新增车辆或修改
+     */
+    public function actionCar ()
+    {
+        model("common/PackApply") -> addCar($this -> user_id);
+    }
+
+    /**
+     * @api {GET}   /index.php?m=Api&c=Pack&a=getCarBar  获取车辆信息done
+     * @apiName     PackGetCarBar
+     * @apiGroup    Pack
+
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *   "status": 1,
+     *   "msg": "返回成功",
+     *   "result": [
+     *   {
+     *      "id": 2,
+     *      "car_info": "丰田",
+     *      "pid": 0,
+     *      "status": 1
+     *   }
+     *   ]
+     *   }
+     */
+
+    /**
+     * 获取车辆信息
+     */
+    public function getCarBar ()
+    {
+        model("common/PackApply") -> getCarInfo();
+    }
+
+    /**
      * @api {POST}   /index.php?m=Api&c=Pack&a=auth_img_up     认证图片上传done
      * @apiName     DriverUploadImg
      * @apiGroup    DriverPack
@@ -139,12 +196,124 @@ class Pack extends Base {
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
      * {
-     * "status": 1,
-     * "msg": "上传成功",
-     * "result": {}
+     *      "status": 1,
+     *      "msg": "上传成功",
+     *      "result": {}
      * }
      */
     public function auth_img_up(){
         model("common/PackApply") -> upload($this->user_id);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getMyCar   获得我的车辆done
+     * @apiName     DriverGetMyCar
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *   "status": 1,
+     *   "msg": "返回成功",
+     *   "result": [
+     *   {
+     *      "car_id": 3,
+     *      "seller_id": 20,
+     *      "brand_id": 1,
+     *      "car_type_id": null,
+     *      "seat_num": 2,
+     *      "car_year": "20",
+     *      "is_customer_insurance": 0,
+     *      "create_at": null,
+     *      "update_at": null,
+     *      "is_state": 0,
+     *      "plate_number": "苏A-33333",
+     *      "seat_size": "小型车",
+     *      "car_img": null,
+     *      "pass_content": null
+     *   },
+     *   {
+     *      "car_id": 7,
+     *      "seller_id": 20,
+     *      "brand_id": 1,
+     *      "car_type_id": null,
+     *      "seat_num": 5,
+     *      "car_year": "10",
+     *      "is_customer_insurance": 1,
+     *      "create_at": null,
+     *      "update_at": null,
+     *      "is_state": 1,
+     *      "plate_number": "苏A-666667",
+     *      "seat_size": "中型车",
+     *      "car_img": "312154",
+     *      "pass_content": ""
+     *   }
+     *   ]
+     *   }
+     */
+    /**
+     * 获取我的车辆
+     */
+    public function getMyCar ()
+    {
+        model("common/PackApply") -> getMyAllCar($this -> user_id);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=delMyCar   删除车辆done
+     * @apiName     DriverDelMyCar
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} car_id 车辆id，多个删除用逗号隔开
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "删除成功！",
+     *      "result": {}
+     * }
+     */
+    /**
+     * 删除车辆
+     */
+    public function delMyCar()
+    {
+        model("common/PackApply") -> delMyCar($this -> user_id);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=carInfo   获取车辆详情done
+     * @apiName     DriverCarInfo
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} car_id 车辆id
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "返回成功",
+     *      "result": {
+     *      "car_id": 3,
+     *      "seller_id": 20,
+     *      "brand_id": 1,
+     *      "car_type_id": 29,
+     *      "seat_num": 2,
+     *      "car_year": "20",
+     *      "is_customer_insurance": 0,
+     *      "create_at": "",
+     *      "update_at": "",
+     *      "is_state": 0,
+     *      "plate_number": "苏A-33333",
+     *      "seat_size": "小型车",
+     *      "car_img": "",
+     *      "pass_content": "",
+     *      "brand_name": "大众",
+     *      "car_type_name": "桑塔纳"
+     *    }
+     *    }
+     */
+    public function carInfo ()
+    {
+        model("common/PackApply") -> getMyCarInfo($this -> user_id);
     }
 }

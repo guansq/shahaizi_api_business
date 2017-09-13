@@ -130,6 +130,141 @@ class PackApply extends Model
             M("seller") -> where("seller_id = $seller_id") -> save(["drv_id" => $insert_id]);
         }
         jsonData(1,"上传成功",[]);
-
     }
+
+
+    /**
+     * 新增车辆
+     */
+    public function addCar ()
+    {
+        $pack_car_info = db::name("pack_car_info");
+
+        $car_id = I("car_id");
+        $data['seller_id'] = I("seller_id");
+        $data['car_img'] = I("car_img");
+        $data['brand_id'] = I("brand_id");
+        $data['car_type_id'] = I("car_type_id");
+        $data['seat_num'] = intval(I("seat_num"),0);
+        $data['car_year'] = I("car_year");
+        $data['is_customer_insurance'] = I("is_customer_insurance");
+
+        $result = array_filter($data, function ($v){return $v != "";});
+
+//        if($result['brand'])
+//        {
+//            $brand =  $pack_car_info -> where("brand = '{$result['brand']}'") -> find();
+//            if($brand)
+//                jsonData(4004, "车牌号重复！",[]);
+//        }
+
+        if($car_id)
+            $pack_car_info -> where("car_id = $car_id") -> save($result);
+        else
+            $pack_car_info -> add($result);
+
+        jsonData(1,"返回成功！",[]);
+    }
+
+    /**
+     * 获取车辆信息表
+     */
+    public function getCarInfo ()
+    {
+        $brand_id = I("brand_id");
+        if(empty($brand_id))
+            $where = "pid = 0";
+        else
+            $where =  "pid = $brand_id";
+
+        $pack_car_data = M("pack_car_bar") -> order("id,car_info,pid") -> where($where) -> select();
+
+        dataJson(1,"返回成功", $pack_car_data);
+    }
+
+
+
+    /**
+     * 获取我的车辆
+     * @param $user_id
+     */
+    public function getMyAllCar ($user_id)
+    {
+        $all_car_info = M("pack_car_info") -> where("seller_id = $user_id") -> select();
+        foreach($all_car_info as $key => $val)
+        {
+            $val["car_img"] = explode("|",$val["car_img"]);
+            $result[] = $val;
+        }
+        dataJson(1,"返回成功",$all_car_info);
+    }
+
+    /**
+     * 删除我的车辆
+     */
+    public function delMyCar ($seller_id)
+    {
+        $car_id = I("car_id");
+        if($car_id)
+             M("pack_car_info") -> where("car_id in ($car_id) AND seller_id = $seller_id") -> delete();
+        else
+            dataJson(4004,"car_id不能为空",[]);
+
+        dataJson(1,"删除成功！",[]);
+    }
+
+
+    /**
+     * 获取车辆详情
+     */
+    public function getMyCarInfo ($seller_id)
+    {
+        $car_id = I("car_id",0);
+        if(!$car_id)
+            dataJson(4004,"car_id不能为0或空",[]);
+
+        $car_info = M("pack_car_info") -> where("car_id = $car_id AND seller_id = $seller_id") -> find();
+        if(!$car_info)
+            $car_info = [];
+        else
+            $car_info = removeNull($car_info);
+
+        $result = getCarInfoName($car_info["brand_id"],$car_info["car_type_id"]);
+        $car_info["brand_name"] = $result["brand_name"];
+        $car_info["car_type_name"] = $result["car_type_name"];
+        dataJson(1,"返回成功",$car_info);
+    }
+
+    /**
+     * 确认订单
+     */
+    public function confirmOrder ($seller_id)
+    {
+        $air_id = I("air_id");
+//        $pack_order_data = M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
+
+        $status = 5; //待评价
+        $time = time();
+
+        $data["status"] = $status;
+        $data["end_time"] = $time;
+
+        M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save($data);
+        dataJson(1,"确认成功！",[]);
+    }
+
+
+    /**
+     * 添加加班费用
+     */
+    public function overtime_recharge ($seller_id)
+    {
+        $air_id = I("air_id");
+        $pack_order_data = M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
+        if($pack_order_data["status"] == 3 && $pack_order_data["type"] != 1 && $pack_order_data["type"] != 2) //订单进行中并且非接机送机
+        {
+
+        }
+    }
+
 }

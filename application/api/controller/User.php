@@ -49,7 +49,9 @@ class User extends Base {
      *      "nickname": "13222222222",
      *      "language": "",
      *      "head_pic": "",
-     *      "briefing": ""
+     *      "briefing": "",
+     *       "img_url" :{
+     *      }
      *      }
      *      }
      *   @apiErrorExample {json}  Error-Response:
@@ -63,10 +65,15 @@ class User extends Base {
     public function getMyInfo ()
     {
         $seller_info = M("seller")
-            -> field("seller_id,sex,nickname,language,head_pic, briefing")
+            -> field("seller_id,sex,nickname,language,head_pic, briefing,img_url")
             ->where("seller_id = ".$this -> user_id)
             -> find();
-        jsonData(1,"返回成功",removeNull($seller_info));
+        if($seller_info["img_url"])
+            $seller_info["img_url"] = explode("|", $seller_info["img_url"]);
+        else
+            $seller_info["img_url"] = [];
+
+        jsonData(1,"返回成功",$seller_info);
     }
 
     /**
@@ -138,6 +145,7 @@ class User extends Base {
      * @apiName  postUpdateInfo
      * @apiGroup User
      * @apiParam {String} token  token值
+     * @apiParam {String} head_pic   头像
      * @apiParam {String} nickname   昵称
      * @apiParam {int} sex   性别 0 保密 1 男 2 女
      * @apiParam {String} language   语言
@@ -324,7 +332,7 @@ class User extends Base {
     }
 
     /**
-     * @api     {POST} /index.php?m=Api&c=User&a=reg            用户注册done
+     * @api     {POST} /index.php?m=Api&c=User&a=reg            用户注册
      * @apiName   reg
      * @apiGroup  User
      * @apiParam {String} username         手机号/用户名.
@@ -414,43 +422,29 @@ class User extends Base {
         exit(json_encode($data));
     }
 
-    /**
-     * @api {POST}  index.php?m=Api&c=User&a=updateUserInfo     更改用户信息done
-     * @apiName     updateUserInfo
-     * @apiGroup    User
-     * @apiParam    {String}    [nickname]      昵称
-     * @apiParam    {String}    [qq]            QQ号码
-     * @apiParam    {String}    [head_pic]      头像URL
-     * @apiParam    {String}    [sex]           性别（0 保密 1 男 2 女）
-     * @apiParam    {String}    [birthday]      生日 （2015-01-05）
-     * @apiParam    {String}    [province]      省份ID
-     * @apiParam    {String}    [city]          城市ID
-     * @apiParam    {String}    [district]      地区ID
-     * @apiParam    {String}    token      token
-     */
-    public function updateUserInfo(){
-        if(IS_POST){
-            //$user_id = I('user_id/d');
-            if(!$this->user_id)
-                exit(json_encode(array('status'=>-1,'msg'=>'缺少参数','result'=>'')));
-
-            I('post.nickname') ? $post['nickname'] = I('post.nickname') : false; //昵称
-            I('post.qq') ? $post['qq'] = I('post.qq') : false;  //QQ号码
-            I('post.head_pic') ? $post['head_pic'] = I('post.head_pic') : false; //头像地址
-            I('post.sex') ? $post['sex'] = I('post.sex') : false;  // 性别
-            I('post.birthday') ? $post['birthday'] = strtotime(I('post.birthday')) : false;  // 生日
-            I('post.province') ? $post['province'] = I('post.province') : false;  //省份
-            I('post.city') ? $post['city'] = I('post.city') : false;  // 城市
-            I('post.district') ? $post['district'] = I('post.district') : false;  //地区
-            I('post.email') ? $post['email'] = I('post.email') : false;  
-            I('post.mobile') ? $post['mobile'] = I('post.mobile') : false;  
-
-            if(!$this->userLogic->update_info($this->user_id,$post))
-                exit(json_encode(array('status'=>-1,'msg'=>'更新失败','result'=>'')));
-            exit(json_encode(array('status'=>1,'msg'=>'更新成功','result'=>'')));
-
-        }
-    }
+//    public function updateUserInfo(){
+//        if(IS_POST){
+//            //$user_id = I('user_id/d');
+//            if(!$this->user_id)
+//                exit(json_encode(array('status'=>-1,'msg'=>'缺少参数','result'=>'')));
+//
+//            I('post.nickname') ? $post['nickname'] = I('post.nickname') : false; //昵称
+//            I('post.qq') ? $post['qq'] = I('post.qq') : false;  //QQ号码
+//            I('post.head_pic') ? $post['head_pic'] = I('post.head_pic') : false; //头像地址
+//            I('post.sex') ? $post['sex'] = I('post.sex') : false;  // 性别
+//            I('post.birthday') ? $post['birthday'] = strtotime(I('post.birthday')) : false;  // 生日
+//            I('post.province') ? $post['province'] = I('post.province') : false;  //省份
+//            I('post.city') ? $post['city'] = I('post.city') : false;  // 城市
+//            I('post.district') ? $post['district'] = I('post.district') : false;  //地区
+//            I('post.email') ? $post['email'] = I('post.email') : false;
+//            I('post.mobile') ? $post['mobile'] = I('post.mobile') : false;
+//
+//            if(!$this->userLogic->update_info($this->user_id,$post))
+//                exit(json_encode(array('status'=>-1,'msg'=>'更新失败','result'=>'')));
+//            exit(json_encode(array('status'=>1,'msg'=>'更新成功','result'=>'')));
+//
+//        }
+//    }
 
 
     /**

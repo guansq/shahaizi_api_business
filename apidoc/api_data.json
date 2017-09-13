@@ -365,7 +365,7 @@
       "examples": [
         {
           "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n\"status\": 1,\n\"msg\": \"上传成功\",\n\"result\": {}\n}",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"上传成功\",\n     \"result\": {}\n}",
           "type": "json"
         }
       ]
@@ -925,6 +925,217 @@
   },
   {
     "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=actionCar",
+    "title": "新增/修改车辆done",
+    "name": "CarInfo",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": true,
+            "field": "car_id",
+            "description": "<p>修改时传入</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_img",
+            "description": "<p>车辆图片，多个以|分隔</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "brand_id",
+            "description": "<p>车辆品牌id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_type_id",
+            "description": "<p>车型id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "seat_num",
+            "description": "<p>座位数</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_year",
+            "description": "<p>汽车年限</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "is_customer_insurance",
+            "description": "<p>是否有保险</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1  200 OK\n{\n  \"status\": 1,\n  \"msg\": \"返回成功！\",\n  \"result\": {}\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=actionCar"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=carInfo",
+    "title": "获取车辆详情done",
+    "name": "DriverCarInfo",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_id",
+            "description": "<p>车辆id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"car_id\": 3,\n     \"seller_id\": 20,\n     \"brand_id\": 1,\n     \"car_type_id\": 29,\n     \"seat_num\": 2,\n     \"car_year\": \"20\",\n     \"is_customer_insurance\": 0,\n     \"create_at\": \"\",\n     \"update_at\": \"\",\n     \"is_state\": 0,\n     \"plate_number\": \"苏A-33333\",\n     \"seat_size\": \"小型车\",\n     \"car_img\": \"\",\n     \"pass_content\": \"\",\n     \"brand_name\": \"大众\",\n     \"car_type_name\": \"桑塔纳\"\n   }\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=carInfo"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=delMyCar",
+    "title": "删除车辆done",
+    "name": "DriverDelMyCar",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_id",
+            "description": "<p>车辆id，多个删除用逗号隔开</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"删除成功！\",\n     \"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=delMyCar"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getMyCar",
+    "title": "获得我的车辆done",
+    "name": "DriverGetMyCar",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n  \"status\": 1,\n  \"msg\": \"返回成功\",\n  \"result\": [\n  {\n     \"car_id\": 3,\n     \"seller_id\": 20,\n     \"brand_id\": 1,\n     \"car_type_id\": null,\n     \"seat_num\": 2,\n     \"car_year\": \"20\",\n     \"is_customer_insurance\": 0,\n     \"create_at\": null,\n     \"update_at\": null,\n     \"is_state\": 0,\n     \"plate_number\": \"苏A-33333\",\n     \"seat_size\": \"小型车\",\n     \"car_img\": null,\n     \"pass_content\": null\n  },\n  {\n     \"car_id\": 7,\n     \"seller_id\": 20,\n     \"brand_id\": 1,\n     \"car_type_id\": null,\n     \"seat_num\": 5,\n     \"car_year\": \"10\",\n     \"is_customer_insurance\": 1,\n     \"create_at\": null,\n     \"update_at\": null,\n     \"is_state\": 1,\n     \"plate_number\": \"苏A-666667\",\n     \"seat_size\": \"中型车\",\n     \"car_img\": \"312154\",\n     \"pass_content\": \"\"\n  }\n  ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getMyCar"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "index.php?m=Api&c=PackLine&a=getQualityLine",
     "title": "得到精品路线",
     "name": "getQualityLine",
@@ -944,6 +1155,30 @@
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=PackLine&a=getQualityLine"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getCarBar",
+    "title": "获取车辆信息done",
+    "name": "PackGetCarBar",
+    "group": "Pack",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n  \"status\": 1,\n  \"msg\": \"返回成功\",\n  \"result\": [\n  {\n     \"id\": 2,\n     \"car_info\": \"丰田\",\n     \"pid\": 0,\n     \"status\": 1\n  }\n  ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getCarBar"
       }
     ]
   },
@@ -1271,7 +1506,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " Http/1.1   200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"seller_id\": 20,\n     \"sex\": \"\",\n     \"nickname\": \"13222222222\",\n     \"language\": \"\",\n     \"head_pic\": \"\",\n     \"briefing\": \"\"\n     }\n     }",
+          "content": " Http/1.1   200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"seller_id\": 20,\n     \"sex\": \"\",\n     \"nickname\": \"13222222222\",\n     \"language\": \"\",\n     \"head_pic\": \"\",\n     \"briefing\": \"\",\n      \"img_url\" :{\n     }\n     }\n     }",
           "type": "json"
         }
       ]
@@ -1432,6 +1667,13 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "head_pic",
+            "description": "<p>头像</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "nickname",
             "description": "<p>昵称</p>"
           },
@@ -1487,7 +1729,7 @@
   {
     "type": "POST",
     "url": "/index.php?m=Api&c=User&a=reg",
-    "title": "用户注册done",
+    "title": "用户注册",
     "name": "reg",
     "group": "User",
     "parameter": {
@@ -1615,90 +1857,6 @@
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=User&a=thirdLogin"
-      }
-    ]
-  },
-  {
-    "type": "POST",
-    "url": "index.php?m=Api&c=User&a=updateUserInfo",
-    "title": "更改用户信息done",
-    "name": "updateUserInfo",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "nickname",
-            "description": "<p>昵称</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "qq",
-            "description": "<p>QQ号码</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "head_pic",
-            "description": "<p>头像URL</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "sex",
-            "description": "<p>性别（0 保密 1 男 2 女）</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "birthday",
-            "description": "<p>生日 （2015-01-05）</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "province",
-            "description": "<p>省份ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "city",
-            "description": "<p>城市ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": true,
-            "field": "district",
-            "description": "<p>地区ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "token",
-            "description": "<p>token</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/User.php",
-    "groupTitle": "User",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=User&a=updateUserInfo"
       }
     ]
   }

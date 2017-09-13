@@ -19,7 +19,7 @@ class WorkStation extends Model
     {
         $where[]= "allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
-        $data = $this->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 2);
+        $data = $this->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 4);
         $read = $this -> is_read ($seller_id);
 
         foreach ($data as $key => $val)
@@ -50,35 +50,24 @@ class WorkStation extends Model
         $status = trim(I("status"));
         $pagesize = I("pagesize");
         $this -> order_status($status) && $where[]= $this -> order_status($status);
-        $data = $this -> order("air_id desc") -> where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 2);
+        $data = $this -> order("air_id desc") -> where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 4);
         $time = time();
 
         if($status == "3,4") //进行中
         {
-            foreach ($data as $key => $val)
-            {
-                $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
-                $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
-                $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
-                $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
-                if($time < $val["start_time"])
-                {
-                    $val["status"] = 3;
-                    $result["wait_start"][] = $val;
-                }else
-                {
-                    $val["status"] = 4;
-                    $result["wait_confirm"][] = $val;
-                }
-            }
+            $wait_start_data  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> paginate(2);
+            $wait_confirm_num  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> paginate(2);
+            $result["wait_start"] = $this->order_data_manage($wait_start_data,3);
+            $result["wait_confirm"] = $this->order_data_manage($wait_confirm_num,4);
 
         }else
         {
             foreach ($data as $key => $val)
             {
-                $val["start_time"] = packDateFormat($val["start_time"]);
                 if($val["status"] == 3)
-                    $val["status"] = $this->time_status($val["start_time"]);
+                    $val["status"] = $this -> time_status($val["start_time"]);
+
+                $val["start_time"] = packDateFormat($val["start_time"]);
 
                 $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
                 $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
@@ -90,6 +79,7 @@ class WorkStation extends Model
         }
         $result_num["wait_start_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> count();
         $result_num["wait_confirm_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> count();
+
         if(!$result)
             $result  = ["data" =>[] ];
         else
@@ -102,6 +92,19 @@ class WorkStation extends Model
 
     }
 
+    public function order_data_manage ($data,$status)
+    {
+        foreach ($data as $key => $val)
+        {
+            $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
+            $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+            $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
+            $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
+            $val["status"] = $status;
+            $result[] = $val;
+        }
+        return $result;
+    }
 
     public function useCarNum ($use_car_adult, $use_car_children)
     {

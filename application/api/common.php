@@ -48,6 +48,14 @@ if(!function_exists('returnJson')){
     }
 }
 
+// 接口返回json 数据
+if(!function_exists('dataJson')){
+    function dataJson($result = 0, $msg = '', $data = []){
+        header('Content-type:application/json; charset=utf-8');
+        header("Access-Control-Allow-Origin: *");
+        exit(json_encode(["status" => $result,"msg" => $msg ,"result" => $data]));
+    }
+}
 /*
  * 生成签名
  */
@@ -90,7 +98,7 @@ if(!function_exists('removeNull')){
         if($array)
         {
             array_walk($array,function ($v,$k) use (&$result){
-                if($v)
+                if(!is_null($v))
                     $result[$k] = $v;
                 else
                     $result[$k] = '';
@@ -107,6 +115,21 @@ if(!function_exists('removeNull')){
 function packDateFormat($date)
 {
     $week = ["周一","周二","周三","周四","周五","周六","周日"];
-    $week_date = date("w",$date);
-    return date("Y-m-d", $date)." ".$week[$week_date-1]." ".date("H:i", $date);
+    $week_date = date("w","1496419200");
+    date("Y-m-d", $date)." ".$week[$week_date-1].date("Y-m-d", $date);
+}
+
+function  getCarInfoName($brand_id = 0, $type_id = 0)
+{
+    $pack_info = M("pack_car_bar") -> where("id in ($brand_id, $type_id)") -> column("pid,car_info");
+    $pack_info["brand_name"] = $pack_info[0];
+    $pack_info["car_type_name"] = $pack_info[1];
+    return $pack_info;
+}
+
+function  diffHour ($startdate, $enddate = 0)
+{
+    $overtime = M("config") -> where("inc_type = 'overtime'") -> select();
+    print_r($overtime);die;
+   return  floor((strtotime($enddate)-strtotime($startdate))%86400/3600);
 }
