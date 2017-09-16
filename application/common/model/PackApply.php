@@ -417,16 +417,16 @@ class PackApply extends Model
                 "date_num" => 2,
                 "summary" => "这是摘要1",
                 "port_detail" =>
-                    [
-                        ["port_num" => 1,
-                            "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-                            "port_detail" => "这是第一站1"
-                        ],
-                        ["port_num" => 2,
-                            "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-                            "port_detail" => "这是第二站2"
-                        ]
-                    ],
+                 [
+                     ["port_num" => 1,
+                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                         "port_detail" => "这是第一站1"
+                     ],
+                     ["port_num" => 2,
+                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                         "port_detail" => "这是第二站2"
+                     ]
+                 ],
             ]
         ];
         echo json_encode($line_detail);

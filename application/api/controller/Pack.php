@@ -476,75 +476,61 @@ class Pack extends Base {
 
 
     /**
-     * @api {GET}  /index.php?m=Api&c=Pack&a=lineDetail   线路详情done
+     * @api {GET}  /index.php?m=Api&c=Pack&a=lineDetail&token=37cd1e8ea0c8b81f1fcc03d178625599&line_id=8   线路详情done
      * @apiName     LineDetail
      * @apiGroup    Pack
      * @apiParam {string} token token值
      * @apiParam {string} line_id line_id值
-     * @apiSuccessExample {json}    Success-Response
-     *  Http/1.1    200 OK
-     * {
-     *      "status": 1,
-     *      "msg": "返回成功！",
-     *      "result": {
-     *          "line_id": 3,
-     *          "line_title": "新加坡",
-     *          "line_price": "500.00RMB",
-     *          "seller_id": 20,
-     *          "car_id": "3",
-     *          "line_highlights": "亮点多多",
-     *          "line_detail": [
-     *              {
-     *                  "date_num": 1,
-     *                  "summary": "这是摘要1",
-     *                  "port_detail": [
-     *                      {
-     *                          "port_num": 1,
-     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-     *                          "port_detail": "这是第一站1"
-     *                      },
-     *                      {
-     *                          "port_num": 2,
-     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-     *                          "port_detail": "这是第二站2"
-     *                      }
-     *                  ]
-     *              },
-     *              {
-     *                  "date_num": 2,
-     *                  "summary": "这是摘要1",
-     *                  "port_detail": [
-     *                      {
-     *                          "port_num": 1,
-     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-     *                          "port_detail": "这是第一站1"
-     *                      },
-     *                      {
-     *                          "port_num": 2,
-     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-     *                          "port_detail": "这是第二站2"
-     *                      }
-     *                  ]
-     *              }
-     *          ],
-     *          "create_at": null,
-     *          "update_at": null,
-     *          "is_comm": 0,
-     *          "cover_img": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-     *          "is_state": 0,
-     *          "pass_content": null,
-     *          "is_del": 0
-     *      }
-     *  }
      */
     /**
      * 线路详情
      */
     public function lineDetail ()
     {
-        $line_detail = model("common/PackApply") -> getLineDetail($this -> user_id,1);
-        $this -> assign("line_detail",$line_detail);
+        $line_data = model("common/PackApply") -> getLineDetail($this -> user_id,1);
+//        print_r($line_data);die;
+        $this -> assign("line_data",$line_data);
         return $this -> fetch();
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=collegeList  司导学院文章列表done
+     * @apiName     College
+     * @apiGroup    Pack
+     * @apiParam {string} pagesize  展示数目
+     * @apiParam {string} page  页数
+     * @apiSuccessExample {json}  Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *
+     * }
+     */
+    public function collegeList ()
+    {
+        $pagesize = I("pagesize");
+        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 29") -> paginate($pagesize ? $pagesize : 10);
+        dataJson(1,"返回成功！",$article_lists);
+    }
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=college&id=19  司导学院文章详情done
+     * @apiName     College
+     * @apiGroup    Pack
+     * @apiParam {string} id  文章列表的article_id值
+     */
+    /**
+     * 司导学院文章详情
+     */
+    public function college ()
+    {
+        $id = I("id");
+        if(!$id)
+            dataJson(4004,"文章id不能为空！",[]);
+
+        $article = M("article") -> where("cat_id = 29 AND article_id = $id") -> find();
+//        print_r($article);die;
+        $article["content"] = htmlspecialchars_decode($article["content"]);
+        $this->assign("article",$article);
+        return $this-> fetch();
     }
 
     /**

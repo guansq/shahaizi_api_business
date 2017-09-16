@@ -76,7 +76,23 @@ input, button {
     margin-right: -16px;
     box-sizing: border-box;
 }
+.article_detail{
+    width: 100%;
+    position: absolute;
+    top:60px;
+}
 
+.article_detail h1{
+    font-size:14px;
+    text-align: center;
+    margin-bottom:10px;
+}
+.article_detail p
+{
+    padding-left:16px;
+    line-height:20px;
+    font-size:14px;
+}
 /*================================================线路详情====================================================*/
 .shz-rd-pic{
     width: 100%;

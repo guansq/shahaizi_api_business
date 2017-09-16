@@ -279,12 +279,11 @@ class WorkStation extends Model
             M("pack_midstat") -> where($where)-> save($data);
         else
             M("pack_midstat")-> add($data);
-
-        jsonData(1,"已拒绝",[]);
     }
 
     public function getMyWorkSingleStation ($seller_id)
     {
+
         $air_id = I("air_id");
         if(empty(trim($air_id)))
             jsonData(4004,"air_id不能为空",[]);
@@ -295,8 +294,10 @@ class WorkStation extends Model
         $data = $this->where($whereCondition) -> find();
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);
+
         $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
         $this->order_readed($seller_id,$air_id);
+
         if(!$data)
             $data  = [];
         else

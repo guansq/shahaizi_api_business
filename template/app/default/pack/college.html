@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="csrf-token" content="WrH4No5hr30bTJgefuj7YnxjP0WsssMx3SyQv7Rh"/>
     <meta name="format-detection" content="telephone=no">
-    <title>线路详情</title>
+    <title>文章详情</title>
     <!--让IE8，IE9，支持Html5和Css3-->
     <!--[if lte IE 8]>
     <script src="/public/pack/lib/common/mediaqueries/selectivity-full.min.js"></script>
@@ -26,36 +26,15 @@
     <link type="text/css" href="/public/pack/lib/common/reset.css" rel="stylesheet"/>
     <link type="text/css" href="/public/pack/css/index.css" rel="stylesheet"/>
 </head>
-<body class="shz-back">
-<div class="shz-bottom">
-    <img class="shz-rd-pic" id="shz_rd_pic" src="{$line_data.cover_img}" alt="">
-    <div class="shz-rd-top">
-        <p class="title" id="rd_title">{$line_data.line_title}</p>
-        <p class="num" id="rd_num">￥{$line_data.line_price}/天</p>
-    </div>
-    <div class="shz-rd-feature">
-        <p class="title">体验亮点</p>
-        <p class="content" id="rd_content">{$line_data.line_highlights}</p>
-    </div>
-    <p class="shz-rd-title">线路详情</p>
-    <div id="shz-rd-det">
-        <foreach name="line_data.line_detail" item="lineDetail">
-            <div class="shz-rd-details">
-                <div class="title"><p class="line"></p><img src="../image/zfx.png" alt=""><span>第{$lineDetail.date_num|number2chinese}天</span><img src="../image/zfx.png" alt=""><p class="line"></p></div>
-                <foreach name="lineDetail.port_detail" item="port_details">
-                    <div class="route">
-                        <p>第{$port_details.port_num|number2chinese}站</p>
-                        <img src="{$port_details.port_coverImg}" alt="">
-                        <div>{$port_details.port_detail}</div>
-                    </div>
-                </foreach>
-            </div>
-       </foreach>
-    </div>
-
+<body>
+<div class="shz-header">
+    <div class="left"><img src="/public/pack/image/left.png" alt=""></div>
+    <div>文章详情</div>
 </div>
-
+<div class="article_detail">
+    <h1>{$article.title}</h1>
+    <p>{$article.content}</p>
+</div>
 </body>
-<script type="text/javascript" src="../lib/jQuery/jquery-min.js"></script>
-<script type="text/javascript" src="../js/route_details.js"></script>
+<script type="text/javascript" src="/public/pack/lib/jQuery/jquery-1.12.4.min.js"></script>
 </html>

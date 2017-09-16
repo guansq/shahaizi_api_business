@@ -1192,6 +1192,78 @@
     ]
   },
   {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=collegeList",
+    "title": "司导学院文章列表done",
+    "name": "College",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>展示数目</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=collegeList"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
+    "title": "司导学院文章详情done",
+    "name": "College",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>文章列表的article_id值</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
+      }
+    ]
+  },
+  {
     "type": "POST",
     "url": "/index.php?m=Api&c=Pack&a=delLine",
     "title": "删除线路done",
@@ -1662,7 +1734,7 @@
   },
   {
     "type": "GET",
-    "url": "/index.php?m=Api&c=Pack&a=lineDetail",
+    "url": "/index.php?m=Api&c=Pack&a=lineDetail&token=37cd1e8ea0c8b81f1fcc03d178625599&line_id=8",
     "title": "线路详情done",
     "name": "LineDetail",
     "group": "Pack",
@@ -1686,21 +1758,12 @@
         ]
       }
     },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": {\n         \"line_id\": 3,\n         \"line_title\": \"新加坡\",\n         \"line_price\": \"500.00RMB\",\n         \"seller_id\": 20,\n         \"car_id\": \"3\",\n         \"line_highlights\": \"亮点多多\",\n         \"line_detail\": [\n             {\n                 \"date_num\": 1,\n                 \"summary\": \"这是摘要1\",\n                 \"port_detail\": [\n                     {\n                         \"port_num\": 1,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第一站1\"\n                     },\n                     {\n                         \"port_num\": 2,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第二站2\"\n                     }\n                 ]\n             },\n             {\n                 \"date_num\": 2,\n                 \"summary\": \"这是摘要1\",\n                 \"port_detail\": [\n                     {\n                         \"port_num\": 1,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第一站1\"\n                     },\n                     {\n                         \"port_num\": 2,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第二站2\"\n                     }\n                 ]\n             }\n         ],\n         \"create_at\": null,\n         \"update_at\": null,\n         \"is_comm\": 0,\n         \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n         \"is_state\": 0,\n         \"pass_content\": null,\n         \"is_del\": 0\n     }\n }",
-          "type": "json"
-        }
-      ]
-    },
     "version": "0.0.0",
     "filename": "application/api/controller/Pack.php",
     "groupTitle": "Pack",
     "sampleRequest": [
       {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=lineDetail"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=lineDetail&token=37cd1e8ea0c8b81f1fcc03d178625599&line_id=8"
       }
     ]
   },
