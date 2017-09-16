@@ -34,10 +34,10 @@ class Pack extends Base {
      *      "status": 1,
      *      "msg": "返回成功",
      *      "result": {
-     *      "is_seller_auth": 0,
-     *      "is_drv_auth": 1,
-     *      "is_home_auth": 0
-     *  }
+     *          "is_seller_auth": 0,
+     *          "is_drv_auth": 1,
+     *          "is_home_auth": 0
+     *      }
      *  }
      */
     public function index(){
@@ -407,6 +407,7 @@ class Pack extends Base {
      * @apiGroup    Pack
      * @apiParam {string} token token值
      * @apiParam {string} air_id air_id值
+     * @apiParam {string} add_reason 加班理由
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
      * {
@@ -424,10 +425,395 @@ class Pack extends Base {
     }
 
     /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getOvertime   获取加班时间done
+     * @apiName     GetOvertime
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} air_id air_id值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "申请成功！",
+     *      "result": {}
+     * }
+     */
+    /**
+     * 获取加班时间
+     */
+    public function getOvertime ()
+    {
+        model("common/PackApply") -> getOverTime($this -> user_id,1);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=publishLine   发布线路done
+     * @apiName     PublishLine
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} line_title 线路标题
+     * @apiParam {string} line_price 线路价格
+     * @apiParam {string} car_id  车辆id,多个以逗号隔开
+     * @apiParam {string} cover_img  封面图片
+     * @apiParam {string} bright_dot  亮点
+     * @apiParam {string} line_detail  线路详情 示例： [{"date_num":1,"summary":"\u8fd9\u662f\u6458\u89811","port_detail":[{"port_num":1,"port_coverImg":"http:\/\/ovwiqces1.bkt.clouddn.com\/cee31c276bb2c1ee71391ac799ed78cc.png","port_detail":"\u8fd9\u662f\u7b2c\u4e00\u7ad91"},{"port_num":2,"port_coverImg":"http:\/\/ovwiqces1.bkt.clouddn.com\/cee31c276bb2c1ee71391ac799ed78cc.png","port_detail":"\u8fd9\u662f\u7b2c\u4e8c\u7ad92"}]},{"date_num":2,"summary":"\u8fd9\u662f\u6458\u89811","port_detail":[{"port_num":1,"port_coverImg":"http:\/\/ovwiqces1.bkt.clouddn.com\/cee31c276bb2c1ee71391ac799ed78cc.png","port_detail":"\u8fd9\u662f\u7b2c\u4e00\u7ad91"},{"port_num":2,"port_coverImg":"http:\/\/ovwiqces1.bkt.clouddn.com\/cee31c276bb2c1ee71391ac799ed78cc.png","port_detail":"\u8fd9\u662f\u7b2c\u4e8c\u7ad92"}]}]
+     * @apiParam {string} line_id  线路id 为空时为添加，存在时为修改
+     * @apiSuccessExample {json}  Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *    "status": 1,
+     *    "msg": "发布成功！",
+     *    "result": []
+     *  }
+     */
+    /**
      * 发布线路
      */
     public function publishLine ()
     {
         model("common/PackApply") -> publish_line($this -> user_id);
+    }
+
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=lineDetail   线路详情done
+     * @apiName     LineDetail
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} line_id line_id值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "返回成功！",
+     *      "result": {
+     *          "line_id": 3,
+     *          "line_title": "新加坡",
+     *          "line_price": "500.00RMB",
+     *          "seller_id": 20,
+     *          "car_id": "3",
+     *          "line_highlights": "亮点多多",
+     *          "line_detail": [
+     *              {
+     *                  "date_num": 1,
+     *                  "summary": "这是摘要1",
+     *                  "port_detail": [
+     *                      {
+     *                          "port_num": 1,
+     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                          "port_detail": "这是第一站1"
+     *                      },
+     *                      {
+     *                          "port_num": 2,
+     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                          "port_detail": "这是第二站2"
+     *                      }
+     *                  ]
+     *              },
+     *              {
+     *                  "date_num": 2,
+     *                  "summary": "这是摘要1",
+     *                  "port_detail": [
+     *                      {
+     *                          "port_num": 1,
+     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                          "port_detail": "这是第一站1"
+     *                      },
+     *                      {
+     *                          "port_num": 2,
+     *                          "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                          "port_detail": "这是第二站2"
+     *                      }
+     *                  ]
+     *              }
+     *          ],
+     *          "create_at": null,
+     *          "update_at": null,
+     *          "is_comm": 0,
+     *          "cover_img": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *          "is_state": 0,
+     *          "pass_content": null,
+     *          "is_del": 0
+     *      }
+     *  }
+     */
+    /**
+     * 线路详情
+     */
+    public function lineDetail ()
+    {
+        $line_detail = model("common/PackApply") -> getLineDetail($this -> user_id,1);
+        $this -> assign("line_detail",$line_detail);
+        return $this -> fetch();
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=delLine   删除线路done
+     * @apiName     DelLine
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} line_id line_id值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "删除成功！",
+     *      "result": {}
+     * }
+     */
+    /**
+     * 删除线路
+     */
+    public function delLine ()
+    {
+        model("common/PackApply") -> delLine($this -> user_id);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getLinelist   线路列表/我的服务done
+     * @apiName     GetLinelist
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} pagesize 显示条数
+     * @apiSuccess  {String} is_state 0:待审核1:审核通过2:已拒绝
+     * @apiSuccess  {String} result 返回成功
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *  {
+     *    "status": 1,
+     *    "msg": "返回成功！",
+     *    "result": {
+     *        "total": 4,
+     *        "per_page": 10,
+     *        "current_page": 1,
+     *        "data": [
+     *            {
+     *                "line_id": 5,
+     *                "line_title": "墨西哥",
+     *                "line_price": "500.00RMB",
+     *                "seller_id": 20,
+     *                "car_id": "3",
+     *                "line_highlights": "亮点多多",
+     *                "line_detail": [
+     *                    {
+     *                        "date_num": 1,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    },
+     *                    {
+     *                        "date_num": 2,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    }
+     *                ],
+     *                "create_at": null,
+     *                "update_at": null,
+     *                "is_comm": 0,
+     *                "cover_img": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                "is_state": 0,
+     *                "pass_content": null,
+     *                "is_del": 0
+     *            },
+     *            {
+     *                "line_id": 4,
+     *                "line_title": "菲律宾",
+     *                "line_price": "500.00RMB",
+     *                "seller_id": 20,
+     *                "car_id": "3",
+     *                "line_highlights": "亮点多多",
+     *                "line_detail": [
+     *                    {
+     *                        "date_num": 1,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    },
+     *                    {
+     *                        "date_num": 2,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    }
+     *                ],
+     *                "create_at": null,
+     *                "update_at": null,
+     *                "is_comm": 0,
+     *                "cover_img": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                "is_state": 0,
+     *                "pass_content": null,
+     *                "is_del": 0
+     *            },
+     *            {
+     *                "line_id": 3,
+     *                "line_title": "新加坡",
+     *                "line_price": "500.00RMB",
+     *                "seller_id": 20,
+     *                "car_id": "3",
+     *                "line_highlights": "亮点多多",
+     *                "line_detail": [
+     *                    {
+     *                        "date_num": 1,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    },
+     *                    {
+     *                        "date_num": 2,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    }
+     *                ],
+     *                "create_at": null,
+     *                "update_at": null,
+     *                "is_comm": 0,
+     *                "cover_img": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                "is_state": 0,
+     *                "pass_content": null,
+     *                "is_del": 0
+     *            },
+     *            {
+     *                "line_id": 2,
+     *                "line_title": "菲律宾",
+     *                "line_price": "500.00RMB",
+     *                "seller_id": 20,
+     *                "car_id": "3",
+     *                "line_highlights": "亮点多多",
+     *                "line_detail": [
+     *                    {
+     *                        "date_num": 1,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    },
+     *                    {
+     *                        "date_num": 2,
+     *                        "summary": "这是摘要1",
+     *                        "port_detail": [
+     *                            {
+     *                                "port_num": 1,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第一站1"
+     *                            },
+     *                            {
+     *                                "port_num": 2,
+     *                                "port_coverImg": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                                "port_detail": "这是第二站2"
+     *                            }
+     *                        ]
+     *                    }
+     *                ],
+     *                "create_at": null,
+     *                "update_at": null,
+     *                "is_comm": 0,
+     *                "cover_img": "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+     *                "is_state": 0,
+     *                "pass_content": null,
+     *                "is_del": 0
+     *            }
+     *        ]
+     *    }
+     *}
+     */
+    public function getLinelist ()
+    {
+        model("common/PackApply") -> getLinelist($this -> user_id);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=postComment   提交评价done
+     * @apiName     PostComment
+     * @apiGroup    Pack
+     * @apiParam {string} token token值
+     * @apiParam {string} score 评分值
+     * @apiParam {string} content 评价内容
+     * @apiParam {string} order_id 订单id
+     * @apiParam {string} is_anonymous 是否匿名
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "返回成功！",
+     *      "result": []
+     * }
+     */
+    /*
+     * 提交评价
+     */
+    public function  postComment ()
+    {
+        model("common/PackApply") -> postComment($this -> user_id);
     }
 }

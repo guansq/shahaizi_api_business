@@ -136,12 +136,12 @@ class PackApply extends Model
     /**
      * 新增车辆
      */
-    public function addCar ()
+    public function addCar ($seller_id)
     {
         $pack_car_info = db::name("pack_car_info");
 
         $car_id = I("car_id");
-        $data['seller_id'] = I("seller_id");
+        $data['seller_id'] = $seller_id;
         $data['car_img'] = I("car_img");
         $data['brand_id'] = I("brand_id");
         $data['car_type_id'] = I("car_type_id");
@@ -197,7 +197,7 @@ class PackApply extends Model
             $val["brand_name"] = $car_info["brand_name"];
             $val["car_type_name"] = $car_info["car_type_name"];
             $car_img = explode("|",$val["car_img"]);
-            $val["car_img"] = $car_img ? $car_img : [];
+            $val["car_img"] = array_filter($car_img) ? $car_img : [];
             $result[] = $val;
         }
         dataJson(1,"返回成功",$result);
@@ -264,10 +264,7 @@ class PackApply extends Model
     }
 
 
-    /**
-     * 添加加班费用
-     */
-    public function overtime_recharge ($seller_id)
+    public function getOverTime ($seller_id, $is_post = 0)
     {
         $air_id = I("air_id");
         if(!$air_id)
@@ -278,15 +275,29 @@ class PackApply extends Model
         if($pack_order_data["status"] == 3 && $pack_order_data["type"] != 1 && $pack_order_data["type"] != 2) //订单进行中并且非接机送机
         {
             $overtime_data = diffHour($pack_order_data["start_time"], $pack_order_data["end_time"]);
-            $pack_order["add_time_long"] = $overtime_data["overtime_hour"];
-            $pack_order["add_recharge"] = $overtime_data["charge"];
+            $pack_order["add_time_long"] = floatval($overtime_data["overtime_hour"]) < 0 ? 0 : $overtime_data["overtime_hour"] ;
+            $pack_order["add_recharge"] = floatval($overtime_data["charge"]) < 0 ? 0 : $overtime_data["charge"];
+            $pack_order["add_reason"] = $overtime_data["add_reason"];
+            if(!$is_post)
+            {
+                M("pack_order") -> where("air_id = $air_id AND seller_id = $seller_id") -> save($pack_order);
+                dataJson(1,"申请成功！",[]);
+            }else
+            {
+                dataJson(1,"返回成功！",$pack_order);
+            }
 
-            M("pack_order") -> where("air_id = $air_id AND seller_id = $seller_id") -> save($pack_order);
-            dataJson(1,"申请成功！",[]);
         }else
         {
             dataJson(4004,"接送机不能申请加班！",[]);
         }
+    }
+    /**
+     * 添加加班费用
+     */
+    public function overtime_recharge ($seller_id)
+    {
+        $this->getOverTime($seller_id);
     }
 
     /**
@@ -305,24 +316,172 @@ class PackApply extends Model
      */
     public function publish_line ($seller_id)
     {
+       $line_id = I("line_id");
        $line_title = I("line_title");
        $line_price = I("line_price");
-       $line_price = I("line_price");
-       $brand_id = I("brand_id");
-       $car_type_id = I("car_type_id");
+       $car_id = I("car_id");
        $cover_img = I("cover_img");
        $bright_dot = I("bright_dot");
        $line_detail = I("line_detail");
+
+       if(!$line_title)
+           dataJson(4004,"线路标题不能为空！",[]);
+
+       if(!$line_price)
+           dataJson(4004,"线路价格不能为空！",[]);
+
+       $line_body =
+       [
+            "seller_id" => $seller_id,
+            "line_title" => $line_title,
+            "line_price" => $line_price,
+            "car_id" => $car_id,
+            "cover_img" => $cover_img,
+            "line_highlights" => $bright_dot,
+            "line_detail" => $line_detail,
+       ];
+       if(!$line_id)
+       {
+           $line_body["create_at"] = time();
+           if(M("pack_line") -> add($line_body))
+               dataJson(1,"发布成功！",[]);
+       }else
+       {
+           $line_body["update_at"] = time();
+           if(M("pack_line") -> where("seller_id = $seller_id AND line_id = $line_id") -> save($line_body))
+               dataJson(1,"修改成功！",[]);
+       }
+        dataJson(1,"操作失败！",[]);
     }
 
-    public function line_detail ($line_detail)
+    public function line_detail($line_detail)
     {
+
+    }
+
+    /**
+     * 提交评价
+     */
+    public function postComment($seller_id)
+    {
+        $order_id = I("order_id");
+        $score = I("score");
+        $content = I("content");
+        $is_anonymous = I("is_anonymous");
+        $commemt_time = time();
+
+        if(!$order_id)
+            dataJson(4004,"订单id不能为空！",[]);
+
+        if(!$content)
+            dataJson(4004,"评论内容不能为空！",[]);
+
+        if(!$score)
+            dataJson(4004,"评分不能为空！",[]);
+
+        if(!$is_anonymous)
+            dataJson(4004,"是否匿名不能为空！",[]);
+
+        $data["order_id"] = $order_id;
+        $data["seller_score"] = $score;
+        $data["content"] = $content;
+        $data["is_anonymous"] = $is_anonymous;
+        $data["commemt_time"] = $commemt_time;
+        $data["user_id"] = $seller_id;
+        $data["type"] = 2;
+
+        M("order_comment") -> add($data);
+        dataJson(1,"返回成功！",[]);
+    }
+
+    public function line_detail2 ()
+    {
+        $line_detail =
         [
-            "abstracts" => 11111,
-            "port_num" =>
             [
-                "cover_img" => "http://www.shaihaizi.com/111.jpg",
+                "date_num" => 1,
+                "summary" => "这是摘要1",
+                "port_detail" =>
+                 [
+                     ["port_num" => 1,
+                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                         "port_detail" => "这是第一站1"
+                     ],
+                     ["port_num" => 2,
+                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                         "port_detail" => "这是第二站2"
+                     ]
+                 ],
+            ],
+            [
+                "date_num" => 2,
+                "summary" => "这是摘要1",
+                "port_detail" =>
+                    [
+                        ["port_num" => 1,
+                            "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                            "port_detail" => "这是第一站1"
+                        ],
+                        ["port_num" => 2,
+                            "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                            "port_detail" => "这是第二站2"
+                        ]
+                    ],
             ]
         ];
+        echo json_encode($line_detail);
+    }
+
+    /**
+     * 获取线路列表
+     */
+    public function getLinelist ($seller_id)
+    {
+        $pagesize = I("pagesize");
+        $pack_line = M("pack_line") -> order("line_id desc")
+            -> where("seller_id = $seller_id AND is_del = 0")
+            -> paginate($pagesize ? $pagesize : 10);
+
+        foreach ($pack_line as $key => $val)
+        {
+            $val["line_price"] =  $val["line_price"]."RMB";
+//            $val["line_detail"] = json_decode(htmlspecialchars_decode($val["line_detail"]), true);
+            unset($val["line_detail"]);
+            $car_data = M("pack_car_info") -> where("car_id = ".$val["car_id"]) -> find();
+            $val["car_img"] = array_filter(explode("|",$car_data["car_img"])) ? explode("|",$car_data["car_img"]) : [];
+            $pack_line[$key] = $val;
+        }
+
+        dataJson(1, "返回成功！", $pack_line);
+    }
+
+    public function getLineDetail ($seller_id, $isReturn = 0)
+    {
+        $line_id = I("line_id");
+        if(!$line_id)
+            dataJson(4004,"line_id不能为空！" ,[]);
+
+        $pack_line = M("pack_line") -> order("line_id desc")
+            -> where("seller_id = $seller_id AND line_id = $line_id AND is_del = 0")
+            -> find();
+        $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
+        $pack_line["line_price"] =  $pack_line["line_price"]."RMB";
+        if(!$isReturn)
+            dataJson(1, "返回成功！", $pack_line);
+        else
+            return $pack_line;
+    }
+
+    /**
+     * 删除线路
+     * @param $seller_id
+     */
+    public function delLine($seller_id)
+    {
+        $line_id = I("line_id");
+        if(!$line_id)
+            dataJson(1, "line_id不能为空！", []);
+        M("pack_line") -> where("seller_id = $seller_id AND line_id in ($line_id)") -> save(["is_del" => 1]);
+        dataJson(1, "删除成功！", []);
     }
 }

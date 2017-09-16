@@ -1559,3 +1559,16 @@ function getTotalAddress($province_id, $city_id, $district_id, $twon_id, $addres
     $total_address .= $address ?: '';
     return $total_address;
 }
+
+function rand_gene($length,$len = 6)
+{
+    $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+    $string=time();
+    for(;$len>=1;$len--)
+    {
+        $position = rand() % mb_strlen($chars);
+        $position2 = rand() %mb_strlen($string);
+        $string = substr_replace($string, mb_substr($chars,$position,1), $position2, 0);
+    }
+    return mb_substr($string,rand(0,mb_strlen($string) - $length),$length);
+}

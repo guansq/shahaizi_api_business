@@ -1,0 +1,307 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", "SimSun", "SimHei", "KaiTi", "LiSu";
+    line-height: 1;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+a {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+input, button {
+    outline: none;
+    font-family: "Microsoft YaHei", "SimSun", "SimHei", "KaiTi", "LiSu";
+}
+
+/*.mask {*/
+/*position: fixed;*/
+/*width: 100%;*/
+/*height: 100%;*/
+/*background: rgba(0, 0, 0, 0.5);*/
+/*top: 0;*/
+/*bottom: 0;*/
+/*z-index: 100000;*/
+/*}*/
+.shz-back{
+    background-color: #F0F0F0;
+}
+.shz-bottom{
+    margin-bottom: 50px;
+}
+/*===================标题栏=======================*/
+.shz-header {
+    line-height: 45px;
+    text-align: center;
+    font-size: 1.7rem;
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    z-index: 10000000;
+    border-bottom: 1px solid #ECECEC;
+}
+
+.shz-header .left {
+    position: absolute;
+    width: 60px;
+    font-size: 1.3rem;
+}
+
+.shz-header .left img {
+    width: 25px;
+    margin-top:12px;
+    margin-left: -26px;
+}
+
+.shz-header .right {
+    position: absolute;
+    top: 22px;
+    right: 10px;
+    font-size: 1.3rem;
+    color: #FFFFFF;
+}
+
+.shz-header .right img {
+    width: 54%;
+    margin-top: 15px;
+    margin-right: -16px;
+    box-sizing: border-box;
+}
+
+/*================================================线路详情====================================================*/
+.shz-rd-pic{
+    width: 100%;
+}
+.shz-rd-top{
+    background-color: white;
+    padding: 16px 15px;
+}
+.shz-rd-top .title{
+    font-size: 1.6rem;
+}
+.shz-rd-top .num{
+    font-size: 1.5rem;
+    margin-top: 15px;
+    color: #FB6162;
+}
+.shz-rd-feature{
+    margin: 8px 0;
+    background-color: white;
+    padding: 20px 15px;
+}
+.shz-rd-feature .title{
+    font-size: 1.7rem;
+}
+.shz-rd-feature .content{
+    margin-top: 12px;
+    line-height: 22px;
+    font-size: 1.5rem;
+    color: #757575;
+}
+.shz-rd-title{
+    background-color: white;
+    line-height: 40px;
+    font-size: 1.6rem;
+    padding-left: 15px;
+}
+.shz-rd-details{
+    background-color: white;
+    font-size: 1.5rem;
+    padding: 20px 15px 0 15px;
+    color: #757575;
+    border-bottom: 1px solid #E2E2E2;
+}
+.shz-rd-details .detail{
+    font-size: 1.7rem;
+    color: #363636;
+}
+.shz-rd-details .title{
+    font-size: 1.7rem;
+    color: #363636;
+    text-align: center;
+}
+.shz-rd-details .title .line{
+    border-bottom: 1px solid ;
+    display: inline-block;
+    width: 20%;
+    vertical-align: middle;
+    color: #DADADA;
+}
+.shz-rd-details .title img{
+    width: 12px;
+    vertical-align: middle;
+    margin: 0 8px;
+}
+.shz-rd-details .route p{
+    line-height: 40px;
+}
+.shz-rd-details .route img{
+    width: 100%;
+}
+.shz-rd-details .route div{
+    padding: 15px 0;
+    line-height: 22px;
+}
+
+/*住宿详情*/
+.swiper-wrapper img{
+    width: 100%;
+}
+.shz-lisdet-title{
+    padding: 0 15px;
+    background-color: white;
+}
+.shz-lisdet-title .title{
+    padding: 15px 0;
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 25px;
+    border-bottom: 1px solid #ECECEC;
+}
+.shz-lisdet-title .list{
+    overflow: hidden;
+    padding: 15px 0;
+    font-size: 1.5rem;
+    color: #A6A6A6;
+    border-bottom: 1px solid #ECECEC;
+}
+.shz-lisdet-title .list li{
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+.shz-lisdet-title .list li img{
+    width: 40%;
+    margin-bottom: 10px;
+}
+
+.shz-lisdet-title .introduce{
+    line-height: 45px;
+    font-size: 1.7rem;
+    color: #363636;
+}
+.shz-lisdet-title .lis{
+    line-height: 25px;
+    font-size: 1.5rem;
+    color: #A6A6A6;
+    border-bottom: 1px solid #ECECEC;
+    padding-bottom: 10px;
+}
+.shz-lisdet-title .ask{
+    line-height: 50px;
+    font-size: 1.7rem;
+    color: #363636;
+    background-color: white;
+}
+.shz-lisdet-facilities{
+    background-color: white;
+    margin: 8px 0;
+    padding:0 15px;
+}
+.shz-lisdet-facilities .title{
+    line-height: 50px;
+    font-size: 1.7rem;
+    color: #363636;
+}
+.shz-lisdet-facilities .list{
+    overflow: hidden;
+    padding: 15px 0;
+    font-size: 1.5rem;
+    color: #A6A6A6;
+}
+.shz-lisdet-facilities .list li{
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+.shz-lisdet-facilities .list li img{
+    width: 40%;
+    margin-bottom: 10px;
+}
+.shz-lisdet-det{
+    padding: 10px 15px;
+    background-color: white;
+}
+.shz-lisdet-det .title{
+    font-size: 1.7rem;
+    color: #363636;
+}
+.shz-lisdet-det .det{
+    font-size: 1.5rem;
+    color: #A6A6A6;
+    margin-top: 8px;
+}
+.shz-lisdet-det img{
+    float: right;
+    width: 20px;
+    margin-top: -30px;
+}
+/*========================商品详情===========================*/
+.shz-waredet-top{
+    background-color: white;
+    padding: 16px 15px;
+    border-bottom: 1px solid #F7F7F7;
+    border-top: 1px solid #F7F7F7;
+}
+.shz-waredet-top .title{
+    font-size: 1.6rem;
+}
+.shz-waredet-top .num{
+    font-size: 1.5rem;
+    margin-top: 15px;
+    color: #FB6162;
+}
+.shz-waredet-con{
+    background-color: white;
+    padding: 6px 15px 20px 15px;
+    font-size: 1.4rem;
+    line-height: 22px;
+    color: #7B7B7B;
+}
+.shz-waredet-parameter{
+    margin-top: 10px;
+    background-color: white;
+    font-size: 1.4rem;
+}
+.shz-waredet-parameter .title{
+    padding: 0 15px;
+    line-height: 40px;
+    font-size: 1.6rem;
+    border-bottom:1px solid #F7F7F7;
+}
+.shz-waredet-parameter .list{
+    padding: 8px 15px;
+    font-size: 1.3rem;
+}
+.shz-waredet-parameter .list span:first-child{
+    display: inline-block;
+    width: 7rem;
+    line-height: 22px;
+    color: #A1A1A1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

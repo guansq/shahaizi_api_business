@@ -7,11 +7,12 @@
 namespace app\api\controller;
 use service\HttpService;
 class Sms{
-    private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
-
     /**
-     * @api {GET}  /index.php?m=Api&c=Sms&a=getCountry  获得国家区号done
-     * @apiName     GetCountry
+     * @api {POST}  /index.php?m=Api&c=Sms&a=send  发送国家验证码done
+     * @apiName     PostSend
+     * @apiParam {string} country_code 区号
+     * @apiParam {string} mobile 手机号
+     * @apiParam {string} opt [reg] 为注册，空或其他为登陆或忘记密码
      * @apiGroup    SmsInfo
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
@@ -23,15 +24,15 @@ class Sms{
      */
     public function send()
     {
-        $mobile = I("mobile");
-        $data = ["mobile"=> $mobile,"opt" => "reg"];
-        $httpRet = HttpService::post($this -> common_sms_url, $data);
-        $httpRet = json_decode($httpRet,true);
+        model("common/Sms") -> sendSms();
+    }
 
-        if($httpRet["msg"] != "发送成功")
-            dataJson(4004,$httpRet["msg"],[]);
-        else
-            dataJson(1,$httpRet["msg"],[]);
+    /**
+     * 检查验证码
+     */
+    public function checkSms ()
+    {
+        model("common/Sms") -> checkSms();
     }
 
     /**

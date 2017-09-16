@@ -193,41 +193,6 @@ define({ "api": [
     ]
   },
   {
-    "type": "POST",
-    "url": "/index/sendCaptcha",
-    "title": "发送验证码done",
-    "name": "sendCaptcha",
-    "group": "Common",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "mobile",
-            "description": "<p>手机号.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "opt",
-            "description": "<p>验证码类型 reg=注册 resetpwd=找回密码 login=登陆 bind=绑定手机号.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/BaseMessage.php",
-    "groupTitle": "Common",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index/sendCaptcha"
-      }
-    ]
-  },
-  {
     "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=auth_img",
     "title": "认证图片done",
@@ -402,7 +367,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n     \"is_seller_auth\": 0,\n     \"is_drv_auth\": 1,\n     \"is_home_auth\": 0\n }\n }",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n         \"is_seller_auth\": 0,\n         \"is_drv_auth\": 1,\n         \"is_home_auth\": 0\n     }\n }",
           "type": "json"
         }
       ]
@@ -575,6 +540,172 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=NewAction&a=getIndexNewAction"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=User&a=getWithdrawalList",
+    "title": "获取提现列表done",
+    "name": "GetWithdrawalList",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>每页条数</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "status",
+            "description": "<p>状态：-2删除作废-1审核失败0申请中1审核通过2已转款完成</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n    \"status\": 1,\n    \"msg\": \"返回成功！\",\n    \"result\": []\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=getWithdrawalList"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=User&a=getWithdrawals",
+    "title": "获取提现金额done",
+    "name": "GetWithdrawals",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "status",
+            "description": "<p>状态：-2删除作废-1审核失败0申请中1审核通过2已转款完成</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功\",\n     \"result\": {\n         \"seller_id\": 20,\n         \"drv_money\": 100\n     }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=getWithdrawals"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Order&a=missOrder",
+    "title": "获取错过订单done",
+    "name": "MissOrder",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>页显示数</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "page",
+            "description": "<p>页数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "string",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>当前页数</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n {\n   \"status\": 1,\n   \"msg\": \"返回成功！\",\n   \"result\": {\n       \"data\": [\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           },\n           {\n               \"type\": 1,\n               \"work_address\": \"江苏省苏州市\",\n               \"dest_address\": \"英格兰\",\n               \"real_price\": \"100.00\",\n               \"create_at\": \"2017-09-14\"\n           }\n       ],\n       \"count\": 21\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=missOrder"
       }
     ]
   },
@@ -864,6 +995,117 @@ define({ "api": [
     ]
   },
   {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=User&a=postWithdrawals",
+    "title": "提交提现申请done",
+    "name": "PostWithdrawals",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "money",
+            "description": "<p>提现金额</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "distill_way",
+            "description": "<p>提现方式</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "account",
+            "description": "<p>提现账户</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "account_name",
+            "description": "<p>提现人用户名</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n    \"status\": 1,\n    \"msg\": \"返回成功！\",\n    \"result\": []\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=postWithdrawals"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Order&a=updateTime",
+    "title": "获取我的工作台done",
+    "name": "UpdateTime",
+    "group": "Mine",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>air_id值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "time_new",
+            "description": "<p>小时，格式 18:00</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "Http/1.1    200 OK\n {\n    \"status\": 1,\n    \"msg\": \"返回成功!\",\n    \"result\": {}\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Order.php",
+    "groupTitle": "Mine",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Order&a=updateTime"
+      }
+    ]
+  },
+  {
     "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=actionCar",
     "title": "新增/修改车辆done",
@@ -946,6 +1188,50 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=actionCar"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=delLine",
+    "title": "删除线路done",
+    "name": "DelLine",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "line_id",
+            "description": "<p>line_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"删除成功！\",\n     \"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=delLine"
       }
     ]
   },
@@ -1177,6 +1463,13 @@ define({ "api": [
             "optional": false,
             "field": "air_id",
             "description": "<p>air_id值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "add_reason",
+            "description": "<p>加班理由</p>"
           }
         ]
       }
@@ -1196,6 +1489,218 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=overtime"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getLinelist",
+    "title": "线路列表/我的服务done",
+    "name": "GetLinelist",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "is_state",
+            "description": "<p>0:待审核1:审核通过2:已拒绝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>返回成功</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n {\n   \"status\": 1,\n   \"msg\": \"返回成功！\",\n   \"result\": {\n       \"total\": 4,\n       \"per_page\": 10,\n       \"current_page\": 1,\n       \"data\": [\n           {\n               \"line_id\": 5,\n               \"line_title\": \"墨西哥\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           },\n           {\n               \"line_id\": 4,\n               \"line_title\": \"菲律宾\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           },\n           {\n               \"line_id\": 3,\n               \"line_title\": \"新加坡\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           },\n           {\n               \"line_id\": 2,\n               \"line_title\": \"菲律宾\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           }\n       ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Emchat.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getLinelist"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getLinelist",
+    "title": "线路列表/我的服务done",
+    "name": "GetLinelist",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "is_state",
+            "description": "<p>0:待审核1:审核通过2:已拒绝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>返回成功</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n {\n   \"status\": 1,\n   \"msg\": \"返回成功！\",\n   \"result\": {\n       \"total\": 4,\n       \"per_page\": 10,\n       \"current_page\": 1,\n       \"data\": [\n           {\n               \"line_id\": 5,\n               \"line_title\": \"墨西哥\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           },\n           {\n               \"line_id\": 4,\n               \"line_title\": \"菲律宾\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           },\n           {\n               \"line_id\": 3,\n               \"line_title\": \"新加坡\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           },\n           {\n               \"line_id\": 2,\n               \"line_title\": \"菲律宾\",\n               \"line_price\": \"500.00RMB\",\n               \"seller_id\": 20,\n               \"car_id\": \"3\",\n               \"line_highlights\": \"亮点多多\",\n               \"line_detail\": [\n                   {\n                       \"date_num\": 1,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   },\n                   {\n                       \"date_num\": 2,\n                       \"summary\": \"这是摘要1\",\n                       \"port_detail\": [\n                           {\n                               \"port_num\": 1,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第一站1\"\n                           },\n                           {\n                               \"port_num\": 2,\n                               \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                               \"port_detail\": \"这是第二站2\"\n                           }\n                       ]\n                   }\n               ],\n               \"create_at\": null,\n               \"update_at\": null,\n               \"is_comm\": 0,\n               \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n               \"is_state\": 0,\n               \"pass_content\": null,\n               \"is_del\": 0\n           }\n       ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getLinelist"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getOvertime",
+    "title": "获取加班时间done",
+    "name": "GetOvertime",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>air_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"申请成功！\",\n     \"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getOvertime"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=lineDetail",
+    "title": "线路详情done",
+    "name": "LineDetail",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "line_id",
+            "description": "<p>line_id值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": {\n         \"line_id\": 3,\n         \"line_title\": \"新加坡\",\n         \"line_price\": \"500.00RMB\",\n         \"seller_id\": 20,\n         \"car_id\": \"3\",\n         \"line_highlights\": \"亮点多多\",\n         \"line_detail\": [\n             {\n                 \"date_num\": 1,\n                 \"summary\": \"这是摘要1\",\n                 \"port_detail\": [\n                     {\n                         \"port_num\": 1,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第一站1\"\n                     },\n                     {\n                         \"port_num\": 2,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第二站2\"\n                     }\n                 ]\n             },\n             {\n                 \"date_num\": 2,\n                 \"summary\": \"这是摘要1\",\n                 \"port_detail\": [\n                     {\n                         \"port_num\": 1,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第一站1\"\n                     },\n                     {\n                         \"port_num\": 2,\n                         \"port_coverImg\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n                         \"port_detail\": \"这是第二站2\"\n                     }\n                 ]\n             }\n         ],\n         \"create_at\": null,\n         \"update_at\": null,\n         \"is_comm\": 0,\n         \"cover_img\": \"http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png\",\n         \"is_state\": 0,\n         \"pass_content\": null,\n         \"is_del\": 0\n     }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=lineDetail"
       }
     ]
   },
@@ -1244,6 +1749,157 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getCarBar"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=postComment",
+    "title": "提交评价done",
+    "name": "PostComment",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "score",
+            "description": "<p>评分值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "content",
+            "description": "<p>评价内容</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "is_anonymous",
+            "description": "<p>是否匿名</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": []\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=postComment"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=publishLine",
+    "title": "发布线路done",
+    "name": "PublishLine",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "line_title",
+            "description": "<p>线路标题</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "line_price",
+            "description": "<p>线路价格</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "car_id",
+            "description": "<p>车辆id,多个以逗号隔开</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "cover_img",
+            "description": "<p>封面图片</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "bright_dot",
+            "description": "<p>亮点</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "line_detail",
+            "description": "<p>线路详情 示例： [{&quot;date_num&quot;:1,&quot;summary&quot;:&quot;\\u8fd9\\u662f\\u6458\\u89811&quot;,&quot;port_detail&quot;:[{&quot;port_num&quot;:1,&quot;port_coverImg&quot;:&quot;http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png&quot;,&quot;port_detail&quot;:&quot;\\u8fd9\\u662f\\u7b2c\\u4e00\\u7ad91&quot;},{&quot;port_num&quot;:2,&quot;port_coverImg&quot;:&quot;http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png&quot;,&quot;port_detail&quot;:&quot;\\u8fd9\\u662f\\u7b2c\\u4e8c\\u7ad92&quot;}]},{&quot;date_num&quot;:2,&quot;summary&quot;:&quot;\\u8fd9\\u662f\\u6458\\u89811&quot;,&quot;port_detail&quot;:[{&quot;port_num&quot;:1,&quot;port_coverImg&quot;:&quot;http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png&quot;,&quot;port_detail&quot;:&quot;\\u8fd9\\u662f\\u7b2c\\u4e00\\u7ad91&quot;},{&quot;port_num&quot;:2,&quot;port_coverImg&quot;:&quot;http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png&quot;,&quot;port_detail&quot;:&quot;\\u8fd9\\u662f\\u7b2c\\u4e8c\\u7ad92&quot;}]}]</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "line_id",
+            "description": "<p>线路id 为空时为添加，存在时为修改</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n   \"status\": 1,\n   \"msg\": \"发布成功！\",\n   \"result\": []\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=publishLine"
       }
     ]
   },
@@ -1410,7 +2066,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"发送成功\",\n     \"result\": []\n }",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": [\n     {\n     \"id\": 214,\n     \"country\": \"中国\",\n     \"mobile_prefix\": \"86\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 215,\n     \"country\": \"香港\",\n     \"mobile_prefix\": \"852\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 216,\n     \"country\": \"澳门\",\n     \"mobile_prefix\": \"853\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 217,\n     \"country\": \"台湾\",\n     \"mobile_prefix\": \"886\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 218,\n     \"country\": \"马来西亚\",\n     \"mobile_prefix\": \"60\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 219,\n     \"country\": \"印度尼西亚\",\n     \"mobile_prefix\": \"62\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 220,\n     \"country\": \"菲律宾\",\n     \"mobile_prefix\": \"63\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 402,\n     \"country\": \"瓦努阿图\",\n     \"mobile_prefix\": \"678\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 403,\n     \"country\": \"斐济\",\n     \"mobile_prefix\": \"679\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 404,\n     \"country\": \"科克群岛\",\n     \"mobile_prefix\": \"682\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 405,\n     \"country\": \"纽埃岛\",\n     \"mobile_prefix\": \"683\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 406,\n     \"country\": \"东萨摩亚\",\n     \"mobile_prefix\": \"684\",\n     \"area\": \"大洋洲\"\n     }\n}",
           "type": "json"
         }
       ]
@@ -1425,16 +2081,43 @@ define({ "api": [
     ]
   },
   {
-    "type": "GET",
-    "url": "/index.php?m=Api&c=Sms&a=getCountry",
-    "title": "获得国家区号done",
-    "name": "GetCountry",
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Sms&a=send",
+    "title": "发送国家验证码done",
+    "name": "PostSend",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "country_code",
+            "description": "<p>区号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "mobile",
+            "description": "<p>手机号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "opt",
+            "description": "<p>[reg] 为注册，空或其他为登陆或忘记密码</p>"
+          }
+        ]
+      }
+    },
     "group": "SmsInfo",
     "success": {
       "examples": [
         {
           "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": [\n     {\n     \"id\": 214,\n     \"country\": \"中国\",\n     \"mobile_prefix\": \"86\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 215,\n     \"country\": \"香港\",\n     \"mobile_prefix\": \"852\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 216,\n     \"country\": \"澳门\",\n     \"mobile_prefix\": \"853\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 217,\n     \"country\": \"台湾\",\n     \"mobile_prefix\": \"886\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 218,\n     \"country\": \"马来西亚\",\n     \"mobile_prefix\": \"60\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 219,\n     \"country\": \"印度尼西亚\",\n     \"mobile_prefix\": \"62\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 220,\n     \"country\": \"菲律宾\",\n     \"mobile_prefix\": \"63\",\n     \"area\": \"亚洲\"\n     },\n     {\n     \"id\": 402,\n     \"country\": \"瓦努阿图\",\n     \"mobile_prefix\": \"678\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 403,\n     \"country\": \"斐济\",\n     \"mobile_prefix\": \"679\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 404,\n     \"country\": \"科克群岛\",\n     \"mobile_prefix\": \"682\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 405,\n     \"country\": \"纽埃岛\",\n     \"mobile_prefix\": \"683\",\n     \"area\": \"大洋洲\"\n     },\n     {\n     \"id\": 406,\n     \"country\": \"东萨摩亚\",\n     \"mobile_prefix\": \"684\",\n     \"area\": \"大洋洲\"\n     }\n}",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"发送成功\",\n     \"result\": []\n }",
           "type": "json"
         }
       ]
@@ -1444,7 +2127,98 @@ define({ "api": [
     "groupTitle": "SmsInfo",
     "sampleRequest": [
       {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Sms&a=getCountry"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Sms&a=send"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=User&a=suggestionFeedback",
+    "title": "意见反馈done",
+    "name": "SuggestionFeedback",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "suggest_id",
+            "description": "<p>意见类型id</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "content",
+            "description": "<p>要反馈的内容</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "img_url",
+            "description": "<p>图片url</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"申请成功！\",\n     \"result\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "Suggestion",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=suggestionFeedback"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=User&a=suggestion_type&limit=",
+    "title": "获取意见反馈类型done",
+    "name": "suggestion_type",
+    "group": "Suggestion",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "limit",
+            "description": "<p>显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": [\n     \"功能异常\",\n     \"体验问题\",\n     \"新功能建议\",\n     \"其他\"\n      ]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "Suggestion",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=suggestion_type&limit="
       }
     ]
   },
@@ -1523,6 +2297,108 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=LocalTalent&a=getLocalTalentList"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=User&a=updateMobile",
+    "title": "【更换手机号】新手机修改done",
+    "name": "UpdateMobile",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "username",
+            "description": "<p>手机号码【区号必须】</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "country_code",
+            "description": "<p>区号</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "code",
+            "description": "<p>验证码</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"验证成功！\",\n     \"result\": []\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=updateMobile"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=User&a=checkSms",
+    "title": "【更换手机号】验证原手机号done",
+    "name": "UserCheckSms",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "username",
+            "description": "<p>手机号码【不带区号】</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "code",
+            "description": "<p>验证码</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"验证成功！\",\n     \"result\": []\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/User.php",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=User&a=checkSms"
       }
     ]
   },
@@ -1852,6 +2728,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "country_code",
+            "description": "<p>国家区号</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "username",
             "description": "<p>手机号/用户名.</p>"
           },
@@ -1883,7 +2766,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\"status\": 1,\n\"msg\": \"注册成功\",\n\"result\": {\n\"user_id\": 146,\n\"email\": \"\",\n\"password\": \"90600d68b0f56d90c4c34284d8dfd138\",\n\"sex\": 0,\n\"birthday\": 0,\n\"user_money\": \"0.00\",\n\"frozen_money\": \"0.00\",\n\"distribut_money\": \"0.00\",\n\"pay_points\": \"0.0000\",\n\"address_id\": 0,\n\"reg_time\": 1504596640,\n\"last_login\": 1504596640,\n\"last_ip\": \"\",\n\"qq\": \"\",\n\"mobile\": \"18451847701\",\n\"mobile_validated\": 1,\n\"oauth\": \"\",\n\"openid\": null,\n\"unionid\": null,\n\"head_pic\": null,\n\"province\": 0,\n\"city\": 0,\n\"district\": 0,\n\"email_validated\": 0,\n\"nickname\": \"18451847701\",\n\"level\": 1,\n\"discount\": \"1.00\",\n\"total_amount\": \"0.00\",\n\"is_lock\": 0,\n\"is_distribut\": 1,\n\"first_leader\": 0,\n\"second_leader\": 0,\n\"third_leader\": 0,\n\"fourth_leader\": null,\n\"fifth_leader\": null,\n\"sixth_leader\": null,\n\"seventh_leader\": null,\n\"token\": \"c34ba58aec24003f0abec19ae2688c86\",\n\"address\": null,\n\"pay_passwd\": null,\n\"pre_pay_points\": \"0.0000\",\n\"optional\": \"0.0000\",\n\"vipid\": 0,\n\"paypoint\": \"0.00\"\n}\n}",
+          "content": " HTTP/1.1 200 OK\n{\n    \"status\": 1,\n    \"msg\": \"注册成功\",\n    \"result\": {\n    \"user_id\": 146,\n    \"email\": \"\",\n    \"password\": \"90600d68b0f56d90c4c34284d8dfd138\",\n    \"sex\": 0,\n    \"birthday\": 0,\n    \"user_money\": \"0.00\",\n    \"frozen_money\": \"0.00\",\n    \"distribut_money\": \"0.00\",\n    \"pay_points\": \"0.0000\",\n    \"address_id\": 0,\n    \"reg_time\": 1504596640,\n    \"last_login\": 1504596640,\n    \"last_ip\": \"\",\n    \"qq\": \"\",\n    \"mobile\": \"18451847701\",\n    \"mobile_validated\": 1,\n    \"oauth\": \"\",\n    \"openid\": null,\n    \"unionid\": null,\n    \"head_pic\": null,\n    \"province\": 0,\n    \"city\": 0,\n    \"district\": 0,\n    \"email_validated\": 0,\n    \"nickname\": \"18451847701\",\n    \"level\": 1,\n    \"discount\": \"1.00\",\n    \"total_amount\": \"0.00\",\n    \"is_lock\": 0,\n    \"is_distribut\": 1,\n    \"first_leader\": 0,\n    \"second_leader\": 0,\n    \"third_leader\": 0,\n    \"fourth_leader\": null,\n    \"fifth_leader\": null,\n    \"sixth_leader\": null,\n    \"seventh_leader\": null,\n    \"token\": \"c34ba58aec24003f0abec19ae2688c86\",\n    \"address\": null,\n    \"pay_passwd\": null,\n    \"pre_pay_points\": \"0.0000\",\n    \"optional\": \"0.0000\",\n    \"vipid\": 0,\n    \"paypoint\": \"0.00\"\n}\n}",
           "type": "json"
         }
       ]

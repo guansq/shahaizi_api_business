@@ -37,10 +37,21 @@ class WorkStation extends Model
             else
                 $result[$key]["is_read"] = 0;
         }
+
+        $date = date("Y-m-d",time());
+        $current_zero = strtotime($date);
+
+        $where = "drv_id <> $seller_id AND type in (1,2) AND create_at >= $current_zero";
+        $count = M("pack_order")
+            -> field("type,work_address,dest_address,real_price,create_at")
+            -> where($where)
+            -> count();
+
         if(!$result)
-            $result  = ["data" =>[] ];
+            $result  = ["data" =>[] ,"count" => $count];
         else
-            $result  = ["data" =>$result ];
+            $result  = ["data" =>$result ,"count" => $count];
+
          jsonData(1,"返回成功",$result);
 
     }
@@ -194,6 +205,35 @@ class WorkStation extends Model
         }
     }
 
+    /**
+     * 错过的订单
+     */
+    public function miss_order ($seller_id)
+    {
+        $pagesize = I("pagesize");
+        $date = date("Y-m-d",time());
+        $current_zero = strtotime($date);
+
+        $where = "drv_id <> $seller_id AND type in (1,2) AND create_at >= $current_zero";
+        $count = M("pack_order")
+            -> field("type,work_address,dest_address,real_price,create_at")
+            -> where($where)
+            -> count();
+
+        $order_data = M("pack_order")
+            -> field("type,work_address,dest_address,real_price,create_at")
+            -> where($where)
+            -> paginate($pagesize ? $pagesize : 10);
+
+        foreach ($order_data as $key => $val)
+        {
+            $val["create_at"] = date("Y-m-d", $val["create_at"] );
+            $order_result[$key] = $val;
+        }
+
+        $result = ["data" => $order_result,"count" => $count];
+        dataJson(1,"返回成功！", $result);
+    }
 
     /**
      * 订单拒绝
@@ -278,5 +318,34 @@ class WorkStation extends Model
             else
                 jsonData(4005,"接单失败!",[]);
         }
+    }
+
+    /**
+     * 更新订单时间
+     */
+    public function updateTime ($seller_id)
+    {
+        $time_new = I("time_new");
+        $air_id = I("air_id");
+        if(!$time_new)
+            jsonData(4004,"时间不能为空!",[]);
+
+        if(!$air_id)
+            jsonData(4004,"air_id不能为空!",[]);
+
+        $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
+        $time = explode(":",$config["go_off_time"]);
+        $hour = explode(":",$time_new);
+
+        if(count($time) == 1)
+            $time[1] = 0;
+        if(count($hour) == 1)
+            $hour[1] = 0;
+
+        if ($hour[0] > $time[0] || ($hour[0] == $time[0] && $hour[1] > $time[1]))
+            jsonData(4004,"不能大于下班时间!",[]);
+
+        M("pack_order") -> where("air_id = $air_id AND seller_id = $seller_id") -> save(["start_time" => $time_new]);
+        jsonData(4004,"不能大于下班时间!",[]);
     }
 }

@@ -296,6 +296,128 @@ class Order extends Base
         model("common/WorkStation") -> getMyWorkSingleStation($this -> user_id);
     }
 
+    /**
+     * @api {GET}   /index.php?m=Api&c=Order&a=missOrder  获取错过订单done
+     * @apiName     MissOrder
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {string} pagesize 页显示数
+     * @apiParam {string} page 页数
+
+     * @apiSuccess  {string} per_page 当前页数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *  {
+     *    "status": 1,
+     *    "msg": "返回成功！",
+     *    "result": {
+     *        "data": [
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            },
+     *            {
+     *                "type": 1,
+     *                "work_address": "江苏省苏州市",
+     *                "dest_address": "英格兰",
+     *                "real_price": "100.00",
+     *                "create_at": "2017-09-14"
+     *            }
+     *        ],
+     *        "count": 21
+     *    }
+     *}
+     */
+    /**
+     * 错过的订单
+     */
+    public function missOrder ()
+    {
+        model("common/WorkStation") -> miss_order($this -> user_id);
+    }
+
+
+    /**
+     * @api {POST}   /index.php?m=Api&c=Order&a=updateTime     获取我的工作台done
+     * @apiName     UpdateTime
+     * @apiGroup    Mine
+     * @apiParam {string} token token值
+     * @apiParam {string} air_id air_id值
+     * @apiParam {string} time_new  小时，格式 18:00
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *   {
+     *      "status": 1,
+     *      "msg": "返回成功!",
+     *      "result": {}
+     *   }
+     */
+    /**
+     * 修改订单时间
+     */
+    public function updateTime ()
+    {
+        model("common/WorkStation") -> updateTime($this -> user_id);
+    }
 
     /**
      * @api {POST}   /index.php?m=Api&c=Order&a=air_status  接单按钮done
@@ -1047,4 +1169,6 @@ class Order extends Base
         $return = $logic->uploadReturnGoodsImg();
         $this->ajaxReturn($return);
     }
+
+
 }

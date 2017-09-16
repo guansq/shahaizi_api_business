@@ -188,7 +188,8 @@ class UsersLogic extends Model
      * @param $password2 确认密码
      * @return array
      */
-    public function reg($username,$password,$password2,$push_id = 0){
+    public function reg($username,$password,$password2,$push_id = 0,$country_code = 0){
+
     	$is_validated = 0 ;
         if(check_email($username)){
             $is_validated = 1;
@@ -215,23 +216,25 @@ class UsersLogic extends Model
         if(get_user_info($username,2))
             return array('status'=>-1,'msg'=>'账号已存在','result'=>'');
 
+        $map['country_code'] = $country_code;
         $map['password'] = $password;
         $map['reg_time'] = time();
         $map['first_leader'] = cookie('first_leader'); // 推荐人id
         // 如果找到他老爸还要找他爷爷他祖父等
         if($map['first_leader'])
         {
-            $first_leader = M('users')->where("user_id = {$map['first_leader']}")->find();
+            $first_leader = M('seller')->where("user_id = {$map['first_leader']}")->find();
             $map['second_leader'] = $first_leader['first_leader'];
             $map['third_leader'] = $first_leader['second_leader'];
             //他上线分销的下线人数要加1
-            M('users')->where(array('user_id' => $map['first_leader']))->setInc('underling_number');
-            M('users')->where(array('user_id' => $map['second_leader']))->setInc('underling_number');
-            M('users')->where(array('user_id' => $map['third_leader']))->setInc('underling_number');
+            M('seller')->where(array('user_id' => $map['first_leader']))->setInc('underling_number');
+            M('seller')->where(array('user_id' => $map['second_leader']))->setInc('underling_number');
+            M('seller')->where(array('user_id' => $map['third_leader']))->setInc('underling_number');
         }else
 		{
 			$map['first_leader'] = 0;
 		}
+
 
         // 成为分销商条件
         //$distribut_condition = tpCache('distribut.condition');
@@ -240,15 +243,31 @@ class UsersLogic extends Model
         $map['push_id'] = $push_id; //推送id
         $map['token'] = md5(time().mt_rand(1,999999999));
         $map['last_login'] = time();
-        
+
+        $apply_code = rand_gene(7);
+        $seller_code = M("seller") -> field("seller_id") -> where("apply_code = '$apply_code'") -> find();
+        while($seller_code)
+        {
+            $apply_code = rand_gene(7);
+            $seller_code = M("seller") -> field("seller_id")-> where("apply_code = '$apply_code'") -> find();
+        }
+
+        $map['apply_code'] = $apply_code;
+
         $user_id = M('seller')->add($map);
+
         if(!$user_id)
             return array('status'=>-1,'msg'=>'注册失败','result'=>'');
 
         $pay_points = tpCache('basic.reg_integral'); // 会员注册赠送积分
         if($pay_points > 0)
             accountLog($user_id, 0,$pay_points, '会员注册赠送积分'); // 记录日志流水
+        $global_mobile = $country_code.$username;
+        M("sms_info") -> where("mobile = '$global_mobile'") -> save(["is_check" => 1]);
         $user = M('seller')->where("seller_id = {$user_id}")->find();
+        $drv_code = date("Ymd").$user["seller_id"];
+        M("seller") -> where("seller_id = {$user_id}") -> save(["drv_code" => $drv_code]);
+        $user["drv_code"] = $drv_code;
 //        // 会员注册送优惠券
 //        $coupon = M('coupon')->where("send_end_time > ".time()." and ((createnum - send_num) > 0 or createnum = 0) and type = 2")->select();
 //        if(!empty($coupon)){
@@ -258,6 +277,7 @@ class UsersLogic extends Model
 //        		M('Coupon')->where("id = {$val['id']}")->setInc('send_num'); // 优惠券领取数量加一
 //        	}
 //        }
+
         return array('status'=>1,'msg'=>'注册成功','result'=>$user);
     }
 

@@ -10,7 +10,7 @@
  * 如果商业用途务必到官方购买正版授权, 以免引起不必要的法律纠纷.
  * ============================================================================
  * $Author: IT宇宙人 2015-08-10 $
- */ 
+ */
 namespace app\api\controller;
 
 use app\common\logic\CartLogic;
@@ -24,11 +24,11 @@ use service\MsgService;
 
 class User extends Base {
     public $userLogic;
-    
+
     /**
      * 析构流函数
      */
-    public function  __construct() {   
+    public function  __construct() {
         parent::__construct();
         $this->userLogic = new UsersLogic();
     }
@@ -229,24 +229,24 @@ class User extends Base {
         if($data['status'] != 1){
             $this->ajaxReturn($data);
         }
-        
+
         $cartLogic = new CartLogic();
         $cartLogic->setUserId($data['result']['user_id']);
         $cartLogic->setUniqueId($unique_id);
         $cartLogic->doUserLoginHandle();  // 用户登录后 需要对购物车 一些操作
         $this->ajaxReturn($data);
     }
-    
+
     /**
      * 登出
      */
     public function logout()
     {
-        $token = I("post.token", ''); 
+        $token = I("post.token", '');
         $data = $this->userLogic->app_logout($token);
         $this->ajaxReturn($data);
     }
-    
+
     /**
      * @api {POST}  index.php?m=Api&c=User&a=thirdLogin
      * @apiName     thirdLogin
@@ -299,11 +299,11 @@ class User extends Base {
         $map['openid'] = I('openid','');
         $map['oauth'] = I('from','');
         $map['nickname'] = I('nickname','');
-        $map['head_pic'] = I('head_pic','');        
+        $map['head_pic'] = I('head_pic','');
         $map['unionid'] = I('unionid','');
         $map['push_id'] = I('push_id','');
         $map['sex'] = I('sex', 0);
-        
+
         if ($map['oauth'] == 'miniapp') {
             $code = I('post.code', '');
             if (!$code) {
@@ -327,7 +327,7 @@ class User extends Base {
             $cartLogic->doUserLoginHandle();// 用户登录后 需要对购物车 一些操作
             //重新获取用户信息，补全数据
             $data = $this->userLogic->getApiUserInfo($data['result']['user_id']);
-        }         
+        }
         $this->ajaxReturn($data);
     }
 
@@ -335,62 +335,63 @@ class User extends Base {
      * @api     {POST} /index.php?m=Api&c=User&a=reg            用户注册
      * @apiName   reg
      * @apiGroup  User
+     * @apiParam {String} country_code     国家区号
      * @apiParam {String} username         手机号/用户名.
      * @apiParam {String} password         密码
      * @apiParam {String} [code]           手机短信验证码
      * @apiParam {String} [push_id]        推送id，相当于第三方的reg_id
      * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
-    {
-    "status": 1,
-    "msg": "注册成功",
-    "result": {
-    "user_id": 146,
-    "email": "",
-    "password": "90600d68b0f56d90c4c34284d8dfd138",
-    "sex": 0,
-    "birthday": 0,
-    "user_money": "0.00",
-    "frozen_money": "0.00",
-    "distribut_money": "0.00",
-    "pay_points": "0.0000",
-    "address_id": 0,
-    "reg_time": 1504596640,
-    "last_login": 1504596640,
-    "last_ip": "",
-    "qq": "",
-    "mobile": "18451847701",
-    "mobile_validated": 1,
-    "oauth": "",
-    "openid": null,
-    "unionid": null,
-    "head_pic": null,
-    "province": 0,
-    "city": 0,
-    "district": 0,
-    "email_validated": 0,
-    "nickname": "18451847701",
-    "level": 1,
-    "discount": "1.00",
-    "total_amount": "0.00",
-    "is_lock": 0,
-    "is_distribut": 1,
-    "first_leader": 0,
-    "second_leader": 0,
-    "third_leader": 0,
-    "fourth_leader": null,
-    "fifth_leader": null,
-    "sixth_leader": null,
-    "seventh_leader": null,
-    "token": "c34ba58aec24003f0abec19ae2688c86",
-    "address": null,
-    "pay_passwd": null,
-    "pre_pay_points": "0.0000",
-    "optional": "0.0000",
-    "vipid": 0,
-    "paypoint": "0.00"
-    }
-    }
+     *   HTTP/1.1 200 OK
+     *  {
+     *      "status": 1,
+     *      "msg": "注册成功",
+     *      "result": {
+     *      "user_id": 146,
+     *      "email": "",
+     *      "password": "90600d68b0f56d90c4c34284d8dfd138",
+     *      "sex": 0,
+     *      "birthday": 0,
+     *      "user_money": "0.00",
+     *      "frozen_money": "0.00",
+     *      "distribut_money": "0.00",
+     *      "pay_points": "0.0000",
+     *      "address_id": 0,
+     *      "reg_time": 1504596640,
+     *      "last_login": 1504596640,
+     *      "last_ip": "",
+     *      "qq": "",
+     *      "mobile": "18451847701",
+     *      "mobile_validated": 1,
+     *      "oauth": "",
+     *      "openid": null,
+     *      "unionid": null,
+     *      "head_pic": null,
+     *      "province": 0,
+     *      "city": 0,
+     *      "district": 0,
+     *      "email_validated": 0,
+     *      "nickname": "18451847701",
+     *      "level": 1,
+     *      "discount": "1.00",
+     *      "total_amount": "0.00",
+     *      "is_lock": 0,
+     *      "is_distribut": 1,
+     *      "first_leader": 0,
+     *      "second_leader": 0,
+     *      "third_leader": 0,
+     *      "fourth_leader": null,
+     *      "fifth_leader": null,
+     *      "sixth_leader": null,
+     *      "seventh_leader": null,
+     *      "token": "c34ba58aec24003f0abec19ae2688c86",
+     *      "address": null,
+     *      "pay_passwd": null,
+     *      "pre_pay_points": "0.0000",
+     *      "optional": "0.0000",
+     *      "vipid": 0,
+     *      "paypoint": "0.00"
+     *  }
+     *  }
      * @apiErrorExample {json} Error-Response:
      *     HTTP/1.1 404 Not Found
     {
@@ -402,24 +403,22 @@ class User extends Base {
     public function reg(){
         $username = I('post.username','');
         $password = I('post.password','');
-        $code = I('post.code');        
+        $country_code = I('post.country_code',0);
+        if(!$country_code)
+            dataJson(4004,"国家区号不能为空！",[]);
+
+        $code = I('post.code');
         $type = I('type','phone');
         $session_id = I('unique_id', session_id());// 唯一id  类似于 pc 端的session id
         $scene = I('scene' , 1);
         $push_id = I('post.push_id' , '');
 
-        //是否开启注册验证码机制
-        if(check_mobile($username)){
-            //校验验证码
-            $result = MsgService::verifyCaptcha($username,'reg',$code);
-            if($result['status'] != 1){
-                returnJson(-1,'验证码输入有误');
-            }
-            //$res = $this->userLogic->check_validate_code($code, $username  , $type , $session_id , $scene);
-            //if($res['status'] != 1) exit(json_encode($res));
+
+        if(model("common/Sms") -> checkSms(1,$country_code.$username,$code))
+        {
+            $data = $this->userLogic->reg($username,$password , $password, $push_id,$country_code);
+            exit(json_encode($data));
         }
-        $data = $this->userLogic->reg($username,$password , $password, $push_id);
-        exit(json_encode($data));
     }
 
 //    public function updateUserInfo(){
@@ -469,7 +468,7 @@ class User extends Base {
             exit(json_encode($data));
         }
     }
-    
+
     public function forgetPasswordInfo()
     {
         $account = I('post.account', '');
@@ -477,7 +476,7 @@ class User extends Base {
         if (!capache([], SESSION_ID, $capache)) {
             $this->ajaxReturn(['status'=>-1,'msg'=>'验证码错误！']);
         }
-        if (($user = M('users')->field('mobile, nickname')->where(['mobile' => $account])->find()) 
+        if (($user = M('users')->field('mobile, nickname')->where(['mobile' => $account])->find())
             || ($user = M('users')->field('mobile, nickname')->where(['email' => $account])->find())
             || ($user = M('users')->field('mobile, nickname')->where(['nickname' => $account])->find())) {
             $this->ajaxReturn(['status'=>1, 'msg'=>'获取成功', 'result' => $user]);
@@ -486,7 +485,7 @@ class User extends Base {
             $this->ajaxReturn(['status'=>-1, 'msg'=>'该账户不存在']);
         }
     }
-    
+
     /**
      * 短信验证
      */
@@ -504,10 +503,10 @@ class User extends Base {
         if ($res['status'] != 1) {
             $this->ajaxReturn($res);
         }
-       
+
         $this->ajaxReturn(['status'=>1, 'msg'=>'验证成功']);
     }
-    
+
     /**
      * 修改手机验证
      */
@@ -530,12 +529,12 @@ class User extends Base {
         /* if (!capache([], SESSION_ID, $capache)) {
             $this->ajaxReturn(['status'=>-1,'msg'=>'图形验证码错误！']);
         } */
-        
+
         if ($scene != 6) {
             $this->ajaxReturn(['status'=>-1,'msg'=>'场景码错误！']);
         }
-        
-        $data['mobile'] = $mobile;  
+
+        $data['mobile'] = $mobile;
         if (!$this->userLogic->update_info($this->user_id, $data)) {
            $this->ajaxReturn(['status' => -1, 'msg' => '手机号码更新失败']);
         }
@@ -560,15 +559,16 @@ class User extends Base {
         $password = I('password');
         $mobile = I('mobile', 'invalid');
         //$consignee = I('consignee', '');
-        $code = I('code');
 
         $user = M('seller')->where("mobile",$mobile)->find();
+
         if (!$user) {
             $this->ajaxReturn(['status'=>-1,'msg'=>'该手机号码没有关联账户']);
         } else {
             //校验验证码
-            $result = MsgService::verifyCaptcha($mobile,'resetpwd',$code);
-            if($result['status'] != 1){
+//            $result = MsgService::verifyCaptcha($mobile,'resetpwd',$code);
+            if(model("common/Sms") -> checkSms(1,$user["country_code"].$mobile,$user["country_code"]))
+            {
                 returnJson(-1,'验证码输入有误');
             }
             //修改密码
@@ -585,7 +585,7 @@ class User extends Base {
         if (!$this->user_id) {
             $this->ajaxReturn(array('status'=>-1,'msg'=>'缺少参数'));
         }
-        
+
         $address = M('user_address')->where(array('user_id'=>$this->user_id))->select();
         if(!$address) {
             $this->ajaxReturn(array('status'=>1,'msg'=>'没有数据','result'=>[]));
@@ -599,7 +599,7 @@ class User extends Base {
             $addr['twon_name']     = $regions[$addr['twon']] ?: '';
             $addr['address']       = $addr['address'] ?: '';
         }
-        
+
         $this->ajaxReturn(array('status'=>1,'msg'=>'获取成功','result'=>$address));
     }
 
@@ -620,27 +620,27 @@ class User extends Base {
         $id = I('id/d');
         if(!$this->user_id) exit(json_encode(array('status'=>-1,'msg'=>'缺少参数','result'=>'')));
         $address = M('user_address')->where("address_id" ,$id)->find();
-        $row = M('user_address')->where(array('user_id'=>$this->user_id,'address_id'=>$id))->delete();      
-      
+        $row = M('user_address')->where(array('user_id'=>$this->user_id,'address_id'=>$id))->delete();
+
         // 如果删除的是默认收货地址 则要把第一个地址设置为默认收货地址
         if($address['is_default'] == 1)
         {
-            $address = M('user_address')->where("user_id",$this->user_id)->find();    
-            
+            $address = M('user_address')->where("user_id",$this->user_id)->find();
+
             //@mobify by wangqh {
-            if($address) {    
+            if($address) {
                 M('user_address')->where("address_id",$address['address_id'])->save(array('is_default'=>1));
             }//@}
-            
-        }      
 
-        //@mobify by wangqh 
+        }
+
+        //@mobify by wangqh
         if ($row)
-           exit(json_encode(array('status'=>1,'msg'=>'删除成功','result'=>''))); 
+           exit(json_encode(array('status'=>1,'msg'=>'删除成功','result'=>'')));
         else
-           exit(json_encode(array('status'=>1,'msg'=>'删除失败','result'=>''))); 
+           exit(json_encode(array('status'=>1,'msg'=>'删除失败','result'=>'')));
     }
-    
+
     /*
      * 设置默认收货地址
      */
@@ -662,14 +662,14 @@ class User extends Base {
         if (!$this->user_id) {
             $this->ajaxReturn(['status'=>-1, 'msg'=>'还没登录', 'result'=>'']);
         }
-        
+
         $store_id = I('get.store_id', 0);
         $type = I('get.type', 0);
         $order_money = I('get.order_money', 0);
-        
+
         $data = $this->userLogic->get_coupon($this->user_id, $type, null, 0, $store_id, $order_money);
         unset($data['show']);
-        
+
         /* 获取各个优惠券的平台 */
         $coupon_list = &$data['result'];
         $store_id_arr = get_arr_column($coupon_list, 'store_id');
@@ -681,10 +681,10 @@ class User extends Base {
                 $coupon['limit_store'] = '全平台';
             }
         }
-        
+
         $this->ajaxReturn($data);
     }
- 
+
     /**
      * 获取购物车指定店铺的优惠券
      */
@@ -692,7 +692,7 @@ class User extends Base {
     {
         $store_id = I('store_id/d' , 0);    //限制店铺
         $money = I('money/f' , 0);        //限制金额
-        
+
         $cartLogic = new CartLogic();
         $couponLogic = new CouponLogic();
         $cartLogic->setUserId($this->user_id);
@@ -700,23 +700,23 @@ class User extends Base {
             $this->ajaxReturn(['status' => -1, 'msg' => '你的购物车没有选中商品']);
         }
         $cartList = $cartLogic->getCartList(1); // 获取用户选中的购物车商品
-        
+
         $cartGoodsList = get_arr_column($cartList,'goods');
         $cartGoodsId = get_arr_column($cartGoodsList,'goods_id');
         $cartGoodsCatId = get_arr_column($cartGoodsList,'cat_id3');
         //$storeCartList = $cartLogic->getStoreCartList($cartList);//转换成带店铺数据的购物车商品
-       
+
         $userCouponList = $couponLogic->getUserAbleCouponList($this->user_id, $cartGoodsId, $cartGoodsCatId);//用户可用的优惠券列表
-        
+
         $store_id_arr = get_arr_column($userCouponList, 'store_id');
         $store_arr = M('store')->where('store_id', 'in', $store_id_arr)->getField('store_id,store_name,store_logo');
 
-        $returnCouponList = array();  
-        foreach ($userCouponList as $k => $v){ 
+        $returnCouponList = array();
+        foreach ($userCouponList as $k => $v){
             if($v['store_id'] ==0 || $v['store_id'] == $store_id){
                 $coupon = $v['coupon'];
-                
-                if($coupon){  
+
+                if($coupon){
                         if($money == 0  || ($money > 0 && $coupon['condition'] <  $money)){      //金额限制
                             $coupon['limit_store'] = $store_arr[$coupon['store_id']]['store_name'];
                             switch ($coupon['use_type']){//0全店通用1指定商品可用2指定分类商品可用
@@ -732,7 +732,7 @@ class User extends Base {
                                 case 3 :
                                     $returnCoupon['limit_store'] = '全平台可用';
                                     break;
-                            }  
+                            }
                             $returnCoupon['id'] = $v['id'];
                             $returnCoupon['name'] = $coupon['name'];
                             $returnCoupon['money'] = $coupon['money'];
@@ -744,10 +744,10 @@ class User extends Base {
                     }
                 }
             }
-        } 
+        }
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $returnCouponList]);
     }
-    
+
     /*
      * 获取商品收藏列表
      */
@@ -769,10 +769,10 @@ class User extends Base {
         if (!$this->user_id) {
             $this->ajaxReturn(['status'=>-1, 'msg'=>'缺少参数', 'result'=>'']);
         }
-        
+
         $map = " deleted = 0 AND user_id = :user_id";
-        $map = $type ? $map.C($type) : $map;   
-        
+        $map = $type ? $map.C($type) : $map;
+
         $order_list = [];
         $order_obj = new \app\common\model\Order();
         $order_list_obj = $order_obj->order("order_id DESC")->where($map)->bind(['user_id'=>$this->user_id])->page($p, 10)->select();
@@ -780,7 +780,7 @@ class User extends Base {
             //转为数字，并获取订单状态，订单状态显示按钮，订单商品
             $order_list=collection($order_list_obj)->append(['order_status_detail','order_button','order_goods','store'])->toArray();
         }
-        
+
         $this->ajaxReturn(['status'=>1,'msg'=>'获取成功','result'=>$order_list]);
     }
 
@@ -796,7 +796,7 @@ class User extends Base {
         $data = $logic->cancel_order($this->user_id,$id);
         exit(json_encode($data));
     }
-     
+
     /**
      *  收货确认
      */
@@ -805,11 +805,11 @@ class User extends Base {
         //$user_id = I('user_id/d',0);
         if(!$this->user_id || !$id)
             exit(json_encode(array('status'=>-1,'msg'=>'参数有误','result'=>'')));
-        $data = confirm_order($id,$this->user_id);            
+        $data = confirm_order($id,$this->user_id);
         exit(json_encode($data));
     }
-    
-    
+
+
     /*
      *添加评论
      */
@@ -826,13 +826,13 @@ class User extends Base {
         $data['content']          = input('post.content', '');
         $data['img']              = input('post.img/a', ''); //小程序需要
         $data['user_id']          = $this->user_id;
-        
+
         $commentLogic = new CommentLogic;
         $return = $commentLogic->addGoodsAndServiceComment($data);
-        
+
         $this->ajaxReturn($return);
-    }  
-    
+    }
+
     /**
      * 提交服务评论
      */
@@ -844,13 +844,13 @@ class User extends Base {
         $goods_rank = I('post.goods_rank', 0);
 
         $store_id = M('order')->where(array('order_id' => $order_id))->getField('store_id');
-        
+
         $commentLogic = new CommentLogic;
         $return = $commentLogic->addServiceComment($this->user_id, $order_id, $store_id, $service_rank, $deliver_rank, $goods_rank);
-        
+
         $this->ajaxReturn($return);
     }
-    
+
     /**
      * 上传头像
      */
@@ -863,26 +863,26 @@ class User extends Base {
             $this->ajaxReturn($return);
         }
         $post['head_pic'] = $return['result'];
-        
+
         if (!$userLogic->update_info($this->user_id, $post)) {
             $this->ajaxReturn(['status' => -1, 'msg' => '保存失败']);
         }
         $this->ajaxReturn(['status' => 1, 'msg' => '操作成功', 'result' => $post['head_pic']]);
     }
-    
+
     /*
      * 账户资金
      */
     public function account(){
-        
+
         $unique_id = I("unique_id"); // 唯一id  类似于 pc 端的session id
        // $user_id = I('user_id/d'); // 用户id
         //获取账户资金记录
-        
+
         $data = $this->userLogic->get_account_log($this->user_id,I('get.type'));
         $account_log = $data['result'];
         exit(json_encode(array('status'=>1,'msg'=>'获取成功','result'=>$account_log)));
-    }    
+    }
 
     /**
      * 申请退货状态
@@ -890,12 +890,12 @@ class User extends Base {
     public function return_goods_status()
     {
         $rec_id = I('rec_id','');
-        
+
         $return_goods = M('return_goods')
             ->where(['rec_id'=>$rec_id])
             ->where('status','in','0,1')
             ->find();
-        
+
         //判断是否超过退货期
         $order = M('order')->where('order_id',$return_goods['order_id'])->find();
         $confirm_time_config = tpCache('shopping.auto_service_date');//后台设置多少天内可申请售后
@@ -903,11 +903,11 @@ class User extends Base {
         if ($order && (time() - $order['confirm_time']) > $confirm_time && !empty($order['confirm_time'])) {
             return ['result'=>-1,'msg'=>'已经超过' . ($confirm_time_config ?: 0) . "天内退货时间"];
         }
-        
+
         $return_id = $return_goods ? $return_goods['id'] : 0; //1代表可以退换货
         $this->ajaxReturn(['status'=>1, 'msg'=>'获取成功',  'result' => $return_id]);
     }
-     
+
     /**
      * 获取收藏店铺列表集合, 只用于查询用户收藏的店铺, 页面判断用, 区别于getUserCollectStore
      */
@@ -931,7 +931,7 @@ class User extends Base {
         $json_arr = array('status' => 1, 'msg' => '获取成功', 'result' => $store_list);
         exit(json_encode($json_arr));
     }
-    
+
     /**
      * 申请提现记录列表网页
      * @return type
@@ -948,7 +948,7 @@ class User extends Base {
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $list]);
         }
-        
+
         $this->assign('page', $page->show());// 赋值分页输出
         $this->assign('list', $list); // 下线
         if (I('is_ajax')) {
@@ -956,7 +956,7 @@ class User extends Base {
         }
         return $this->fetch();
     }
-    
+
     /**
      * 申请提现
      */
@@ -966,9 +966,9 @@ class User extends Base {
         if (!capache([], SESSION_ID, $data['verify_code'])) {
             $this->ajaxReturn(['status' => -1, 'msg' => "验证码错误"]);
         }
-        
-        $data['user_id'] = $this->user_id;    		    		
-        $data['create_time'] = time();                
+
+        $data['user_id'] = $this->user_id;
+        $data['create_time'] = time();
         $distribut_min = tpCache('basic.min'); // 最少提现额度
         $distribut_need  = tpCache('basic.need'); //满多少才能提
         if ($data['money'] < $distribut_min) {
@@ -976,10 +976,10 @@ class User extends Base {
         }
         if ($data['money'] > $this->user['user_money']) {
             $this->ajaxReturn(['status' => -1, 'msg' => "你最多可提现{$this->user['user_money']}账户余额."]);
-        } 
+        }
         if ($this->user['user_money']<$distribut_need) {
             $this->ajaxReturn(['status' => -1, 'msg' => '账户余额最少达到'.$distribut_need.'才能提现']);
-        }    
+        }
 
         $withdrawal = M('withdrawals')->where(array('user_id'=>$this->user_id,'status'=>0))->sum('money');
         if ($this->user['user_money'] < ($withdrawal+$data['money'])){
@@ -996,7 +996,7 @@ class User extends Base {
         }
         $this->ajaxReturn($json_arr);
     }
-    
+
     /**
      * 账户明细
      */
@@ -1005,11 +1005,11 @@ class User extends Base {
         $type = I('type','all');
         $usersLogic = new UsersLogic;
     	$result = $usersLogic->points($this->user_id, $type);
-        
+
         $json_arr = ['status' => 1, 'msg' => '获取成功', 'result' => $result['account_log']];
         exit(json_encode($json_arr));
     }
-    
+
     /**
      * 验证码获取
      */
@@ -1036,7 +1036,7 @@ class User extends Base {
         $Verify->entry($type);
         exit;
     }
-    
+
     /**
      * 评论列表
      */
@@ -1045,10 +1045,10 @@ class User extends Base {
         $status = I('get.status', 0);
         $logic = new CommentLogic;
         $result = $logic->getComment($this->user_id, $status);
-        
+
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['result']]);
     }
-    
+
     /**
      * 服务评论列表
      */
@@ -1057,18 +1057,18 @@ class User extends Base {
         $p = input('p', 1);
         $logic = new CommentLogic;
         $result = $logic->getServiceComment($this->user_id, $p);
-        
+
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result]);
     }
-    
+
     public function comment_num()
     {
         $logic = new CommentLogic;
         $result = $logic->getAllTypeCommentNum($this->user_id);
-        
+
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result]);
     }
-    
+
     /**
      * 浏览记录
      */
@@ -1078,12 +1078,12 @@ class User extends Base {
 
         $user_logic = new UsersLogic;
         $visit_list = $user_logic->visit_log($this->user_id, $p);
-        
+
         $list = [];
         foreach ($visit_list as $k => $v) {
             $list[] = ['date' => $k, 'visit' => $v];
         }
-        
+
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $list]);
     }
 
@@ -1099,7 +1099,7 @@ class User extends Base {
         }
         $this->ajaxReturn(['status' => 1, 'msg' => '删除成功']);
     }
-    
+
     /**
      * 清空浏览记录
      */
@@ -1111,7 +1111,7 @@ class User extends Base {
         }
         $this->ajaxReturn(['status' => 1, 'msg' => '删除成功']);
     }
-    
+
     /**
      *  获取用户消息通知
      */
@@ -1122,7 +1122,7 @@ class User extends Base {
 
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $messages]);
     }
-    
+
     /**
      * 获取消息
      */
@@ -1130,13 +1130,13 @@ class User extends Base {
     {
         $p = I('get.p', 1);
         $category = I('get.category', 0);
-        
+
         $messageModel = new \app\common\logic\MessageLogic;
         $message = $messageModel->getUserMessageList($this->user_id, $category, $p);
 
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $message]);
     }
-    
+
     /**
      * 消息开关
      */
@@ -1145,9 +1145,9 @@ class User extends Base {
         if (!$this->user) {
             $this->ajaxReturn(['status' => -1, 'msg' => '用户不存在']);
         }
-        
+
         $messageModel = new \app\common\logic\MessageLogic;
-        
+
         if (request()->isGet()) {
             /* 获取消息开关 */
             $notice = $messageModel->getMessageSwitch($this->user['message_mask']);
@@ -1171,13 +1171,13 @@ class User extends Base {
         if (!$this->user_id) {
             $this->ajaxReturn(['status' => -1, 'msg' => '用户不存在']);
         }
-        
+
         $messageModel = new \app\common\logic\MessageLogic;
         $messageModel->setMessageRead($this->user_id);
-        
+
         $this->ajaxReturn(['status' => 1, 'msg' => '清除成功']);
     }
-    
+
     /**
      * 账户明细列表网页
      * @return type
@@ -1188,11 +1188,11 @@ class User extends Base {
         $is_json = I('is_json', 0); //json数据请求
     	$usersLogic = new UsersLogic;
     	$result = $usersLogic->account($this->user_id, $type);
-        
+
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['account_log']]);
         }
-        
+
     	$this->assign('type', $type);
     	$showpage = $result['page']->show();
     	$this->assign('account_log', $result['account_log']);
@@ -1202,7 +1202,7 @@ class User extends Base {
     	}
     	return $this->fetch();
     }
-    
+
     /**
      * 积分类别网络
      * @return type
@@ -1213,11 +1213,11 @@ class User extends Base {
         $is_json = I('is_json', 0); //json数据请求
     	$usersLogic = new UsersLogic;
     	$result = $usersLogic->points($this->user_id, $type);
-        
+
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['account_log']]);
         }
-        
+
         $this->assign('type', $type);
 		$showpage = $result['page']->show();
         $this->assign('account_log', $result['account_log']);
@@ -1227,7 +1227,29 @@ class User extends Base {
         }
         return $this->fetch();
     }
-    
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=User&a=getWithdrawalList  获取提现列表done
+     * @apiName     GetWithdrawalList
+     * @apiGroup    Mine
+     * @apiParam    token  token值
+     * @apiParam    pagesize  每页条数
+     * @apiParam    page  页数
+     * @apiSuccess  status 状态：-2删除作废-1审核失败0申请中1审核通过2已转款完成
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *     "status": 1,
+     *     "msg": "返回成功！",
+     *     "result": []
+     *  }
+     */
+    //获取提现列表
+    public function getWithdrawalList()
+    {
+        model("common/Users") -> getWithdrawalList($this -> user_id);
+    }
+
     /**
      * 充值记录网页
      * @return type
@@ -1237,11 +1259,11 @@ class User extends Base {
         $is_json = I('is_json', 0); //json数据请求
     	$usersLogic = new UsersLogic;
     	$result= $usersLogic->get_recharge_log($this->user_id);  //充值记录
-    	
+
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['result']]);
         }
-        
+
         $this->assign('page', $result['show']);
     	$this->assign('lists', $result['result']);
     	if (I('is_ajax')) {
@@ -1249,7 +1271,7 @@ class User extends Base {
     	}
     	return $this->fetch();
     }
-    
+
     /**
      * 物流网页
      * @return type
@@ -1267,7 +1289,7 @@ class User extends Base {
         $this->assign('delivery', $delivery);
         return $this->fetch();
     }
-    
+
     /**
      * 获取全部地址信息, 从BaseController移入到UserController @modify by wangqh.
      */
@@ -1277,7 +1299,7 @@ class User extends Base {
         $json_str = json_encode($json_arr);
         exit($json_str);
     }
-    
+
     /**
      * 关于我们页面
      */
@@ -1285,7 +1307,7 @@ class User extends Base {
     {
         return $this->fetch();
     }
-    
+
     /**
      * 检查token状态
      */
@@ -1298,7 +1320,7 @@ class User extends Base {
         }
         $this->ajaxReturn($return);
     }
-    
+
     /**
      * 上传评论图片，小程序图片只能一张一张传
      */
@@ -1306,14 +1328,14 @@ class User extends Base {
     {
         $logic = new \app\common\logic\CommentLogic;
         $img = $logic->uploadCommentImgFile('comment_img_file');
-        
+
         if ($img['status'] === 1) {
             $img['result'] = implode(',', $img['result']);
         }
 
         $this->ajaxReturn($img);
     }
-    
+
     /**
      * 消息列表（小程序临时接口by lhb）
      * @author dyr
@@ -1337,4 +1359,148 @@ class User extends Base {
         }
         $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $user_sys_message]);
     }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=User&a=suggestion_type&limit=   获取意见反馈类型done
+     * @apiName     suggestion_type
+     * @apiGroup    Suggestion
+     * @apiParam {string} limit 显示条数
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "返回成功！",
+     *      "result": [
+     *      "功能异常",
+     *      "体验问题",
+     *      "新功能建议",
+     *      "其他"
+     *       ]
+     *  }
+     */
+    public function suggestion_type ()
+    {
+        model("common/Users") -> suggestion_type();
+    }
+    /**
+     * @api {POST}  /index.php?m=Api&c=User&a=suggestionFeedback   意见反馈done
+     * @apiName     SuggestionFeedback
+     * @apiGroup    Suggestion
+     * @apiParam     suggest_id  意见类型id
+     * @apiParam    content  要反馈的内容
+     * @apiParam    img_url  图片url
+     * @apiParam    token  token值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "申请成功！",
+     *      "result": {}
+     * }
+     */
+    public function suggestionFeedback ()
+    {
+        model("common/Users") -> suggestionFeedback($this->user_id);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=User&a=updateMobile  【更换手机号】新手机修改done
+     * @apiName     UpdateMobile
+     * @apiGroup    User
+     * @apiParam     username  手机号码【区号必须】
+     * @apiParam    country_code  区号
+     * @apiParam    code  验证码
+     * @apiParam    token  token值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "验证成功！",
+     *      "result": []
+     * }
+     */
+    public function updateMobile ()
+    {
+        model("common/Users") -> updateMobile($this->user_id);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=User&a=checkSms  【更换手机号】验证原手机号done
+     * @apiName     UserCheckSms
+     * @apiGroup    User
+     * @apiParam     username  手机号码【不带区号】
+     * @apiParam    code  验证码
+     * @apiParam    token  token值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "验证成功！",
+     *      "result": []
+     * }
+     */
+    public function checkSms ()
+    {
+        model("common/Users") -> checkSms( $this->user_id );
+    }
+
+    /**
+     * 申请提现
+     */
+    public function driveWithdrawals ()
+    {
+        model("common/Users") -> driveWithdrawals($this->user_id);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=User&a=getWithdrawals  获取提现金额done
+     * @apiName     GetWithdrawals
+     * @apiGroup    Mine
+     * @apiParam    token  token值
+     * @apiSuccess  status 状态：-2删除作废-1审核失败0申请中1审核通过2已转款完成
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *      "status": 1,
+     *      "msg": "返回成功",
+     *      "result": {
+     *          "seller_id": 20,
+     *          "drv_money": 100
+     *      }
+     *  }
+     */
+    /**
+     * 获取提现
+     */
+    public function getWithdrawals ()
+    {
+        model("common/Users") -> getWithdrawal($this -> user_id);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=User&a=postWithdrawals  提交提现申请done
+     * @apiName     PostWithdrawals
+     * @apiGroup    Mine
+     * @apiParam    token  token值
+     * @apiParam    money  提现金额
+     * @apiParam    distill_way  提现方式
+     * @apiParam    account  提现账户
+     * @apiParam    account_name  提现人用户名
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *     "status": 1,
+     *     "msg": "返回成功！",
+     *     "result": []
+     *  }
+     */
+    /**
+     * 获取提现
+     */
+    public function postWithdrawals ()
+    {
+        model("common/Users") -> driveWithdrawals($this->user_id);
+    }
+
+
 }
