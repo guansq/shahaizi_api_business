@@ -252,7 +252,15 @@ class UsersLogic extends Model
             $seller_code = M("seller") -> field("seller_id")-> where("apply_code = '$apply_code'") -> find();
         }
 
+        $easemobUse = new  \emchat\EasemobUse();
+
+        $hx_user = md5($map['mobile']);
+        $easemobUse -> setUserName($hx_user);
+        $easemobUse -> setPassword($password);
+        $easemobUse -> createSingleUser();
+
         $map['apply_code'] = $apply_code;
+        $map['hx_user_name'] = $hx_user;
 
         $user_id = M('seller')->add($map);
 
@@ -268,6 +276,7 @@ class UsersLogic extends Model
         $drv_code = date("Ymd").$user["seller_id"];
         M("seller") -> where("seller_id = {$user_id}") -> save(["drv_code" => $drv_code]);
         $user["drv_code"] = $drv_code;
+        $user['hx_user_name'] = $hx_user;
 //        // 会员注册送优惠券
 //        $coupon = M('coupon')->where("send_end_time > ".time()." and ((createnum - send_num) > 0 or createnum = 0) and type = 2")->select();
 //        if(!empty($coupon)){

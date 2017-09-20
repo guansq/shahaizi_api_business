@@ -20,14 +20,9 @@ use app\common\logic\GroupBuyLogic;
 
 class Users extends Model
 {
-    //自定义初始化
-    protected static function init()
-    {
-        //TODO:自定义的初始化
-    }
-
     public function  updateUser ($seller_id)
     {
+        $easemobUse = new  \emchat\EasemobUse();
         $head_pic = I("head_pic");
         $nickname = I("nickname");
         $sex = I("sex");
@@ -41,6 +36,14 @@ class Users extends Model
         $language && $data["language"] = $language;
         $briefing && $data["briefing"] = $briefing;
         $img_url && $data["img_url"] = $img_url;
+
+        if($nickname)
+        {
+            $mobile = M("seller") -> where("seller_id = $seller_id") -> value("mobile");
+            $hx_user = md5($mobile);
+            $easemobUse -> setUserName($hx_user);
+            $easemobUse -> updateNickname($nickname);
+        }
 
         if($data)
         {
@@ -175,6 +178,40 @@ class Users extends Model
             M("seller") -> where("seller_id = $seller_id") -> save(["country_code" => $country_code,"mobile" => $username]);
             dataJson(1,"更换成功！",[]);
         }
+    }
+
+    public function getHxSingleUser ()
+    {
+        $hx_user = I("hx_user");
+        if(!$hx_user)
+            dataJson(4004,"环信用户名不能为空！",[]);
+
+        $seller_data = M("seller")  -> field("nickname,head_pic") -> where("hx_user_name = '$hx_user'") -> find();
+//        $easemobUse = new  \emchat\EasemobUse();
+//        $user_data = $easemobUse -> getUserInfo($hx_user);
+        $result["nickname"] = $seller_data["nickname"];
+        $result["head_pic"] = $seller_data["head_pic"];
+        if(!$seller_data)
+            dataJson(0,"返回失败",$seller_data);
+        dataJson(1,"返回成功",$seller_data);
+    }
+
+    public function getSellerHxName ()
+    {
+        $seller_id = I("seller_id");
+        $seller_data = M("seller")
+            -> field("nickname,head_pic,hx_user_name")
+            -> where("seller_id = $seller_id")
+            -> find();
+
+        $result["nickname"] = $seller_data["nickname"];
+        $result["head_pic"] = $seller_data["head_pic"];
+        $result["hx_user_name"] = $seller_data["hx_user_name"];
+
+        if(!$seller_data)
+            dataJson(0,"返回失败", $seller_data);
+
+        dataJson(1,"返回成功", $seller_data);
     }
 
     public function getWithdrawal ($seller_id)

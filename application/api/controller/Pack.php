@@ -511,6 +511,16 @@ class Pack extends Base {
         $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 29") -> paginate($pagesize ? $pagesize : 10);
         dataJson(1,"返回成功！",$article_lists);
     }
+
+    /**
+     * 通知公告
+     */
+    public function noticeList ()
+    {
+        $pagesize = I("pagesize");
+        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 36") -> paginate($pagesize ? $pagesize : 10);
+        dataJson(1,"返回成功！",$article_lists);
+    }
     /**
      * @api {GET}  /index.php?m=Api&c=Pack&a=college&id=19  司导学院文章详情done
      * @apiName     College
@@ -531,6 +541,19 @@ class Pack extends Base {
         $article["content"] = htmlspecialchars_decode($article["content"]);
         $this->assign("article",$article);
         return $this-> fetch();
+    }
+
+    public function notice ()
+    {
+        $id = I("id");
+        if(!$id)
+            dataJson(4004,"文章id不能为空！",[]);
+
+        $article = M("article") -> where("cat_id = 36 AND article_id = $id") -> find();
+//        print_r($article);die;
+        $article["content"] = htmlspecialchars_decode($article["content"]);
+        $this->assign("article",$article);
+        return $this-> fetch("college");
     }
 
     /**

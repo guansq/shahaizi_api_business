@@ -31,11 +31,9 @@ class Sms extends Model
         $seller = M("seller") -> field("country_code") -> where("mobile = $mobile") -> find();
 
         if($seller)
+            $country_code = $seller["country_code"];
 
-        if($seller)
-            $mobile=$seller["country_code"].$mobile;
-        else
-            $mobile = $country_code.$mobile;
+        $mobile = $country_code.$mobile;
 
         $data = ["mobile"=> $mobile,"opt" => $type];
         $httpRet = HttpService::post($this -> common_sms_url, $data);

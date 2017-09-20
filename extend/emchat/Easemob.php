@@ -22,7 +22,8 @@ class Easemob{
 	 * @param $options['org_name']    	
 	 * @param $options['app_name']   		
 	 */
-	public function __construct($options) {
+	public function __construct($options)
+	{
 		$this->client_id = isset ( $options ['client_id'] ) ? $options ['client_id'] : '';
 		$this->client_secret = isset ( $options ['client_secret'] ) ? $options ['client_secret'] : '';
 		$this->org_name = isset ( $options ['org_name'] ) ? $options ['org_name'] : '';

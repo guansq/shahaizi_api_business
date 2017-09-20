@@ -41,7 +41,7 @@
     <div id="shz-rd-det">
         <foreach name="line_data.line_detail" item="lineDetail">
             <div class="shz-rd-details">
-                <div class="title"><p class="line"></p><img src="../image/zfx.png" alt=""><span>第{$lineDetail.date_num|number2chinese}天</span><img src="../image/zfx.png" alt=""><p class="line"></p></div>
+                <div class="title"><p class="line"></p><img src="/public/pack/image/zfx.png" alt=""><span>第{$lineDetail.date_num|number2chinese}天</span><img src="/public/pack/image/zfx.png" alt=""><p class="line"></p></div>
                 <foreach name="lineDetail.port_detail" item="port_details">
                     <div class="route">
                         <p>第{$port_details.port_num|number2chinese}站</p>
@@ -56,6 +56,6 @@
 </div>
 
 </body>
-<script type="text/javascript" src="../lib/jQuery/jquery-min.js"></script>
-<script type="text/javascript" src="../js/route_details.js"></script>
+<script type="text/javascript" src="/public/pack/lib/jQuery/jquery-min.js"></script>
+<script type="text/javascript" src="/public/pack/js/route_details.js"></script>
 </html>

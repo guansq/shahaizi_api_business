@@ -19,29 +19,31 @@ class WorkStation extends Model
     {
         $where[]= "allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
-        $data = $this->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 4);
+        $data = $this -> where(implode(" AND ",$where)) ->order("air_id desc") -> paginate($pagesize ? $pagesize : 4);
         $read = $this -> is_read ($seller_id);
-
-        foreach ($data as $key => $val)
+        if($data)
         {
-            $val["start_time_detail"] = packDateFormat($val["start_time"]);
-            $val["start_time"] = date("Y-m-d",$val["start_time"]);
-            $val["end_time"] = date("Y-m-d",$val["end_time"]);
-            $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
-            $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
-            $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
-            $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
-            $result[$key] = $val;
-            if($read)
-                $result[$key]["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
-            else
-                $result[$key]["is_read"] = 0;
+            foreach ($data as $key => $val)
+            {
+                $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                $val["start_time"] = date("Y-m-d",$val["start_time"]);
+                $val["end_time"] = date("Y-m-d",$val["end_time"]);
+                $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
+                $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+                $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
+                $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
+                $result[$key] = $val;
+                if($read)
+                    $result[$key]["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
+                else
+                    $result[$key]["is_read"] = 0;
+            }
         }
 
         $date = date("Y-m-d",time());
         $current_zero = strtotime($date);
 
-        $where = "drv_id <> $seller_id AND type in (1,2) AND create_at >= $current_zero";
+        $where = "drv_id <> $seller_id AND create_at >= '$current_zero'";
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)

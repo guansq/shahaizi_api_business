@@ -445,30 +445,6 @@ class User extends Base {
 //        }
 //    }
 
-
-    /**
-     * @api      {POST} index.php?m=Api&c=User&a=password   修改用户密码done
-     * @apiName  password
-     * @apiGroup User
-     * @apiParam {String}   token           token.
-     * @apiSuccessExample {json} Success-Response:
-     *           Http/1.1   200 OK
-    {
-    "status": 1,
-    "msg": "密码修改成功",
-    "result": ""
-    }
-     */
-    public function password(){
-        if(IS_POST){
-            if(!$this->user_id){
-                exit(json_encode(array('status'=>-1,'msg'=>'缺少参数','result'=>'')));
-            }
-            $data = $this->userLogic->passwordForApp($this->user_id,I('post.old_password'),I('post.new_password')); // 修改密码
-            exit(json_encode($data));
-        }
-    }
-
     public function forgetPasswordInfo()
     {
         $account = I('post.account', '');
@@ -556,6 +532,7 @@ class User extends Base {
      */
     public function forgetPassword()
     {
+        $code = I('code');
         $password = I('password');
         $mobile = I('mobile', 'invalid');
         //$consignee = I('consignee', '');
@@ -567,13 +544,19 @@ class User extends Base {
         } else {
             //校验验证码
 //            $result = MsgService::verifyCaptcha($mobile,'resetpwd',$code);
-            if(model("common/Sms") -> checkSms(1,$user["country_code"].$mobile,$user["country_code"]))
+            if(model("common/Sms") -> checkSms(1,$user["country_code"].$mobile,$code))
             {
-                returnJson(-1,'验证码输入有误');
+                $easemobUse = new  \emchat\EasemobUse();
+                $hx_user = md5($mobile);
+                $easemobUse -> setUserName($hx_user);
+                $easemobUse -> setPassword($password);
+                $easemobUse -> resetPassword();
+
+                //修改密码
+                M('seller')->where("seller_id",$user['seller_id'])->save(array('password'=>$password));
+                $this->ajaxReturn(['status'=>1,'msg'=>'密码已重置,请重新登录']);
             }
-            //修改密码
-            M('seller')->where("seller_id",$user['seller_id'])->save(array('password'=>$password));
-            $this->ajaxReturn(['status'=>1,'msg'=>'密码已重置,请重新登录']);
+
         }
     }
 
@@ -1502,5 +1485,53 @@ class User extends Base {
         model("common/Users") -> driveWithdrawals($this->user_id);
     }
 
+    /**
+     * @api {GET}    /index.php?m=Api&c=User&a=getHxSingleUser  获取环信单个用户信息done
+     * @apiName     GetHxSingleUser
+     * @apiGroup    Mine
+     * @apiParam    token  token值
+     * @apiParam    hx_user  环信用户名
+
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *     "status": 1,
+     *     "msg": "返回成功！",
+     *     "result": []
+     *  }
+     */
+    /**
+     * 获取提现
+     */
+    public function getHxSingleUser ()
+    {
+        model("common/Users") -> getHxSingleUser();
+    }
+
+    /**
+     * @api {POST}    /index.php?m=Api&c=User&a=getSellerHx  获取环信用户done
+     * @apiName     GetSellerHx
+     * @apiGroup    Mine
+     * @apiParam    token  token值
+
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *{
+     *  "status": 1,
+     *  "msg": "返回成功",
+     *  "result": {
+     *      "nickname": "13222222222",
+     *      "head_pic": "112354521412",
+     *      "hx_user_name": "d53fa014dabdff84cf9d616b8cc1fabf"
+     *  }
+     *  }
+     */
+    /**
+     * 根据seller_id获取环信用户
+     */
+    public function getSellerHx ()
+    {
+        model("common/Users") -> getSellerHxName();
+    }
 
 }
