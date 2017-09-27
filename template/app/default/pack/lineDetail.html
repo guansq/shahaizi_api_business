@@ -42,6 +42,10 @@
         <foreach name="line_data.line_detail" item="lineDetail">
             <div class="shz-rd-details">
                 <div class="title"><p class="line"></p><img src="/public/pack/image/zfx.png" alt=""><span>第{$lineDetail.date_num|number2chinese}天</span><img src="/public/pack/image/zfx.png" alt=""><p class="line"></p></div>
+                <p class="shz-rd-title" style="margin-left: -15px;">线路摘要</p>
+                <div class="route">
+                    {$lineDetail.summary}
+                </div>
                 <foreach name="lineDetail.port_detail" item="port_details">
                     <div class="route">
                         <p>第{$port_details.port_num|number2chinese}站</p>

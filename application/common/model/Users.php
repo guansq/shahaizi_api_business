@@ -29,13 +29,22 @@ class Users extends Model
         $language = I("language");
         $briefing = I("briefing");
         $img_url = I("img_url");
+        $area = I("area");
 
         $head_pic && $data["head_pic"] = $head_pic;
         $nickname && $data["nickname"] = $nickname;
         $sex && $data["sex"] = $sex;
         $language && $data["language"] = $language;
         $briefing && $data["briefing"] = $briefing;
-        $img_url && $data["img_url"] = $img_url;
+        $data["img_url"] = $img_url;
+
+        if($area)
+        {
+            $area_data = json_decode(htmlspecialchars_decode($area), true);
+            $area_data["country"] && $data["country_id"]  = $area_data["country"];
+            $area_data["province"] && $data["province"]  = $area_data["province"];
+            $area_data["city"] && $data["city"]  = $area_data["city"];
+        }
 
         if($nickname)
         {
@@ -196,12 +205,12 @@ class Users extends Model
         dataJson(1,"返回成功",$seller_data);
     }
 
-    public function getSellerHxName ()
+    public function getUserHxName ()
     {
-        $seller_id = I("seller_id");
-        $seller_data = M("seller")
+        $user_id = I("user_id");
+        $seller_data = M("users")
             -> field("nickname,head_pic,hx_user_name")
-            -> where("seller_id = $seller_id")
+            -> where("user_id = $user_id")
             -> find();
 
         $result["nickname"] = $seller_data["nickname"];

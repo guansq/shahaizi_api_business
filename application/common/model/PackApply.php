@@ -121,17 +121,55 @@ class PackApply extends Model
 
         if($seller_info["drv_id"])
         {
-            $this -> where("drv_id = ".$seller_info["drv_id"]) -> save($imgArr);
-        }else
-        {
-            $imgArr['auth_time'] = $post["auth_time"];
-            $this -> add($imgArr);
-            $insert_id = $this -> getLastInsID();
-            M("seller") -> where("seller_id = $seller_id") -> save(["drv_id" => $insert_id]);
+            $drv_data = $this -> where("drv_id = {$seller_info["drv_id"]}") -> find();
+            $imgArr["auth_status"] = 1;
+            if(!empty($drv_data))
+            {
+                $this -> where("drv_id = ".$seller_info["drv_id"]) -> save($imgArr);
+                jsonData(1,"上传成功",[]);
+            }
         }
+
+        $imgArr['auth_time'] = $post["auth_time"];
+        $this -> add($imgArr);
+        $insert_id = $this -> getLastInsID();
+        $this -> where("drv_id = $insert_id") -> save(["auth_status" => 1]);
+        M("seller") -> where("seller_id = $seller_id") -> save(["drv_id" => $insert_id]);
+
+
         jsonData(1,"上传成功",[]);
     }
 
+    function getArea ()
+    {
+        $continent = I("continent"); //大洲
+        $country = I("country"); //国家
+        $province = I("province"); //省
+        $city = I("city"); //市
+        if(!$continent)
+            $where =  "level = 1";
+        else
+            $where =  "parent_id = $continent";
+
+        if($country)
+        {
+            if(!$province)
+            {
+                $whereRegion =  "parent_id = 0 AND country_id = $country";
+            }else
+            {
+                $whereRegion =  "parent_id = $province AND country_id = $country";
+            }
+
+            $area_data = M("region") -> where($whereRegion) -> select();
+            if($area_data)
+                jsonData(1,"返回成功！",$area_data);
+        }
+
+        $getCountry = M("region_country") -> where($where) -> select();
+        if($getCountry)
+            jsonData(1,"返回成功！",$getCountry);
+    }
 
     /**
      * 新增车辆
@@ -193,7 +231,7 @@ class PackApply extends Model
         $all_car_info = M("pack_car_info") -> where("seller_id = $user_id") -> select();
         foreach($all_car_info as $key => $val)
         {
-            $car_info = getCarInfoName($val["brand_id"], $val["car_type_id"]);
+            $car_info = getCarInfoName2($val["brand_id"], $val["car_type_id"]);
             $val["brand_name"] = $car_info["brand_name"];
             $val["car_type_name"] = $car_info["car_type_name"];
             $car_img = explode("|",$val["car_img"]);
@@ -330,6 +368,9 @@ class PackApply extends Model
        if(!$line_price)
            dataJson(4004,"线路价格不能为空！",[]);
 
+       if(!$car_id)
+           dataJson(4004,"car_id不能为空！",[]);
+
        $line_body =
        [
             "seller_id" => $seller_id,
@@ -369,7 +410,6 @@ class PackApply extends Model
         $content = I("content");
         $is_anonymous = I("is_anonymous");
         $commemt_time = time();
-
         if(!$order_id)
             dataJson(4004,"订单id不能为空！",[]);
 
@@ -389,7 +429,11 @@ class PackApply extends Model
         $data["commemt_time"] = $commemt_time;
         $data["user_id"] = $seller_id;
         $data["type"] = 2;
+        $is_find = M("order_comment") -> where("order_id = $order_id AND user_id = $seller_id AND type = 2") -> find();
+        if($is_find)
+            dataJson(0,"您已经评价过该订单了！",[]);
 
+        M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["seller_order_status" => 1]);
         M("order_comment") -> add($data);
         dataJson(1,"返回成功！",[]);
     }
@@ -442,16 +486,26 @@ class PackApply extends Model
             -> where("seller_id = $seller_id AND is_del = 0")
             -> paginate($pagesize ? $pagesize : 10);
 
-        foreach ($pack_line as $key => $val)
+        if($pack_line)
         {
-            $val["line_price"] =  $val["line_price"]."RMB";
+            foreach ($pack_line as $key => $val)
+            {
+                $val["line_price"] =  $val["line_price"]."RMB";
 //            $val["line_detail"] = json_decode(htmlspecialchars_decode($val["line_detail"]), true);
-            unset($val["line_detail"]);
-            $car_data = M("pack_car_info") -> where("car_id = ".$val["car_id"]) -> find();
-            $val["car_img"] = array_filter(explode("|",$car_data["car_img"])) ? explode("|",$car_data["car_img"]) : [];
-            $pack_line[$key] = $val;
+                unset($val["line_detail"]);
+                if($val["car_id"])
+                {
+                    $car_data = M("pack_car_info") -> where("car_id = ".$val["car_id"]) -> find();
+                    $car_img = array_filter(explode("|",$car_data["car_img"]));
+                    $val["car_img"] = $car_img ? $car_img : [];
+                }else
+                {
+                    $val["car_img"] = [];
+                }
+                $pack_line[$key] = $val;
+            }
+//            print_r($pack_line);die;
         }
-
         dataJson(1, "返回成功！", $pack_line);
     }
 
@@ -464,8 +518,10 @@ class PackApply extends Model
         $pack_line = M("pack_line") -> order("line_id desc")
             -> where("seller_id = $seller_id AND line_id = $line_id AND is_del = 0")
             -> find();
+
         $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
         $pack_line["line_price"] =  $pack_line["line_price"]."RMB";
+
         if(!$isReturn)
             dataJson(1, "返回成功！", $pack_line);
         else
@@ -483,5 +539,21 @@ class PackApply extends Model
             dataJson(1, "line_id不能为空！", []);
         M("pack_line") -> where("seller_id = $seller_id AND line_id in ($line_id)") -> save(["is_del" => 1]);
         dataJson(1, "删除成功！", []);
+    }
+
+    /**
+     * 修改订单时间
+     */
+    function fixOrderTime ($seller_id)
+    {
+        $air_id = I("air_id");
+        $time = I("time");
+        $time = strtotime($time);
+        if($time < time())
+        {
+            dataJson(0,"不能小于当前时间！",[]);
+        }
+        M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save(["start_time" => $time]);
+        dataJson(1,"返回成功！",[]);
     }
 }

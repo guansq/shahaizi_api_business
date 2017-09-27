@@ -46,17 +46,20 @@ class Pack extends Base {
             $seller["is_seller_auth"] = 1;
         else
             $seller["is_seller_auth"] = 0;
+        $drv_data["drv_id"] && $driver_apply = M("pack_driver_apply") -> where("drv_id = ".$drv_data["drv_id"]) -> find();
+            if($driver_apply)
+            {
+                if($driver_apply["auth_status"]==1)
+                    $seller["is_drv_auth"] = 1;
+                elseif($driver_apply["auth_status"]==2)
+                    $seller["is_drv_auth"] = 2;
+                elseif($driver_apply["auth_status"]==3)
+                    $seller["is_drv_auth"] = 3;
+            }else
+            {
+                $seller["is_drv_auth"] = 0;
+            }
 
-        if($drv_data["drv_id"] !=0 )
-        {
-            $driver_apply = M("pack_driver_apply") -> where("drv_id = ".$drv_data["drv_id"]) -> find();
-            if($driver_apply["auth_status"]==1)
-                $seller["is_drv_auth"] = 1;
-            else
-                $seller["is_drv_auth"] = 1;
-        }
-        else
-            $seller["is_drv_auth"] = 0;
 
         if($drv_data["home_id"] !=0 )
             $seller["is_home_auth"] = 1;
@@ -488,11 +491,15 @@ class Pack extends Base {
     public function lineDetail ()
     {
         $line_data = model("common/PackApply") -> getLineDetail($this -> user_id,1);
-//        print_r($line_data);die;
+//print_r($line_data);die;
         $this -> assign("line_data",$line_data);
         return $this -> fetch();
     }
 
+    public function userAgreement ()
+    {
+        return $this -> fetch("user_agreement");
+    }
     /**
      * @api {GET}  /index.php?m=Api&c=Pack&a=collegeList  司导学院文章列表done
      * @apiName     College
@@ -824,5 +831,60 @@ class Pack extends Base {
     public function  postComment ()
     {
         model("common/PackApply") -> postComment($this -> user_id);
+    }
+
+    public function fixOrderTime ()
+    {
+        model("common/PackApply") -> fixOrderTime($this -> user_id);
+    }
+
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getArea  获取国家省市区done
+     * @apiName   GetArea
+     * @apiGroup  Pack
+     * @apiParam {string} continent 大洲id 0为获取所有大洲
+     * @apiParam {string} country 国家id 0为获取所有国家
+     * @apiParam {string} province 省id 0为获取所有省
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *   "status": 1,
+     *   "msg": "返回成功！",
+     *   "result":
+     * [
+     *       {
+     *           "id": 2,
+     *           "name": "北京市",
+     *           "level": 2,
+     *           "parent_id": 1,
+     *           "is_hot": 0,
+     *           "country_id": 7
+     *       },
+     *       {
+     *           "id": 300,
+     *           "name": "县",
+     *           "level": 2,
+     *           "parent_id": 1,
+     *           "is_hot": 0,
+     *           "country_id": 7
+     *       },
+     *       {
+     *           "id": 47498,
+     *           "name": "海淀区",
+     *           "level": 2,
+     *           "parent_id": 1,
+     *           "is_hot": 1,
+     *           "country_id": 7
+     *       }
+     *   ]
+     *   }
+     */
+    /**
+     * 获取地区
+     */
+    public function getArea ()
+    {
+        model("common/PackApply") -> getArea();
     }
 }

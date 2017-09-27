@@ -188,7 +188,7 @@ class UsersLogic extends Model
      * @param $password2 确认密码
      * @return array
      */
-    public function reg($username,$password,$password2,$push_id = 0,$country_code = 0){
+    public function reg($username,$password,$password2,$push_id = 0,$country_code = 0,$up_apply_code=""){
 
     	$is_validated = 0 ;
         if(check_email($username)){
@@ -254,13 +254,15 @@ class UsersLogic extends Model
 
         $easemobUse = new  \emchat\EasemobUse();
 
-        $hx_user = md5($map['mobile']);
+        $hx_user = md5($map['mobile'].time());
         $easemobUse -> setUserName($hx_user);
         $easemobUse -> setPassword($password);
         $easemobUse -> createSingleUser();
 
         $map['apply_code'] = $apply_code;
         $map['hx_user_name'] = $hx_user;
+
+        $map['up_apply_code'] = $up_apply_code;
 
         $user_id = M('seller')->add($map);
 

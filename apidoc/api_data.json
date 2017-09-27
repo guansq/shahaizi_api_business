@@ -1271,34 +1271,6 @@
   },
   {
     "type": "GET",
-    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
-    "title": "司导学院文章详情done",
-    "name": "College",
-    "group": "Pack",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "id",
-            "description": "<p>文章列表的article_id值</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Pack.php",
-    "groupTitle": "Pack",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
-      }
-    ]
-  },
-  {
-    "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=collegeList",
     "title": "司导学院文章列表done",
     "name": "College",
@@ -1338,6 +1310,34 @@
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=collegeList"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
+    "title": "司导学院文章详情done",
+    "name": "College",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>文章列表的article_id值</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
       }
     ]
   },
@@ -1644,9 +1644,9 @@
   },
   {
     "type": "GET",
-    "url": "/index.php?m=Api&c=Pack&a=getUserSingle",
-    "title": "获取单个用户信息done",
-    "name": "GetLinelist",
+    "url": "/index.php?m=Api&c=Pack&a=getArea",
+    "title": "获取国家省市区done",
+    "name": "GetArea",
     "group": "Pack",
     "parameter": {
       "fields": {
@@ -1655,52 +1655,41 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "token",
-            "description": "<p>token值</p>"
+            "field": "continent",
+            "description": "<p>大洲id 0为获取所有大洲</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "pagesize",
-            "description": "<p>显示条数</p>"
+            "field": "country",
+            "description": "<p>国家id 0为获取所有国家</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "province",
+            "description": "<p>省id 0为获取所有省</p>"
           }
         ]
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "is_state",
-            "description": "<p>0:待审核1:审核通过2:已拒绝</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "result",
-            "description": "<p>返回成功</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response",
-          "content": " Http/1.1    200 OK\n {\n   \"status\": 1,\n   \"msg\": \"返回成功！\",\n   \"result\": {\n       \"total\": 4,\n}",
+          "content": " Http/1.1    200 OK\n{\n  \"status\": 1,\n  \"msg\": \"返回成功！\",\n  \"result\":\n[\n      {\n          \"id\": 2,\n          \"name\": \"北京市\",\n          \"level\": 2,\n          \"parent_id\": 1,\n          \"is_hot\": 0,\n          \"country_id\": 7\n      },\n      {\n          \"id\": 300,\n          \"name\": \"县\",\n          \"level\": 2,\n          \"parent_id\": 1,\n          \"is_hot\": 0,\n          \"country_id\": 7\n      },\n      {\n          \"id\": 47498,\n          \"name\": \"海淀区\",\n          \"level\": 2,\n          \"parent_id\": 1,\n          \"is_hot\": 1,\n          \"country_id\": 7\n      }\n  ]\n  }",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "application/api/controller/Emchat.php",
+    "filename": "application/api/controller/Pack.php",
     "groupTitle": "Pack",
     "sampleRequest": [
       {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getUserSingle"
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getArea"
       }
     ]
   },
@@ -1763,6 +1752,68 @@
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getLinelist"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getUserSingle",
+    "title": "获取单个用户信息done",
+    "name": "GetLinelist",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pagesize",
+            "description": "<p>显示条数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "is_state",
+            "description": "<p>0:待审核1:审核通过2:已拒绝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "result",
+            "description": "<p>返回成功</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n {\n   \"status\": 1,\n   \"msg\": \"返回成功！\",\n   \"result\": {\n       \"total\": 4,\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Emchat.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getUserSingle"
       }
     ]
   },
@@ -2797,6 +2848,13 @@
             "optional": false,
             "field": "img_url",
             "description": "<p>多个用| 隔开</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "area",
+            "description": "<p>示例：{&quot;country&quot; : &quot;1&quot;,&quot;province&quot;: &quot;100&quot;,&quot;city&quot;: &quot;200&quot;}</p>"
           }
         ]
       }
