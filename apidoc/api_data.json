@@ -1271,6 +1271,34 @@
   },
   {
     "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
+    "title": "司导学院文章详情done",
+    "name": "College",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>文章列表的article_id值</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=collegeList",
     "title": "司导学院文章列表done",
     "name": "College",
@@ -1310,34 +1338,6 @@
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=collegeList"
-      }
-    ]
-  },
-  {
-    "type": "GET",
-    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
-    "title": "司导学院文章详情done",
-    "name": "College",
-    "group": "Pack",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "id",
-            "description": "<p>文章列表的article_id值</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Pack.php",
-    "groupTitle": "Pack",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
       }
     ]
   },
@@ -1985,6 +1985,13 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
+            "field": "image",
+            "description": "<p>订单评论图片</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
             "field": "is_anonymous",
             "description": "<p>是否匿名</p>"
           }
@@ -2092,6 +2099,43 @@
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=publishLine"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=recharge_desc",
+    "title": "费用说明",
+    "name": "RechargeDesc",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>24是id不为空 25是改退补偿</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n   \"status\": 1,\n   \"msg\": \"返回成功\",\n   \"result\": {\n       \"title\": \"费用补偿\",\n       \"content\": \"<p>这里是费用补偿</p>\"\n   }\n}\n    /**\n费用补偿说明",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=recharge_desc"
       }
     ]
   },

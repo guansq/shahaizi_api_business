@@ -409,6 +409,7 @@ class PackApply extends Model
         $score = I("score");
         $content = I("content");
         $is_anonymous = I("is_anonymous");
+        $image = I("image");
         $commemt_time = time();
         if(!$order_id)
             dataJson(4004,"订单id不能为空！",[]);
@@ -429,13 +430,28 @@ class PackApply extends Model
         $data["commemt_time"] = $commemt_time;
         $data["user_id"] = $seller_id;
         $data["type"] = 2;
+        $data["image"] = $image;
         $is_find = M("order_comment") -> where("order_id = $order_id AND user_id = $seller_id AND type = 2") -> find();
         if($is_find)
             dataJson(0,"您已经评价过该订单了！",[]);
 
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["seller_order_status" => 1]);
+        $this -> addUserRecharge($order_id);
         M("order_comment") -> add($data);
         dataJson(1,"返回成功！",[]);
+    }
+
+    /**
+     * 根据订单号增加用户余额
+     */
+    public function addUserRecharge ($air_id)
+    {
+       $pack_order = M("pack_order") -> where("air_id = $air_id") -> find();
+       if($pack_order["seller_id"])
+       {
+           $user_money = floatval($pack_order["real_price"]) + floatval($pack_order["add_recharge"]);
+           M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> save(["user_money" => $user_money]);
+       }
     }
 
     public function line_detail2 ()
@@ -555,5 +571,20 @@ class PackApply extends Model
         }
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save(["start_time" => $time]);
         dataJson(1,"返回成功！",[]);
+    }
+
+    public function getOrderCommentBaseOrderId ($seller_id)
+    {
+        $air_id = I("air_id");
+        if(!$air_id)
+            dataJson(4004,"air_id不能为空！",[]);
+
+        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id AND order_id = $air_id") -> select();
+        jsonData(1,"返回成功！",$pack_data);
+    }
+    public function getOrderAllComment ($seller_id)
+    {
+        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id") -> select();
+        jsonData(1,"返回成功！",$pack_data);
     }
 }

@@ -21,6 +21,8 @@ class WorkStation extends Model
         $pagesize = I("pagesize");
         $data = $this -> where(implode(" AND ",$where)) ->order("air_id desc") -> paginate($pagesize ? $pagesize : 4);
         $read = $this -> is_read ($seller_id);
+        $refuse = $this -> is_refuse ($seller_id);
+
         if($data)
         {
             foreach ($data as $key => $val)
@@ -29,6 +31,8 @@ class WorkStation extends Model
                 $val["start_time"] = date("Y-m-d",$val["start_time"]);
                 $val["end_time"] = date("Y-m-d",$val["end_time"]);
 
+                $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 2") -> find();
+                $val["seller_order_status"] = $is_find ? 1 : 0;
                 $val["type"] !=3 && $val["line_data"] = order_type($val["type"],$val["air_id"]);
                 $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
                 $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
@@ -39,6 +43,10 @@ class WorkStation extends Model
                     $result[$key]["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
                 else
                     $result[$key]["is_read"] = 0;
+
+                if($refuse && in_array($val["air_id"],$refuse))
+                    unset($result[$key]);
+
             }
             $this -> user_head_pic($data);
         }
@@ -53,11 +61,11 @@ class WorkStation extends Model
             -> count();
 //        echo M("pack_order") -> getLastSql(true);die;
         if(!$result)
-            $result  = ["data" =>[] ,"count" => $count];
+            $results  = ["data" =>[] ,"count" => $count];
         else
-            $result  = ["data" =>$result ,"count" => $count];
+            $results  = ["data" =>$result ,"count" => $count];
 
-         jsonData(1,"返回成功",$result);
+         jsonData(1,"返回成功",$results);
 
     }
 
@@ -241,6 +249,17 @@ class WorkStation extends Model
         }
     }
 
+    public function is_refuse ($seller_id)
+    {
+        if($seller_id)
+        {
+            $where[] = "is_refuse = 1";
+            $where[] = "seller_id = $seller_id";
+            $whereConditon = implode(" AND ", $where);
+            return  M("pack_midstat") -> where($whereConditon) -> column("air_id");
+        }
+    }
+
     /**
      * 错过的订单
      */
@@ -290,7 +309,12 @@ class WorkStation extends Model
             "is_read" => 1,
             "is_refuse" => 1
         ];
+//print_r($data);die;
         $pack_midstat = M("pack_midstat") -> where($where) -> find();
+
+        if($pack_midstat["is_refuse"] == 1)
+            jsonData(4004,"您已经拒绝过了！",[]);
+
         if($pack_midstat)
              M("pack_midstat") -> where($where)-> save($data);
         else
