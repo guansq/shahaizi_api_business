@@ -483,6 +483,7 @@ class Pack extends Base {
      * @apiName     LineDetail
      * @apiGroup    Pack
      * @apiParam {string} token token值
+     * @apiParam {string} is_h5 为0时为h5页面 1为json
      * @apiParam {string} line_id line_id值
      */
     /**
@@ -490,10 +491,17 @@ class Pack extends Base {
      */
     public function lineDetail ()
     {
+        $is_h5 = I("is_h5");
         $line_data = model("common/PackApply") -> getLineDetail($this -> user_id,1);
 //print_r($line_data);die;
-        $this -> assign("line_data",$line_data);
-        return $this -> fetch();
+        if($is_h5)
+        {
+            $this -> assign("line_data",$line_data);
+            return $this -> fetch();
+        }
+
+        dataJson(1,"返回成功！", $line_data);
+
     }
 
     public function userAgreement ()

@@ -1962,6 +1962,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
+            "field": "is_h5",
+            "description": "<p>为0时为h5页面 1为json</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
             "field": "line_id",
             "description": "<p>line_id值</p>"
           }
