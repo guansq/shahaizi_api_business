@@ -30,6 +30,7 @@ class Users extends Model
         $briefing = I("briefing");
         $img_url = I("img_url");
         $area = I("area");
+        $signature = I("signature");
 
         $head_pic && $data["head_pic"] = $head_pic;
         $nickname && $data["nickname"] = $nickname;
@@ -37,6 +38,7 @@ class Users extends Model
         $language && $data["language"] = $language;
         $briefing && $data["briefing"] = $briefing;
         $data["img_url"] = $img_url;
+        $signature && $data["signature"] = $signature;
 
         if($area)
         {
@@ -236,7 +238,7 @@ class Users extends Model
             dataJson(4004,"司导认证中您还不能提现！", []);
         if($pack_driver_apply["auth_status"] == 3)
             dataJson(4004,"司导认证未通过，您还不能提现！", []);
-
-        dataJson(1,"返回成功",["seller_id" => $seller_id,"drv_money" => sprintf("%.2f",$pack_driver_apply["drv_money"])]);
+        $data = M("seller") -> where("seller_id = $seller_id") -> find();
+        dataJson(1,"返回成功",["seller_id" => $seller_id,"drv_money" => sprintf("%.2f",$data["user_money"])]);
     }
 }

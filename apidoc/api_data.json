@@ -1962,7 +1962,7 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "is_h5",
+            "field": "is_json",
             "description": "<p>为0时为h5页面 1为json</p>"
           },
           {
@@ -2980,6 +2980,13 @@
             "optional": false,
             "field": "img_url",
             "description": "<p>多个用| 隔开</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "signature",
+            "description": "<p>签名</p>"
           },
           {
             "group": "Parameter",

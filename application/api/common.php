@@ -145,6 +145,15 @@ function  getCarInfoNameBaseCarId($car_id)
     $pack_info["car_type_name"] = $pack_info[1];
     return $pack_info;
 }
+
+function getUpStartTime ()
+{
+    $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
+    $overtime_time = $config["overtime_time"].":0";
+    return ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(start_time,"%Y-%m-%d")," '.$overtime_time.'"))';
+}
+
+
 function  diffHour ($startDate,$endData)
 {
     $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
@@ -156,6 +165,18 @@ function  diffHour ($startDate,$endData)
     $price = $hour_num * $config["charge"];
    return  ["overtime_hour" => $hour_num,"charge" => $price];
 }
+
+//根据订单评论信息获取用户信息
+function getUserInfo($comment_info)
+{
+    if($comment_info["type"] == 1)
+        $table = "users";
+    elseif($comment_info["type"] == 2)
+         $table = "seller";
+
+    M($table)->field("nickname,head_pic") -> where("user_id = {$comment_info["user_id"]} AND type = 1") -> find();
+}
+
 function number2chinese($num,$mode = true,$sim = true){
     if(!is_numeric($num)) return '含有非数字非小数点字符！';
     $char    = $sim ? array('零','一','二','三','四','五','六','七','八','九')

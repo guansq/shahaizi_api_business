@@ -301,7 +301,6 @@ class PackApply extends Model
         dataJson(1,"确认成功！",[]);
     }
 
-
     public function getOverTime ($seller_id, $is_post = 0)
     {
         $air_id = I("air_id");
@@ -506,7 +505,7 @@ class PackApply extends Model
         {
             foreach ($pack_line as $key => $val)
             {
-                $val["line_price"] =  $val["line_price"]."RMB";
+                $val["line_price"] =  $val["line_price"];
 //            $val["line_detail"] = json_decode(htmlspecialchars_decode($val["line_detail"]), true);
                 unset($val["line_detail"]);
                 if($val["car_id"])
@@ -536,7 +535,7 @@ class PackApply extends Model
             -> find();
 
         $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
-        $pack_line["line_price"] =  $pack_line["line_price"]."RMB";
+        $pack_line["line_price"] =  $pack_line["line_price"];
 
         if(!$isReturn)
             dataJson(1, "返回成功！", $pack_line);
@@ -573,18 +572,63 @@ class PackApply extends Model
         dataJson(1,"返回成功！",[]);
     }
 
+
+    /**
+     * 获取user_user_pic
+     */
+    public function user_head_pic (&$data)
+    {
+        if($data)
+        {
+            foreach ($data  as $key => $val)
+            {
+                $user_id = $val["user_id"];
+                $headpic = M("users") -> field("head_pic,hx_user_name,nickname") -> where("user_id = $user_id") -> find();
+                $val["user_head_pic"] = $headpic["head_pic"];
+                $val["user_hx_user_name"] = $headpic["hx_user_name"];
+                $val["user_nickname"] = $headpic["nickname"];
+            }
+        }
+        //print_r($data);die;
+    }
+
     public function getOrderCommentBaseOrderId ($seller_id)
     {
+        $pagesize = I("pagesize");
         $air_id = I("air_id");
         if(!$air_id)
             dataJson(4004,"air_id不能为空！",[]);
 
-        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id AND order_id = $air_id") -> select();
-        jsonData(1,"返回成功！",$pack_data);
+        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id AND order_id = $air_id") -> paginate($pagesize ? $pagesize :10);
+
+        foreach ($pack_data as $key => $val)
+        {
+            $user_info = getUserInfo($val);
+            $pack_data[$key]["head_pic"] = $user_info["head_pic"];
+            $pack_data[$key]["nickname"] = $user_info["nickname"];
+        }
+
+        if(!$pack_data)
+            $pack_data = [];
+
+        dataJson(1,"返回成功！",$pack_data);
     }
+
+
     public function getOrderAllComment ($seller_id)
     {
-        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id") -> select();
-        jsonData(1,"返回成功！",$pack_data);
+        $pagesize = I("pagesize");
+        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id") -> paginate($pagesize ? $pagesize :10);
+
+        foreach ($pack_data as $key => $val)
+        {
+            $user_info = getUserInfo($val);
+            $pack_data[$key]["head_pic"] = $user_info["head_pic"];
+            $pack_data[$key]["nickname"] = $user_info["nickname"];
+        }
+
+        if(!$pack_data)
+            $pack_data = [];
+        dataJson(1,"返回成功！",$pack_data);
     }
 }

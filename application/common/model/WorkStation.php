@@ -54,7 +54,7 @@ class WorkStation extends Model
         $date = date("Y-m-d",time());
         $current_zero = strtotime($date);
 
-        $where = "(seller_id <> 0 AND allot_seller_id like '%$seller_id%') OR (create_at >= '$current_zero')";
+        $where = "allot_seller_id like '%,$seller_id,%' AND seller_id <> 0 AND create_at >= '$current_zero'";
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
@@ -75,19 +75,23 @@ class WorkStation extends Model
 
         $status = trim(I("status"));
         $pagesize = I("pagesize");
+        $up_time = getUpStartTime();
+        $current_time = time();
         $this -> order_status($status) && $where[]= $this -> order_status($status);
         $data = $this -> order("air_id desc") -> where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 4);
-        $time = time();
+
+        $wait_where = "seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND $current_time < $up_time";
+        $confirm_where = "seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND $current_time >= $up_time ";
 
         if($status == "3,4") //进行中
         {
-            $wait_start_data  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> paginate(2);
+            $wait_start_data  = $this -> where($wait_where) -> paginate(2);
             $this -> user_head_pic($wait_start_data);
-            $wait_confirm_num  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> paginate(2);
+            $wait_confirm_num  = $this -> where($confirm_where) -> paginate(2);
             $this -> user_head_pic($wait_confirm_num);
-            $wait_start = $this->order_data_manage($wait_start_data,3);
+            $wait_start = $this -> order_data_manage($wait_start_data, 3);
             $result["wait_start"] = $wait_start ? $wait_start  : [];
-            $wait_confirm = $this->order_data_manage($wait_confirm_num,4);
+            $wait_confirm = $this -> order_data_manage($wait_confirm_num, 4);
 
             $result["wait_confirm"] = $wait_confirm ? $wait_confirm : [];
 
@@ -103,18 +107,21 @@ class WorkStation extends Model
                 $val["end_time"] = date("Y-m-d",$val["end_time"]);
                 $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 2") -> find();
                 $val["seller_order_status"] = $is_find ? 1 : 0;
-                $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
-                $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+                $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
+                $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
                 $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
                 $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
 
                 $result[$key] = $val;
             }
+
+
             $this->user_head_pic($result);
         }
 
-        $result_num["wait_start_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> count();
-        $result_num["wait_confirm_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> count();
+         $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
+
+         $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
 
         if(!$result)
             $result  = ["data" =>[] ];
@@ -161,7 +168,7 @@ class WorkStation extends Model
                 $val["user_nickname"] = $headpic["nickname"];
             }
         }
-
+        //print_r($data);die;
     }
 
     public function useCarNum ($use_car_adult, $use_car_children)
@@ -182,7 +189,8 @@ class WorkStation extends Model
     public function order_status ($status)
     {
         $status = trim($status);
-        $time = time();
+        $up_time = getUpStartTime();
+        $current_time = time();
         if($status == "" && $status !== 0)
             $status = 7;
 
@@ -197,11 +205,10 @@ class WorkStation extends Model
             $where = "is_pay = 1 AND status = 2";
         }else if($status == 3)//进行中-待开始
         {
-            $where = "is_pay = 1 AND status = 3 AND start_time > $time";
-
+            $where = "is_pay = 1 AND status = 3 AND $up_time > $current_time";
         }else if($status == 4)//进行中-待确认
         {
-            $where = "is_pay = 1 AND status = 3 AND start_time <= $time";
+            $where = "is_pay = 1 AND status = 3 AND $up_time <= $current_time";
         }else if($status == 5)//待评价
         {
             $where = "is_pay = 1 AND status >= 5 AND seller_order_status = 0";
@@ -270,7 +277,7 @@ class WorkStation extends Model
         $current_zero = strtotime($date);
 
 //        $where = "(seller_id <> 0 AND allot_seller_id like '%,$seller_id,%' AND type in (1,2)) OR (create_at >= $current_zero)";
-        $where = "(seller_id <> 0 AND allot_seller_id like '%$seller_id%') OR (create_at >= '$current_zero')";
+        $where = "allot_seller_id like '%,$seller_id,%' AND seller_id <> 0 AND create_at >= '$current_zero'";
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
@@ -379,18 +386,18 @@ class WorkStation extends Model
     public function statusAir ($seller_id)
     {
         $air_id = I("air_id");
-        $car_id = I("car_id");
+//        $car_id = I("car_id");
         $seller_data = $this -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
         if($seller_data)
             jsonData(4004,"该订单已被接单",[]);
         else
         {
-            $car_info = getCarInfoNameBaseCarId($car_id);
+//            $car_info = getCarInfoNameBaseCarId($car_id);
 //            print_r($car_info);die;
             $car_data =
             [
-                "con_car_id" => $car_id,
-                "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
+//                "con_car_id" => $car_id,
+//                "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
                 "seller_id"=> $seller_id,
                 "status" => 3
             ];
