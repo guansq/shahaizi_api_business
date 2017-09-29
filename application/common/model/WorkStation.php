@@ -370,6 +370,18 @@ class WorkStation extends Model
         if($data["status"] == 3)
             $data["status"] = $this -> time_status($data["start_time"]);
 
+        if($data["type"] == 3)
+        {
+            if($data["line_id"])
+            {
+                $line_data = M("pack_line") -> where("line_id = ".$data["line_id"]) -> find();
+                $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
+                $endline = end($line_detail);
+                $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                $endline && $data["dest_address"] = $endline["port_detail"][0]["site_name"];
+//                print_r($line_detail);die;
+            }
+        }
         $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);

@@ -419,7 +419,7 @@ class PackApply extends Model
         if(!$score)
             dataJson(4004,"评分不能为空！",[]);
 
-        if(!$is_anonymous)
+        if($is_anonymous == "")
             dataJson(4004,"是否匿名不能为空！",[]);
 
         $data["order_id"] = $order_id;
@@ -601,18 +601,21 @@ class PackApply extends Model
 
         $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id AND order_id = $air_id") -> paginate($pagesize ? $pagesize :10);
 
-        foreach ($pack_data as $key => $val)
+        $pack_data = $pack_data -> toArray();
+        $packData = $pack_data["data"];
+
+        foreach ($packData as $key => $val)
         {
-            $pack_data[$key]["commemt_time"] = date("Y-m-d H:i:s", $val["commemt_time"]);
             $user_info = getUserInfo($val);
-            $pack_data[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
-            $pack_data[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
+            $packData[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
+            $packData[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
+            $packData[$key]["commemt_time"] = date("Y-m-d H:i:s",$packData[$key]["commemt_time"]);
         }
 
-        if(!$pack_data)
-            $pack_data = [];
+        if(!$packData)
+            $packData = [];
 
-        dataJson(1,"返回成功！",$pack_data);
+        dataJson(1,"返回成功！",$packData);
     }
 
 
@@ -620,17 +623,19 @@ class PackApply extends Model
     {
         $pagesize = I("pagesize");
         $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id") -> paginate($pagesize ? $pagesize :10);
+        $pack_data = $pack_data -> toArray();
+        $packData = $pack_data["data"];
 
-        foreach ($pack_data as $key => $val)
+        foreach ($packData as $key => $val)
         {
-            $pack_data[$key]["commemt_time"] = date("Y-m-d H:i:s", $val["commemt_time"]);
             $user_info = getUserInfo($val);
-            $pack_data[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
-            $pack_data[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
+            $packData[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
+            $packData[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
+            $packData[$key]["commemt_time"] = date("Y-m-d H:i:s",$packData[$key]["commemt_time"]);
         }
 
-        if(!$pack_data)
-            $pack_data = [];
-        dataJson(1,"返回成功！",$pack_data);
+        if(!$packData)
+            $packData = [];
+        dataJson(1,"返回成功！",$packData);
     }
 }

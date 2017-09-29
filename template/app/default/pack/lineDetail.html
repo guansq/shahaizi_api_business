@@ -48,7 +48,7 @@
                 </div>
                 <foreach name="lineDetail.port_detail" item="port_details">
                     <div class="route">
-                        <p>第{$port_details.port_num|number2chinese}站</p>
+                        <p><span>第{$port_details.port_num|number2chinese}站</span><span style="margin-left:10px;">{$port_details.site_name}</span></p>
                         <img src="{$port_details.port_coverImg}" alt="">
                         <div>{$port_details.port_detail}</div>
                     </div>
