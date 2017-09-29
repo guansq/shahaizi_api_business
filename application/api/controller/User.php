@@ -68,6 +68,7 @@ class User extends Base {
             -> field("seller_id,country_id,province,signature,city,sex,nickname,language,head_pic, briefing,img_url")
             ->where("seller_id = ".$this -> user_id)
             -> find();
+
         if($seller_info["img_url"])
             $seller_info["img_url"] = explode("|", $seller_info["img_url"]);
         else
