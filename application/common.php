@@ -1572,3 +1572,14 @@ function rand_gene($length,$len = 6)
     }
     return mb_substr($string,rand(0,mb_strlen($string) - $length),$length);
 }
+
+/**
+ * 今天0点到晚上
+ */
+function todayBeginEnd ()
+{
+    $time = time();
+    $time_result["start_time"] = strtotime(date("Y-m-d 0:0:0"));
+    $time_result["end_time"] = strtotime(date("Y-m-d 23:59:59"));
+    return $time_result;
+}

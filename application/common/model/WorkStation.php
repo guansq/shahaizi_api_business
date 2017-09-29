@@ -15,6 +15,16 @@ use app\common\logic\GroupBuyLogic;
 class WorkStation extends Model
 {
     protected $table = "ruit_pack_order";
+
+    //错过订单条件
+    public function missWhere ($seller_id)
+    {
+        $up_time = getUpStartTime();
+        $current_time = time();
+        $time = todayBeginEnd();
+        $missWhere = "is_pay = 1 AND `status` = 3  AND allot_seller_id like '%,$seller_id,%' AND seller_id <> $seller_id AND ((type in (1,2,5) AND create_at >= '{$time['start_time']}' AND create_at <= '{$time['end_time']}') OR (type not in(1,2,5) AND  $current_time < $up_time ))";
+        return $missWhere;
+    }
     public function getMyWorkStation ($seller_id)
     {
         $where[]= "seller_id = 0 AND allot_seller_id like '%,".$seller_id.",%'";
@@ -51,10 +61,8 @@ class WorkStation extends Model
             $this -> user_head_pic($data);
         }
 
-        $date = date("Y-m-d",time());
-        $current_zero = strtotime($date);
+        $where = $this->missWhere($seller_id);
 
-        $where = "allot_seller_id like '%,$seller_id,%' AND seller_id <> 0 AND create_at >= '$current_zero'";
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
@@ -71,17 +79,28 @@ class WorkStation extends Model
 
     public function orderList ($seller_id)
     {
-        $where[]= "seller_id = $seller_id";
+        $where = "seller_id = $seller_id";
 
         $status = trim(I("status"));
         $pagesize = I("pagesize");
         $up_time = getUpStartTime();
         $current_time = time();
-        $this -> order_status($status) && $where[]= $this -> order_status($status);
-        $data = $this -> order("air_id desc") -> where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 4);
 
-        $wait_where = "seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND $current_time < $up_time";
-        $confirm_where = "seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND $current_time >= $up_time ";
+
+        $common_where = $where." AND is_pay = 1 AND `status` = 3 ";
+        $wait_where = $common_where." AND ( (type not in(1,2,5) AND $current_time < $up_time) OR (type in(1,2,5) AND start_time < $current_time) )";
+        $confirm_where = $common_where." AND ( (type not in(1,2,5) AND $current_time < $up_time) OR (type in(1,2,5) AND start_time >= $current_time) )";
+
+        if($status == 3)
+        {
+            $where = $wait_where;
+        }elseif ($status == 4)
+        {
+            $where = $confirm_where;
+        }
+        $this -> order_status($status) && $where .= $this -> order_status($status);
+        $data = $this -> order("air_id desc") -> where($where) -> paginate($pagesize ? $pagesize : 4);
+
 
         if($status == "3,4") //进行中
         {
@@ -100,7 +119,7 @@ class WorkStation extends Model
             foreach ($data as $key => $val)
             {
                 if($val["status"] == 3)
-                    $val["status"] = $this -> time_status($val["start_time"]);
+                    $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
 
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);
                 $val["start_time"] = date("Y-m-d",$val["start_time"]);
@@ -126,7 +145,7 @@ class WorkStation extends Model
         if(!$result)
             $result  = ["data" =>[] ];
         else
-            $result  = ["data" =>$result ];
+            $result  = ["data" => $result ];
 
         $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
         $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
@@ -203,12 +222,6 @@ class WorkStation extends Model
         }else if ($status == 2)//待接单
         {
             $where = "is_pay = 1 AND status = 2";
-        }else if($status == 3)//进行中-待开始
-        {
-            $where = "is_pay = 1 AND status = 3 AND $up_time > $current_time";
-        }else if($status == 4)//进行中-待确认
-        {
-            $where = "is_pay = 1 AND status = 3 AND $up_time <= $current_time";
         }else if($status == 5)//待评价
         {
             $where = "is_pay = 1 AND status >= 5 AND seller_order_status = 0";
@@ -224,16 +237,28 @@ class WorkStation extends Model
             $where = "is_pay = 1 AND seller_order_status = 1 ";
         }
 
-        if($status == "3,4") //所有进行中
-        {
-            $where = "is_pay = 1 AND status = 3";
-        }
+//        if($status == "3,4") //所有进行中
+//        {
+//            $where = "is_pay = 1 AND status = 3";
+//        }
 
         return $where;
     }
 
-    public function time_status ($start_time)
+    public function time_status ($type,$start_time)
     {
+        if(in_array($type,[1,2,5]))
+        {
+            if($start_time - time() < 0)
+            {
+                $order_status = 3;
+            }else
+            {
+                $order_status = 4;
+            }
+            return $order_status;
+        }
+
         if($start_time - time() > 0)
         {
             $order_status = 3;
@@ -273,11 +298,7 @@ class WorkStation extends Model
     public function miss_order ($seller_id)
     {
         $pagesize = I("pagesize");
-        $date = date("Y-m-d",time());
-        $current_zero = strtotime($date);
-
-//        $where = "(seller_id <> 0 AND allot_seller_id like '%,$seller_id,%' AND type in (1,2)) OR (create_at >= $current_zero)";
-        $where = "allot_seller_id like '%,$seller_id,%' AND seller_id <> 0 AND create_at >= '$current_zero'";
+        $where = $this->missWhere($seller_id);
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
@@ -368,7 +389,7 @@ class WorkStation extends Model
                 jsonData(4004,"您已经错过该订单！",[]);
         }
         if($data["status"] == 3)
-            $data["status"] = $this -> time_status($data["start_time"]);
+            $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
 
         if($data["type"] == 3)
         {
