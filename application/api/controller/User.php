@@ -74,6 +74,7 @@ class User extends Base {
         else
             $seller_info["img_url"] = [];
 
+        $seller_info = $seller_info -> data;
         $this->getAreaName($seller_info);
 
         jsonData(1,"返回成功",$seller_info);
