@@ -604,8 +604,8 @@ class PackApply extends Model
         foreach ($pack_data as $key => $val)
         {
             $user_info = getUserInfo($val);
-            $pack_data[$key]["head_pic"] = $user_info["head_pic"];
-            $pack_data[$key]["nickname"] = $user_info["nickname"];
+            $pack_data[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
+            $pack_data[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
         }
 
         if(!$pack_data)
@@ -623,8 +623,8 @@ class PackApply extends Model
         foreach ($pack_data as $key => $val)
         {
             $user_info = getUserInfo($val);
-            $pack_data[$key]["head_pic"] = $user_info["head_pic"];
-            $pack_data[$key]["nickname"] = $user_info["nickname"];
+            $pack_data[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
+            $pack_data[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
         }
 
         if(!$pack_data)
