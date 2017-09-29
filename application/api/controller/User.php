@@ -68,13 +68,11 @@ class User extends Base {
             -> field("seller_id,country_id,province,signature,city,sex,nickname,language,head_pic, briefing,img_url")
             ->where("seller_id = ".$this -> user_id)
             -> find();
-
         if($seller_info["img_url"])
             $seller_info["img_url"] = explode("|", $seller_info["img_url"]);
         else
             $seller_info["img_url"] = [];
 
-        $seller_info = $seller_info -> data;
         $this->getAreaName($seller_info);
 
         jsonData(1,"返回成功",$seller_info);
@@ -141,13 +139,13 @@ class User extends Base {
         $seller_info["order_count"] = $order_count ? $order_count : 0;
         $seller_info["star"] = $comment_count == 0 ? 0 : round($star_sum["star"]/$comment_count);
         $seller_info["level"] = 1;
-        $seller_info = $seller_info -> data;
         $this->getAreaName($seller_info);
         jsonData(1,"返回成功", $seller_info);
     }
 
     public function getAreaName (&$userInfo)
     {
+        $userInfo = (array)$userInfo;
         if($userInfo["country_id"])
         {
             $region_country = M("region_country") -> where("id = ".$userInfo["country_id"]) -> find();

@@ -21,19 +21,26 @@ use service\HttpService;
 class Sms extends Model
 {
     private $expire_time = 1800000;
-    private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
+    private $common_sms_url = "http://user.api.shahaizi.shop/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
     public function sendSms ()
     {
         $mobile = I("mobile");
         $country_code = I("country_code");
         $type = I("opt");
-
-        $seller = M("seller") -> field("country_code") -> where("mobile = $mobile") -> find();
+        $seller_where = "mobile = $mobile";
+        $seller = M("seller") -> field("country_code") -> where($seller_where) -> find();
 
         if($seller)
             $country_code = $seller["country_code"];
 
         $mobile = $country_code.$mobile;
+        $where = "mobile = $mobile";
+        $sms_info = M("sms_info") -> where($where) -> find();
+
+        if($sms_info)
+        {
+            M("sms_info") -> where($where) -> save(["is_check" => 0,"create_time"=> time()]);
+        }
 
         $data = ["mobile"=> $mobile,"opt" => $type];
         $httpRet = HttpService::post($this -> common_sms_url, $data);
