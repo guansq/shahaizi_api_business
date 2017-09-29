@@ -170,11 +170,11 @@ function  diffHour ($startDate,$endData)
 function getUserInfo($comment_info)
 {
     if($comment_info["type"] == 1)
-        $table = "users";
+      M("users")->field("nickname,head_pic") -> where("user_id = {$comment_info["user_id"]} AND type = 1") -> find();
     elseif($comment_info["type"] == 2)
-         $table = "seller";
+        M("seller")->field("nickname,head_pic") -> where("seller_id = {$comment_info["user_id"]} AND type = 1") -> find();
 
-    M($table)->field("nickname,head_pic") -> where("user_id = {$comment_info["user_id"]} AND type = 1") -> find();
+
 }
 
 function number2chinese($num,$mode = true,$sim = true){
