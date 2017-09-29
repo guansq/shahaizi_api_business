@@ -73,6 +73,7 @@ class User extends Base {
         else
             $seller_info["img_url"] = [];
 
+        $seller_info = json_decode($seller_info,true);
         $this->getAreaName($seller_info);
 
         jsonData(1,"返回成功",$seller_info);
@@ -139,12 +140,14 @@ class User extends Base {
         $seller_info["order_count"] = $order_count ? $order_count : 0;
         $seller_info["star"] = $comment_count == 0 ? 0 : round($star_sum["star"]/$comment_count);
         $seller_info["level"] = 1;
+        $seller_info = json_decode($seller_info,true);
         $this->getAreaName($seller_info);
         jsonData(1,"返回成功", $seller_info);
     }
 
     public function getAreaName (&$userInfo)
     {
+
         if($userInfo["country_id"])
         {
             $region_country = M("region_country") -> where("id = ".$userInfo["country_id"]) -> find();
@@ -262,6 +265,7 @@ class User extends Base {
         $unique_id = I("unique_id"); // 唯一id  类似于 pc 端的session id
         $push_id = I('push_id', '');
         $data = $this->userLogic->app_login($username, $password, $capache, $push_id);
+        $data["result"] = json_decode($data["result"]);
         $this->getAreaName($data["result"]);
         if($data['status'] != 1){
             $this->ajaxReturn($data);
