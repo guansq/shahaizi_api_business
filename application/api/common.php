@@ -173,8 +173,6 @@ function getUserInfo($comment_info)
       M("users")->field("nickname,head_pic") -> where("user_id = {$comment_info["user_id"]}") -> find();
     elseif($comment_info["type"] == 2)
         M("seller")->field("nickname,head_pic") -> where("seller_id = {$comment_info["user_id"]}") -> find();
-
-
 }
 
 function number2chinese($num,$mode = true,$sim = true){

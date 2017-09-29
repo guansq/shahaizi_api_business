@@ -603,6 +603,7 @@ class PackApply extends Model
 
         foreach ($pack_data as $key => $val)
         {
+            $pack_data[$key]["commemt_time"] = date("Y-m-d H:i:s", $val["commemt_time"]);
             $user_info = getUserInfo($val);
             $pack_data[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
             $pack_data[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
@@ -622,6 +623,7 @@ class PackApply extends Model
 
         foreach ($pack_data as $key => $val)
         {
+            $pack_data[$key]["commemt_time"] = date("Y-m-d H:i:s", $val["commemt_time"]);
             $user_info = getUserInfo($val);
             $pack_data[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
             $pack_data[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
