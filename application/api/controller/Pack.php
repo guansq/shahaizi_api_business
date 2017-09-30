@@ -996,4 +996,27 @@ class Pack extends Base {
     {
         model("common/PackApply") -> getOrderAllComment($this -> user_id);
     }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=coverImg  上传封面图
+     * @apiName   PackCoverImg
+     * @apiGroup  Pack
+     * @apiParam {string} token  token值
+     * @apiParam {string} cover_img  封面图
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *  {
+     *       "status": 1,
+     *       "msg": "上传成功",
+     *       "result": []
+     *    }
+     */
+    /**
+     * 上传封面图
+     */
+    public function coverImg ()
+    {
+        model("common/PackApply") -> uploadCoverImg($this -> user_id);
+    }
+
 }

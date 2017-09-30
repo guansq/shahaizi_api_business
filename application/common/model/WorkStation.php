@@ -245,7 +245,7 @@ class WorkStation extends Model
         return $where;
     }
 
-    public function time_status ($type,$start_time)
+    public function time_status ($type, $start_time)
     {
         if(in_array($type,[1,2,5]))
         {
@@ -258,6 +258,7 @@ class WorkStation extends Model
             }
             return $order_status;
         }
+
 
         if($start_time - time() > 0)
         {

@@ -638,4 +638,13 @@ class PackApply extends Model
             $packData = [];
         dataJson(1,"返回成功！",$packData);
     }
+
+    public function uploadCoverImg ($seller_id)
+    {
+        $cover_img = I("cover_img");
+        if(!$cover_img)
+            dataJson(4004,"封面图片不能为空");
+        M("seller") -> where("seller_id = $seller_id") -> save(["cover_img" => $cover_img]);
+        dataJson(1,"上传成功",[]);
+    }
 }
