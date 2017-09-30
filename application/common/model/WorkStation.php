@@ -79,6 +79,7 @@ class WorkStation extends Model
 
     public function orderList ($seller_id)
     {
+
         $where = "seller_id = $seller_id";
 
         $status = trim(I("status"));
@@ -98,7 +99,9 @@ class WorkStation extends Model
         {
             $where = $confirm_where;
         }
-        $this -> order_status($status) && $where .= $this -> order_status($status);
+
+        $this -> order_status($status) && $where = $where . " AND ".$this -> order_status($status);
+
         $data = $this -> order("air_id desc") -> where($where) -> paginate($pagesize ? $pagesize : 4);
 
 
