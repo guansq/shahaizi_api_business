@@ -30,6 +30,7 @@ class Users extends Model
         $briefing = I("briefing");
         $img_url = I("img_url");
         $area = I("area");
+        $mandarin = I("mandarin");
         $signature = I("signature");
 
         $head_pic && $data["head_pic"] = $head_pic;
@@ -37,6 +38,7 @@ class Users extends Model
         $sex && $data["sex"] = $sex;
         $language && $data["language"] = $language;
         $briefing && $data["briefing"] = $briefing;
+        $mandarin && $data["mandarin"] = $mandarin;
         $data["img_url"] = $img_url;
         $signature && $data["signature"] = $signature;
 
