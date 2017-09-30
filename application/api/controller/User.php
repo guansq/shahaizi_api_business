@@ -65,7 +65,7 @@ class User extends Base {
     public function getMyInfo ()
     {
         $seller_info = M("seller")
-            -> field("seller_id,country_id,province,signature,city,sex,nickname,language,head_pic, briefing,img_url")
+            -> field("seller_id,country_id,province,mandarin,signature,city,sex,nickname,language,head_pic, briefing,img_url")
             ->where("seller_id = ".$this -> user_id)
             -> find();
         if($seller_info["img_url"])
