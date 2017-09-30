@@ -30,6 +30,12 @@ class Sms extends Model
         $seller_where = "mobile = $mobile";
         $seller = M("seller") -> field("country_code") -> where($seller_where) -> find();
 
+        if($type == "resetpwd" && !$seller)
+            dataJson(4004,"该手机号没有账号",[]);
+
+        if($type == "reg" && $seller)
+            dataJson(4004,"账号已经存在！",[]);
+
         if($seller)
             $country_code = $seller["country_code"];
 
