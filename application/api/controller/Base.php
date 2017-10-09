@@ -146,7 +146,7 @@ class Base extends Controller {
 
         // 判断哪些控制器的 哪些方法需要登录验证的
         $check_arr = [
-            'pack'      => ['index','auth_img','auth_img_up','actionCar',"getMyCar","delMyCar","getMyCarInfo","overtime","publishLine","confirmOrder","getLinelist","lineDetail","delLine","getOvertime","postComment"],
+            'pack'      => ['index','auth_img','auth_img_up','actionCar',"getMyCar","delMyCar","getMyCarInfo","overtime","publishLine","confirmOrder","getLinelist","lineDetail","delLine","getOvertime","postComment","getOrderComment","getOrderAllComment","coverImg"],
             'cart'      => ['cart2','cart3', 'cart4'],
             'distribut' => ['add_goods', 'goods_list', 'index', 'lower_list', 'my_store', 'order_list', 'rebate_log', 'store'],
             'goods'     => ['collectGoodsOrNo'], 

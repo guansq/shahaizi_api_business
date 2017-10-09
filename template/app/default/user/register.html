@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type"/>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+    <meta content="telephone=no, address=no" name="format-detection"/>
+    <!--IOS私有属性，可以添加到主屏幕-->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="csrf-token" content="WrH4No5hr30bTJgefuj7YnxjP0WsssMx3SyQv7Rh"/>
+    <meta name="format-detection" content="telephone=no">
+    <title>注册</title>
+    <!--让IE8，IE9，支持Html5和Css3-->
+    <!--[if lte IE 8]>
+    <script src="/public/pack/lib/common/mediaqueries/selectivity-full.min.js"></script>
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="/public/user/lib/common/mediaqueries/css3-mediaqueries.js"></script>
+    <script src="/public/user/lib/common/mediaqueries/html5shiv.js"></script>
+    <![endif]-->
+    <link type="text/css" href="/public/user/lib/common/reset.css" rel="stylesheet"/>
+    <link type="text/css" href="/public/user/css/index.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="hsh-page">
+    <ul class="hsh-login-list">
+        <li class="user"><span>区号</span>
+            <span>
+            <select class="code_select">
+                <foreach name="country_code" item="codes">
+                    <option value="{$codes.mobile_prefix}">{$codes.country}+{$codes.mobile_prefix}</option>
+                </foreach>
+        </select>
+        </span></li>
+        <li class="user"><span>手机号</span><input id="phone" type="tel" placeholder="请输入手机号码"/></li>
+        <li>
+            <span>验证码</span><input class="code" id="register_code_ipt" type="number" placeholder="请输入验证码"/>
+            <input type="button" id="test" class="code-btn btn-blue" style="-webkit-appearance: none;" value="获取验证码">
+        </li>
+        <li><span>密码</span><input id="password" type="password" placeholder="请输入密码"/></li>
+        <li><span>邀请码</span><input id="apply_code" type="text" value="{:input('apply_code')}" placeholder="必填"/></li>
+        <li class="explain">点击注册，即表示您同意 <p>《傻孩子注册协议》</p></li>
+        <li id="register" class="register">
+            <button class="btn-blue" id="reg_sub">注册</button>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="text/javascript" src="/public/user/lib/jQuery/jquery-min.js"></script>
+<script type="text/javascript" src="/public/user/lib/layer/layer.js"></script>
+<script type="text/javascript" src="/public/user/js/common.js"></script>
+<script type="text/javascript" src="/public/user/js/register.js"></script>
+<script>
+    <if condition="!input('apply_code')">
+         alert("您没有邀请码，不能注册");
+    </if>
+</script>
+</html>

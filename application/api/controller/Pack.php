@@ -46,17 +46,20 @@ class Pack extends Base {
             $seller["is_seller_auth"] = 1;
         else
             $seller["is_seller_auth"] = 0;
+        $drv_data["drv_id"] && $driver_apply = M("pack_driver_apply") -> where("drv_id = ".$drv_data["drv_id"]) -> find();
+            if($driver_apply)
+            {
+                if($driver_apply["auth_status"]==1)
+                    $seller["is_drv_auth"] = 1;
+                elseif($driver_apply["auth_status"]==2)
+                    $seller["is_drv_auth"] = 2;
+                elseif($driver_apply["auth_status"]==3)
+                    $seller["is_drv_auth"] = 3;
+            }else
+            {
+                $seller["is_drv_auth"] = 0;
+            }
 
-        if($drv_data["drv_id"] !=0 )
-        {
-            $driver_apply = M("pack_driver_apply") -> where("drv_id = ".$drv_data["drv_id"]) -> find();
-            if($driver_apply["auth_status"]==1)
-                $seller["is_drv_auth"] = 1;
-            else
-                $seller["is_drv_auth"] = 1;
-        }
-        else
-            $seller["is_drv_auth"] = 0;
 
         if($drv_data["home_id"] !=0 )
             $seller["is_home_auth"] = 1;
@@ -480,6 +483,7 @@ class Pack extends Base {
      * @apiName     LineDetail
      * @apiGroup    Pack
      * @apiParam {string} token token值
+     * @apiParam {string} is_json 为0时为h5页面 1为json
      * @apiParam {string} line_id line_id值
      */
     /**
@@ -487,12 +491,23 @@ class Pack extends Base {
      */
     public function lineDetail ()
     {
+        $is_json = I("is_json");
         $line_data = model("common/PackApply") -> getLineDetail($this -> user_id,1);
-//        print_r($line_data);die;
-        $this -> assign("line_data",$line_data);
-        return $this -> fetch();
+        //print_r($line_data);die;
+        if(!$is_json)
+        {
+            $this -> assign("line_data",$line_data);
+            return $this -> fetch();
+        }
+
+        dataJson(1,"返回成功！", $line_data);
+
     }
 
+    public function userAgreement ()
+    {
+        return $this -> fetch("user_agreement");
+    }
     /**
      * @api {GET}  /index.php?m=Api&c=Pack&a=collegeList  司导学院文章列表done
      * @apiName     College
@@ -809,6 +824,7 @@ class Pack extends Base {
      * @apiParam {string} score 评分值
      * @apiParam {string} content 评价内容
      * @apiParam {string} order_id 订单id
+     * @apiParam {string} image 订单评论图片
      * @apiParam {string} is_anonymous 是否匿名
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
@@ -825,4 +841,182 @@ class Pack extends Base {
     {
         model("common/PackApply") -> postComment($this -> user_id);
     }
+
+    public function fixOrderTime ()
+    {
+        model("common/PackApply") -> fixOrderTime($this -> user_id);
+    }
+
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getArea  获取国家省市区done
+     * @apiName   GetArea
+     * @apiGroup  Pack
+     * @apiParam {string} continent 大洲id 0为获取所有大洲
+     * @apiParam {string} country 国家id 0为获取所有国家
+     * @apiParam {string} province 省id 0为获取所有省
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *   "status": 1,
+     *   "msg": "返回成功！",
+     *   "result":
+     * [
+     *       {
+     *           "id": 2,
+     *           "name": "北京市",
+     *           "level": 2,
+     *           "parent_id": 1,
+     *           "is_hot": 0,
+     *           "country_id": 7
+     *       },
+     *       {
+     *           "id": 300,
+     *           "name": "县",
+     *           "level": 2,
+     *           "parent_id": 1,
+     *           "is_hot": 0,
+     *           "country_id": 7
+     *       },
+     *       {
+     *           "id": 47498,
+     *           "name": "海淀区",
+     *           "level": 2,
+     *           "parent_id": 1,
+     *           "is_hot": 1,
+     *           "country_id": 7
+     *       }
+     *   ]
+     *   }
+     */
+    /**
+     * 获取地区
+     */
+    public function getArea ()
+    {
+        model("common/PackApply") -> getArea();
+    }
+
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=recharge_desc  费用说明
+     * @apiName   RechargeDesc
+     * @apiGroup  Pack
+     * @apiParam {string} id  24是id不为空 25是改退补偿
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     * {
+     *    "status": 1,
+     *    "msg": "返回成功",
+     *    "result": {
+     *        "title": "费用补偿",
+     *        "content": "<p>这里是费用补偿</p>"
+     *    }
+     * }
+     */
+    /**
+     * 费用补偿说明
+     */
+    public function  recharge_desc ()
+    {
+        $article_id = I("id");
+        if(!$article_id)
+            jsonData(0,"id不能为空！",[]);
+
+        $article = M("article") -> field("title,content") -> where("article_id = $article_id") -> find();
+        $article["content"] = htmlspecialchars_decode($article["content"]);
+        jsonData(1,"返回成功",$article);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getOrderComment  获取订单评论
+     * @apiName   GetOrderComment
+     * @apiGroup  Pack
+     * @apiParam {string} token  token值
+     * @apiParam {string} air_id  对应的air_id
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *  {
+     *       "status": 1,
+     *       "msg": "返回成功！",
+     *       "result": [
+     *           {
+     *               "order_commemt_id": 18,
+     *               "order_id": 20,
+     *               "store_id": 0,
+     *               "user_id": 20,
+     *               "describe_score": "0.0",
+     *               "seller_score": "1.0",
+     *               "logistics_score": "0.0",
+     *               "commemt_time": 1505550124,
+     *               "deleted": 0,
+     *               "type": 2,
+     *               "is_anonymous": 1,
+     *               "content": "heheh",
+     *               "img": ""
+     *           }
+     *       ]
+     *   }
+     */
+    public function getOrderComment ()
+    {
+        model("common/PackApply") -> getOrderCommentBaseOrderId($this -> user_id);
+    }
+
+    /**
+     * @api {GET}  /index.php?m=Api&c=Pack&a=getOrderAllComment  获取司导所有订单评论
+     * @apiName   GetOrderAllComment
+     * @apiGroup  Pack
+     * @apiParam {string} token  token值
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *  {
+     *       "status": 1,
+     *       "msg": "返回成功！",
+     *       "result": [
+     *           {
+     *               "order_commemt_id": 18,
+     *               "order_id": 20,
+     *               "store_id": 0,
+     *               "user_id": 20,
+     *               "describe_score": "0.0",
+     *               "seller_score": "1.0",
+     *               "logistics_score": "0.0",
+     *               "commemt_time": 1505550124,
+     *               "deleted": 0,
+     *               "type": 2,
+     *               "is_anonymous": 1,
+     *               "content": "heheh",
+     *               "img": ""
+     *           }
+     *       ]
+     *   }
+     */
+    public function getOrderAllComment ()
+    {
+        model("common/PackApply") -> getOrderAllComment($this -> user_id);
+    }
+
+    /**
+     * @api {POST}  /index.php?m=Api&c=Pack&a=coverImg  上传封面图
+     * @apiName   PackCoverImg
+     * @apiGroup  Pack
+     * @apiParam {string} token  token值
+     * @apiParam {string} cover_img  封面图
+     * @apiSuccessExample {json}    Success-Response
+     *  Http/1.1    200 OK
+     *  {
+     *       "status": 1,
+     *       "msg": "上传成功",
+     *       "result": []
+     *    }
+     */
+    /**
+     * 上传封面图
+     */
+    public function coverImg ()
+    {
+        model("common/PackApply") -> uploadCoverImg($this -> user_id);
+    }
+
 }

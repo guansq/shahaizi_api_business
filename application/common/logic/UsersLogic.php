@@ -70,8 +70,12 @@ class UsersLogic extends Model
             $result = array('status'=>-4,'msg'=>'图形验证码错误！');
         } */  else {
             $user['token'] = md5(time().mt_rand(1,999999999));
-            $data = ['token' => $user['token'], 'last_login' => time()];
+            $device_no = I("device_no");
+            $device_type = I("device_type");
+            $data = ['token' => $user['token'], 'last_login' => time(),"device_no" => $device_no,"device_type" =>$device_type ];
             $push_id && $data['push_id'] = $push_id;
+            $data["device_no"] = $device_no;
+            $data["device_type"] = $device_type;
             M('seller')->where("seller_id", $user['seller_id'])->save($data);
             $result = array('status'=>1,'msg'=>'登陆成功','result'=>$user);
         }
@@ -188,7 +192,7 @@ class UsersLogic extends Model
      * @param $password2 确认密码
      * @return array
      */
-    public function reg($username,$password,$password2,$push_id = 0,$country_code = 0){
+    public function reg($username,$password,$password2,$push_id = 0,$country_code = 0,$up_apply_code=""){
 
     	$is_validated = 0 ;
         if(check_email($username)){
@@ -254,13 +258,15 @@ class UsersLogic extends Model
 
         $easemobUse = new  \emchat\EasemobUse();
 
-        $hx_user = md5($map['mobile']);
+        $hx_user = md5($map['mobile'].time());
         $easemobUse -> setUserName($hx_user);
         $easemobUse -> setPassword($password);
         $easemobUse -> createSingleUser();
 
         $map['apply_code'] = $apply_code;
         $map['hx_user_name'] = $hx_user;
+
+        $map['up_apply_code'] = $up_apply_code;
 
         $user_id = M('seller')->add($map);
 

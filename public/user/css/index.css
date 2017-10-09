@@ -1,0 +1,122 @@
+/*注册*/
+
+.hsh-page{
+    width: 94%;
+    padding-top: 50px;
+    margin: 0 auto;
+}
+.he-header-re {
+    background-color: white;
+    color: #222222;
+}
+
+.hsh-login-list {
+    width: 85%;
+    margin: 20px auto;
+}
+
+.hsh-login-list li {
+    font-size: 1.2rem;
+    line-height: 57px;
+    border-bottom: 1px solid #dcdbdb;
+}
+
+.hsh-login-list li span {
+    display: inline-block;
+    width: 26%;
+}
+
+.hsh-login-list li input {
+    width: 60%;
+    height: 30px;
+    font-size: 1.0rem;
+    padding: 0 6px;
+    border: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.hsh-login-list .register {
+    border-bottom: hidden;
+}
+
+.hsh-login-list .register button {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.hsh-login-list .code {
+    width: 38%;
+}
+
+.hsh-login-list .code-btn {
+    width: 29%;
+    font-size: 0.8rem;
+    float: right;
+    margin-top: 14px;
+    line-height: 32px;
+}
+
+.hsh-login-list .explain {
+    border-bottom: none;
+    color: #333333;
+    font-size: 1.0rem;
+}
+
+.hsh-login-list .explain p {
+    display: inline-block;
+    color: #508df2;
+}
+
+.hsh-login-list .code-btn {
+    width: 29%;
+    font-size: 0.8rem;
+    float: right;
+    margin-top: 14px;
+    line-height: 32px;
+}
+.btn-blue {
+    background-color: #508df2;
+    color: #F4F8FE;
+    line-height: 46px;
+    border: none;
+    border-radius: 24px;
+    font-size: 0.8rem;
+    padding: 0;
+}
+
+.he-page{
+    padding-top: 50px;
+    text-align: center;
+}
+.he-page .title{
+    margin-top: 20%;
+    font-size: 1.2rem;
+}
+.he-page .hint{
+    margin-top: 30px;
+    font-size: 1.0rem;
+}
+.he-page button{
+    margin-top: 25px;
+    border: none;
+    background-color: #508df2;
+    color: white;
+    width: 30%;
+    height: 40px;
+    border-radius: 4px;
+}
+.he-page .lis1{
+    margin-right: 10%;
+}
+.he-page button a{
+    color: white;
+}
+
+.code_select{
+    height: 30px;
+    font-size: 1.0rem;
+    padding: 0 6px;
+    border: none;
+}

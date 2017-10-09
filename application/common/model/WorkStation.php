@@ -15,12 +15,24 @@ use app\common\logic\GroupBuyLogic;
 class WorkStation extends Model
 {
     protected $table = "ruit_pack_order";
+
+    //错过订单条件
+    public function missWhere ($seller_id)
+    {
+        $up_time = getUpStartTime();
+        $current_time = time();
+        $time = todayBeginEnd();
+        $missWhere = "is_pay = 1 AND `status` = 3  AND allot_seller_id like '%,$seller_id,%' AND seller_id <> $seller_id AND ((type in (1,2,5) AND create_at >= '{$time['start_time']}' AND create_at <= '{$time['end_time']}') OR (type not in(1,2,5) AND  $current_time < $up_time ))";
+        return $missWhere;
+    }
     public function getMyWorkStation ($seller_id)
     {
-        $where[]= "allot_seller_id like '%,".$seller_id.",%'";
+        $where[]= "seller_id = 0 AND allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
         $data = $this -> where(implode(" AND ",$where)) ->order("air_id desc") -> paginate($pagesize ? $pagesize : 4);
         $read = $this -> is_read ($seller_id);
+        $refuse = $this -> is_refuse ($seller_id);
+
         if($data)
         {
             foreach ($data as $key => $val)
@@ -28,8 +40,12 @@ class WorkStation extends Model
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);
                 $val["start_time"] = date("Y-m-d",$val["start_time"]);
                 $val["end_time"] = date("Y-m-d",$val["end_time"]);
+
+                $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 2") -> find();
+                $val["seller_order_status"] = $is_find ? 1 : 0;
+                $val["type"] !=3 && $val["line_data"] = order_type($val["type"],$val["air_id"]);
                 $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
-                $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+                $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
                 $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
                 $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
                 $result[$key] = $val;
@@ -37,70 +53,102 @@ class WorkStation extends Model
                     $result[$key]["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
                 else
                     $result[$key]["is_read"] = 0;
+
+                if($refuse && in_array($val["air_id"],$refuse))
+                    unset($result[$key]);
+
             }
+            $this -> user_head_pic($data);
         }
 
-        $date = date("Y-m-d",time());
-        $current_zero = strtotime($date);
+        $where = $this->missWhere($seller_id);
 
-        $where = "drv_id <> $seller_id AND create_at >= '$current_zero'";
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
             -> count();
-
+//        echo M("pack_order") -> getLastSql(true);die;
         if(!$result)
-            $result  = ["data" =>[] ,"count" => $count];
+            $results  = ["data" =>[] ,"count" => $count];
         else
-            $result  = ["data" =>$result ,"count" => $count];
+            $results  = ["data" =>$result ,"count" => $count];
 
-         jsonData(1,"返回成功",$result);
+         jsonData(1,"返回成功",$results);
 
     }
 
     public function orderList ($seller_id)
     {
-        $where[]= "seller_id = $seller_id";
+
+        $where = "seller_id = $seller_id";
 
         $status = trim(I("status"));
         $pagesize = I("pagesize");
-        $this -> order_status($status) && $where[]= $this -> order_status($status);
-        $data = $this -> order("air_id desc") -> where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 4);
-        $time = time();
+        $up_time = getUpStartTime();
+        $current_time = time();
+
+
+        $common_where = $where." AND is_pay = 1 AND `status` = 3 ";
+        $wait_where = $common_where." AND ( (type not in(1,2,5) AND $current_time < $up_time) OR (type in(1,2,5) AND start_time < $current_time) )";
+        $confirm_where = $common_where." AND ( (type not in(1,2,5) AND $current_time < $up_time) OR (type in(1,2,5) AND start_time >= $current_time) )";
+
+        if($status == 3)
+        {
+            $where = $wait_where;
+        }elseif ($status == 4)
+        {
+            $where = $confirm_where;
+        }
+
+        $this -> order_status($status) && $where = $where . " AND ".$this -> order_status($status);
+
+        $data = $this -> order("air_id desc") -> where($where) -> paginate($pagesize ? $pagesize : 4);
+
 
         if($status == "3,4") //进行中
         {
-            $wait_start_data  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> paginate(2);
-            $wait_confirm_num  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> paginate(2);
-            $result["wait_start"] = $this->order_data_manage($wait_start_data,3);
-            $result["wait_confirm"] = $this->order_data_manage($wait_confirm_num,4);
+            $wait_start_data  = $this -> where($wait_where) -> paginate(2);
+            $this -> user_head_pic($wait_start_data);
+            $wait_confirm_num  = $this -> where($confirm_where) -> paginate(2);
+            $this -> user_head_pic($wait_confirm_num);
+            $wait_start = $this -> order_data_manage($wait_start_data, 3);
+            $result["wait_start"] = $wait_start ? $wait_start  : [];
+            $wait_confirm = $this -> order_data_manage($wait_confirm_num, 4);
+
+            $result["wait_confirm"] = $wait_confirm ? $wait_confirm : [];
 
         }else
         {
             foreach ($data as $key => $val)
             {
                 if($val["status"] == 3)
-                    $val["status"] = $this -> time_status($val["start_time"]);
+                    $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
 
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);
                 $val["start_time"] = date("Y-m-d",$val["start_time"]);
                 $val["end_time"] = date("Y-m-d",$val["end_time"]);
-
-                $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
-                $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+                $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 2") -> find();
+                $val["seller_order_status"] = $is_find ? 1 : 0;
+                $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
+                $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
                 $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
                 $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
 
                 $result[$key] = $val;
             }
+
+
+            $this->user_head_pic($result);
         }
-        $result_num["wait_start_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time > $time") -> count();
-        $result_num["wait_confirm_num"]  = $this ->where("seller_id = $seller_id AND is_pay = 1 AND `status` = 3  AND start_time <= $time") -> count();
+
+         $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
+
+         $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
 
         if(!$result)
             $result  = ["data" =>[] ];
         else
-            $result  = ["data" =>$result ];
+            $result  = ["data" => $result ];
 
         $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
         $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
@@ -126,6 +174,25 @@ class WorkStation extends Model
         return $result;
     }
 
+    /**
+     * 获取user_user_pic
+     */
+    public function user_head_pic (&$data)
+    {
+        if($data)
+        {
+            foreach ($data  as $key => $val)
+            {
+                $user_id = $val["user_id"];
+                $headpic = M("users") -> field("head_pic,hx_user_name,nickname") -> where("user_id = $user_id") -> find();
+                $val["user_head_pic"] = $headpic["head_pic"];
+                $val["user_hx_user_name"] = $headpic["hx_user_name"];
+                $val["user_nickname"] = $headpic["nickname"];
+            }
+        }
+        //print_r($data);die;
+    }
+
     public function useCarNum ($use_car_adult, $use_car_children)
     {
         $use_car_children = $use_car_children ? $use_car_children."儿童" : '';
@@ -144,7 +211,8 @@ class WorkStation extends Model
     public function order_status ($status)
     {
         $status = trim($status);
-        $time = time();
+        $up_time = getUpStartTime();
+        $current_time = time();
         if($status == "" && $status !== 0)
             $status = 7;
 
@@ -157,16 +225,9 @@ class WorkStation extends Model
         }else if ($status == 2)//待接单
         {
             $where = "is_pay = 1 AND status = 2";
-        }else if($status == 3)//进行中-待开始
-        {
-            $where = "is_pay = 1 AND status = 3 AND start_time > $time";
-
-        }else if($status == 4)//进行中-待确认
-        {
-            $where = "is_pay = 1 AND status = 3 AND start_time <= $time";
         }else if($status == 5)//待评价
         {
-            $where = "is_pay = 1 AND status = 5";
+            $where = "is_pay = 1 AND status >= 5 AND seller_order_status = 0";
         }else if($status == 6)//已完成
         {
             $where = "is_pay = 1 AND status = 6";
@@ -174,17 +235,34 @@ class WorkStation extends Model
         {
             $where = "is_pay = 1 AND status >= 3 ";
         }
-
-        if($status == "3,4") //所有进行中
+        else if($status == 8)
         {
-            $where = "is_pay = 1 AND status = 3";
+            $where = "is_pay = 1 AND seller_order_status = 1 ";
         }
+
+//        if($status == "3,4") //所有进行中
+//        {
+//            $where = "is_pay = 1 AND status = 3";
+//        }
 
         return $where;
     }
 
-    public function time_status ($start_time)
+    public function time_status ($type, $start_time)
     {
+        if(in_array($type,[1,2,5]))
+        {
+            if($start_time - time() < 0)
+            {
+                $order_status = 3;
+            }else
+            {
+                $order_status = 4;
+            }
+            return $order_status;
+        }
+
+
         if($start_time - time() > 0)
         {
             $order_status = 3;
@@ -207,16 +285,24 @@ class WorkStation extends Model
         }
     }
 
+    public function is_refuse ($seller_id)
+    {
+        if($seller_id)
+        {
+            $where[] = "is_refuse = 1";
+            $where[] = "seller_id = $seller_id";
+            $whereConditon = implode(" AND ", $where);
+            return  M("pack_midstat") -> where($whereConditon) -> column("air_id");
+        }
+    }
+
     /**
      * 错过的订单
      */
     public function miss_order ($seller_id)
     {
         $pagesize = I("pagesize");
-        $date = date("Y-m-d",time());
-        $current_zero = strtotime($date);
-
-        $where = "drv_id <> $seller_id AND type in (1,2) AND create_at >= $current_zero";
+        $where = $this->missWhere($seller_id);
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
@@ -225,6 +311,7 @@ class WorkStation extends Model
         $order_data = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
+            -> order("create_at desc")
             -> paginate($pagesize ? $pagesize : 10);
 
         foreach ($order_data as $key => $val)
@@ -254,7 +341,12 @@ class WorkStation extends Model
             "is_read" => 1,
             "is_refuse" => 1
         ];
+//print_r($data);die;
         $pack_midstat = M("pack_midstat") -> where($where) -> find();
+
+        if($pack_midstat["is_refuse"] == 1)
+            jsonData(4004,"您已经拒绝过了！",[]);
+
         if($pack_midstat)
              M("pack_midstat") -> where($where)-> save($data);
         else
@@ -294,10 +386,31 @@ class WorkStation extends Model
         $where[]= "air_id = $air_id";
         $whereCondition = implode(" AND ",$where);
         $data = $this->where($whereCondition) -> find();
+
+        if($data["seller_id"])
+        {
+            if($data["seller_id"] != $seller_id)
+                jsonData(4004,"您已经错过该订单！",[]);
+        }
+        if($data["status"] == 3)
+            $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
+
+        if($data["type"] == 3)
+        {
+            if($data["line_id"])
+            {
+                $line_data = M("pack_line") -> where("line_id = ".$data["line_id"]) -> find();
+                $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
+                $endline = end($line_detail);
+                $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                $endline && $data["dest_address"] = $endline["port_detail"][0]["site_name"];
+//                print_r($line_detail);die;
+            }
+        }
+        $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);
-
-        $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
+        $data["use_car_num"] = $this->useCarNum($data["use_car_adult"], $data["use_car_children"]);
         $this->order_readed($seller_id,$air_id);
 
         if(!$data)
@@ -310,12 +423,22 @@ class WorkStation extends Model
     public function statusAir ($seller_id)
     {
         $air_id = I("air_id");
+//        $car_id = I("car_id");
         $seller_data = $this -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
         if($seller_data)
             jsonData(4004,"该订单已被接单",[]);
         else
         {
-            $saveData = $this -> where("air_id = $air_id") -> save(["seller_id"=> $seller_id]);
+//            $car_info = getCarInfoNameBaseCarId($car_id);
+//            print_r($car_info);die;
+            $car_data =
+            [
+//                "con_car_id" => $car_id,
+//                "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
+                "seller_id"=> $seller_id,
+                "status" => 3
+            ];
+            $saveData = $this -> where("air_id = $air_id") -> save($car_data);
             if($saveData)
                 jsonData(1,"接单成功!",[]);
             else

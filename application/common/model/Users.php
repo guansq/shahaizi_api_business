@@ -29,13 +29,26 @@ class Users extends Model
         $language = I("language");
         $briefing = I("briefing");
         $img_url = I("img_url");
+        $area = I("area");
+        $mandarin = I("mandarin");
+        $signature = I("signature");
 
         $head_pic && $data["head_pic"] = $head_pic;
         $nickname && $data["nickname"] = $nickname;
         $sex && $data["sex"] = $sex;
         $language && $data["language"] = $language;
         $briefing && $data["briefing"] = $briefing;
-        $img_url && $data["img_url"] = $img_url;
+        $mandarin && $data["mandarin"] = $mandarin;
+        $data["img_url"] = $img_url;
+        $signature && $data["signature"] = $signature;
+
+        if($area)
+        {
+            $area_data = json_decode(htmlspecialchars_decode($area), true);
+            $area_data["country"] && $data["country_id"]  = $area_data["country"];
+            $area_data["province"] && $data["province"]  = $area_data["province"];
+            $area_data["city"] && $data["city"]  = $area_data["city"];
+        }
 
         if($nickname)
         {
@@ -196,12 +209,12 @@ class Users extends Model
         dataJson(1,"返回成功",$seller_data);
     }
 
-    public function getSellerHxName ()
+    public function getUserHxName ()
     {
-        $seller_id = I("seller_id");
-        $seller_data = M("seller")
+        $user_id = I("user_id");
+        $seller_data = M("users")
             -> field("nickname,head_pic,hx_user_name")
-            -> where("seller_id = $seller_id")
+            -> where("user_id = $user_id")
             -> find();
 
         $result["nickname"] = $seller_data["nickname"];
@@ -227,7 +240,7 @@ class Users extends Model
             dataJson(4004,"司导认证中您还不能提现！", []);
         if($pack_driver_apply["auth_status"] == 3)
             dataJson(4004,"司导认证未通过，您还不能提现！", []);
-
-        dataJson(1,"返回成功",["seller_id" => $seller_id,"drv_money" => sprintf("%.2f",$pack_driver_apply["drv_money"])]);
+        $data = M("seller") -> where("seller_id = $seller_id") -> find();
+        dataJson(1,"返回成功",["seller_id" => $seller_id,"drv_money" => sprintf("%.2f",$data["user_money"])]);
     }
 }

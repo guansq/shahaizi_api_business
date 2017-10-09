@@ -116,7 +116,7 @@ function packDateFormat($date)
 {
     $week = ["周一","周二","周三","周四","周五","周六","周日"];
     $week_date = date("w",$date);
-    return date("Y-m-d", $date)." ".$week[$week_date-1].date("Y-m-d", $date);
+    return date("Y-m-d", $date)." ".$week[$week_date-1].date("H:i:s", $date);
 }
 
 function  getCarInfoName($brand_id = 0, $type_id = 0)
@@ -126,6 +126,33 @@ function  getCarInfoName($brand_id = 0, $type_id = 0)
     $pack_info["car_type_name"] = $pack_info[1];
     return $pack_info;
 }
+
+function  getCarInfoName2($brand_id = 0, $type_id = 0)
+{
+    $pack_info = M("pack_car_bar") -> where("id in ($brand_id, $type_id)") -> column("pid,car_info");
+    $pack_info = array_values($pack_info);
+    $pack_info["brand_name"] = $pack_info[0];
+    $pack_info["car_type_name"] = $pack_info[1];
+    return $pack_info;
+}
+
+function  getCarInfoNameBaseCarId($car_id)
+{
+    $car_data = M("pack_car_info") -> where("car_id = $car_id") -> find();
+    $pack_info = M("pack_car_bar") -> where("id in ({$car_data['brand_id']}, {$car_data['car_type_id']})") -> column("pid,car_info");
+    $pack_info = array_values($pack_info);
+    $pack_info["brand_name"] = $pack_info[0];
+    $pack_info["car_type_name"] = $pack_info[1];
+    return $pack_info;
+}
+
+function getUpStartTime ()
+{
+    $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
+    $overtime_time = $config["overtime_time"].":0";
+    return ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(start_time,"%Y-%m-%d")," '.$overtime_time.'"))';
+}
+
 
 function  diffHour ($startDate,$endData)
 {
@@ -137,6 +164,15 @@ function  diffHour ($startDate,$endData)
     $hour_num  = round((strtotime($end_date_data)-strtotime($go_off_time_concat))%86400/3600);
     $price = $hour_num * $config["charge"];
    return  ["overtime_hour" => $hour_num,"charge" => $price];
+}
+
+//根据订单评论信息获取用户信息
+function getUserInfo($comment_info)
+{
+    if($comment_info["type"] == 1)
+        M("users")->field("nickname,head_pic") -> where("user_id = {$comment_info["user_id"]}") -> find();
+    elseif($comment_info["type"] == 2)
+        M("seller")->field("nickname,head_pic") -> where("seller_id = {$comment_info["user_id"]}") -> find();
 }
 
 function number2chinese($num,$mode = true,$sim = true){
@@ -174,4 +210,36 @@ function number2chinese($num,$mode = true,$sim = true){
     }
     $retval = join('',array_reverse($out)) . $retval;
     return $retval;
+}
+
+function order_type($type,$order_id)
+{
+    //1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游
+    if($type == 1)
+    {
+        $table = "pack_base_receive";
+    }elseif($type == 2)
+    {
+        $table = "pack_base_send";
+    }elseif($type == 3)
+    {
+
+    }
+    elseif($type == 4)
+    {
+        $table = "pack_base_once";
+    }
+    elseif($type == 5)
+    {
+        $table = "pack_base_private";
+    }
+    elseif($type == 6)
+    {
+        $table = "pack_base_by_day";
+    }
+    $find_data = M($table) -> where("base_id = $order_id") -> find();
+    if($find_data)
+         $find_data["user_car_time"] = date("Y-m-d H:i:s",$find_data["user_car_time"]);
+
+    return $find_data;
 }

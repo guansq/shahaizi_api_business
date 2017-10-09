@@ -65,13 +65,15 @@ class User extends Base {
     public function getMyInfo ()
     {
         $seller_info = M("seller")
-            -> field("seller_id,sex,nickname,language,head_pic, briefing,img_url")
+            -> field("seller_id,country_id,province,mandarin,signature,city,sex,nickname,language,head_pic, briefing,img_url")
             ->where("seller_id = ".$this -> user_id)
             -> find();
         if($seller_info["img_url"])
             $seller_info["img_url"] = explode("|", $seller_info["img_url"]);
         else
             $seller_info["img_url"] = [];
+
+        $this->getAreaName($seller_info);
 
         jsonData(1,"返回成功",$seller_info);
     }
@@ -128,17 +130,51 @@ class User extends Base {
     public function getMine ()
     {
         $seller_info = M("seller") -> field("password",ture) ->where("seller_id = ".$this -> user_id) -> find();
-        $comment_count = M("pack_comment") -> field("COUNT(pack_comment) comment") ->where("seller_id = ".$this -> user_id) -> count();
+        $comment_count = M("order_comment") -> field("COUNT(order_comment_id) comment") ->where("type = 2 AND user_id = ".$this -> user_id) -> count();
         $order_count = M("pack_order") -> field("COUNT(pack_order) pack_order") ->where("seller_id = ".$this -> user_id) -> count();
-        $comment_count ? '' : $comment_count = 0;
-        $star_sum = M("pack_comment") -> field("SUM(star) star") ->where("seller_id = ".$this -> user_id) -> count();
-        $seller_info["comment_count"] = $comment_count["comment"] ? $comment_count["comment"] : 0;
-        $seller_info["order_count"] = $order_count ? $order_count["pack_order"] : 0;
+        $star_sum = M("order_comment") -> field("SUM(seller_score) star") ->where("type = 2 AND user_id = ".$this -> user_id) -> find();
+
+//        print_r($star_sum);die;
+        $seller_info["comment_count"] = $comment_count ? $comment_count : 0;
+        $seller_info["order_count"] = $order_count ? $order_count : 0;
         $seller_info["star"] = $comment_count == 0 ? 0 : round($star_sum["star"]/$comment_count);
         $seller_info["level"] = 1;
+        $this->getAreaName($seller_info);
         jsonData(1,"返回成功", $seller_info);
     }
 
+    public function getAreaName (&$userInfo)
+    {
+        $userInfo = (array)$userInfo;
+        if($userInfo["country_id"])
+        {
+            $region_country = M("region_country") -> where("id = ".$userInfo["country_id"]) -> find();
+            if(!$region_country)
+                $userInfo["country_name"] = "";
+            $userInfo["country_name"] = $region_country["name"];
+        }else
+        {
+            $userInfo["country_name"] = "";
+        }
+
+        if($userInfo["province"])
+        {
+            $region_province = M("region") -> where("id = ".$userInfo["province"]) -> find();
+            if(!$region_province)
+                $userInfo["province_name"] = "";
+            $userInfo["province_name"] = $region_province["name"];
+        }else
+            $userInfo["province_name"] = "";
+
+        if($userInfo["city"])
+        {
+            $region_city = M("region") -> where("id = ".$userInfo["city"]) -> find();
+            if(!$region_city)
+                $userInfo["city_name"] = "";
+            $userInfo["city_name"] = $region_city["name"];
+        }else
+            $userInfo["city_name"] = "";
+    }
 
     /**
      * @api      {POST} /index.php?m=Api&c=User&a=updateInfo   更新用户信息done
@@ -151,6 +187,8 @@ class User extends Base {
      * @apiParam {String} language   语言
      * @apiParam {String} briefing   简介
      * @apiParam {String} img_url   多个用| 隔开
+     * @apiParam {String} signature  签名
+     * @apiParam {String} area   示例：{"country" : "1","province": "100","city": "200"}
      * @apiSuccessExample {json}    Success-Response:
      *  Http/1.1   200 OK
      * {
@@ -225,7 +263,7 @@ class User extends Base {
         $unique_id = I("unique_id"); // 唯一id  类似于 pc 端的session id
         $push_id = I('push_id', '');
         $data = $this->userLogic->app_login($username, $password, $capache, $push_id);
-
+        $this->getAreaName($data["result"]);
         if($data['status'] != 1){
             $this->ajaxReturn($data);
         }
@@ -404,6 +442,7 @@ class User extends Base {
         $username = I('post.username','');
         $password = I('post.password','');
         $country_code = I('post.country_code',0);
+        $apply_code = I('post.apply_code',0);
         if(!$country_code)
             dataJson(4004,"国家区号不能为空！",[]);
 
@@ -416,11 +455,37 @@ class User extends Base {
 
         if(model("common/Sms") -> checkSms(1,$country_code.$username,$code))
         {
-            $data = $this->userLogic->reg($username,$password , $password, $push_id,$country_code);
+            $data = $this->userLogic->reg($username,$password , $password, $push_id,$country_code,$apply_code);
             exit(json_encode($data));
         }
     }
 
+    public function reg2(){
+        $username = I('post.username','');
+        $password = I('post.password','');
+        $up_apply_code = I('post.apply_code',0);
+        $country_code = I('post.country_code',0);
+        if(!$password)
+            dataJson(4004,"密码不能为空！",[]);
+
+        if(!$country_code)
+            dataJson(4004,"国家区号不能为空！",[]);
+
+        $password = md5("TPSHOP".$password);
+
+        $code = I('post.code');
+        $type = I('type','phone');
+        $session_id = I('unique_id', session_id());// 唯一id  类似于 pc 端的session id
+        $scene = I('scene' , 1);
+        $push_id = I('post.push_id' , '');
+
+
+        if(model("common/Sms") -> checkSms(1,$country_code.$username,$code))
+        {
+            $data = $this->userLogic->reg($username,$password , $password, $push_id,$country_code,$up_apply_code);
+            exit(json_encode($data));
+        }
+    }
 //    public function updateUserInfo(){
 //        if(IS_POST){
 //            //$user_id = I('user_id/d');
@@ -1534,4 +1599,15 @@ class User extends Base {
         model("common/Users") -> getSellerHxName();
     }
 
+    public function register_html()
+    {
+        $result = M("country_mobile_prefix") -> select();
+        $this->assign("country_code", $result);
+        return $this -> fetch("register");
+    }
+
+    public function reg_success()
+    {
+        return $this -> fetch("Registration_Successful");
+    }
 }

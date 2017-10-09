@@ -1,0 +1,59 @@
+html {
+    font-size: 62.5%;
+}
+body {
+    font-family: "Microsoft YaHei", "SimSun", "SimHei", "KaiTi", "LiSu";
+    line-height: 1;
+    font-size: 1.6em;
+}
+
+.swiper-container{
+   border-bottom: 1px solid #EFEFEF;
+}
+.swiper-slide{
+    text-align: center;
+    height: 183px;
+}
+.swiper-slide img{
+
+}
+.atw-detail .name{
+    line-height: 50px;
+    margin-left: 15px;
+    border-bottom: 1px solid #EFEFEF;
+}
+.atw-detail .content{
+    padding:15px;
+    font-size: 1.5rem;
+    color: #A5A5A5;
+    line-height: 30px;
+ }
+
+.atw-detail .content .title{
+    line-height: 30px;
+}
+.atw-detail .content ul{
+    line-height: 30px;
+    color: #A5A5A5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

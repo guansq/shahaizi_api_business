@@ -1271,34 +1271,6 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
-    "title": "司导学院文章详情done",
-    "name": "College",
-    "group": "Pack",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "id",
-            "description": "<p>文章列表的article_id值</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "application/api/controller/Pack.php",
-    "groupTitle": "Pack",
-    "sampleRequest": [
-      {
-        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
-      }
-    ]
-  },
-  {
-    "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=collegeList",
     "title": "司导学院文章列表done",
     "name": "College",
@@ -1338,6 +1310,34 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=collegeList"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=college&id=19",
+    "title": "司导学院文章详情done",
+    "name": "College",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>文章列表的article_id值</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=college&id=19"
       }
     ]
   },
@@ -1644,6 +1644,57 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getArea",
+    "title": "获取国家省市区done",
+    "name": "GetArea",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "continent",
+            "description": "<p>大洲id 0为获取所有大洲</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "country",
+            "description": "<p>国家id 0为获取所有国家</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "province",
+            "description": "<p>省id 0为获取所有省</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n  \"status\": 1,\n  \"msg\": \"返回成功！\",\n  \"result\":\n[\n      {\n          \"id\": 2,\n          \"name\": \"北京市\",\n          \"level\": 2,\n          \"parent_id\": 1,\n          \"is_hot\": 0,\n          \"country_id\": 7\n      },\n      {\n          \"id\": 300,\n          \"name\": \"县\",\n          \"level\": 2,\n          \"parent_id\": 1,\n          \"is_hot\": 0,\n          \"country_id\": 7\n      },\n      {\n          \"id\": 47498,\n          \"name\": \"海淀区\",\n          \"level\": 2,\n          \"parent_id\": 1,\n          \"is_hot\": 1,\n          \"country_id\": 7\n      }\n  ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getArea"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=getUserSingle",
     "title": "获取单个用户信息done",
     "name": "GetLinelist",
@@ -1768,6 +1819,87 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getOrderAllComment",
+    "title": "获取司导所有订单评论",
+    "name": "GetOrderAllComment",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": [\n         {\n             \"order_commemt_id\": 18,\n             \"order_id\": 20,\n             \"store_id\": 0,\n             \"user_id\": 20,\n             \"describe_score\": \"0.0\",\n             \"seller_score\": \"1.0\",\n             \"logistics_score\": \"0.0\",\n             \"commemt_time\": 1505550124,\n             \"deleted\": 0,\n             \"type\": 2,\n             \"is_anonymous\": 1,\n             \"content\": \"heheh\",\n             \"img\": \"\"\n         }\n     ]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getOrderAllComment"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=getOrderComment",
+    "title": "获取订单评论",
+    "name": "GetOrderComment",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "air_id",
+            "description": "<p>对应的air_id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"返回成功！\",\n     \"result\": [\n         {\n             \"order_commemt_id\": 18,\n             \"order_id\": 20,\n             \"store_id\": 0,\n             \"user_id\": 20,\n             \"describe_score\": \"0.0\",\n             \"seller_score\": \"1.0\",\n             \"logistics_score\": \"0.0\",\n             \"commemt_time\": 1505550124,\n             \"deleted\": 0,\n             \"type\": 2,\n             \"is_anonymous\": 1,\n             \"content\": \"heheh\",\n             \"img\": \"\"\n         }\n     ]\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=getOrderComment"
+      }
+    ]
+  },
+  {
+    "type": "GET",
     "url": "/index.php?m=Api&c=Pack&a=getOvertime",
     "title": "获取加班时间done",
     "name": "GetOvertime",
@@ -1830,6 +1962,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
+            "field": "is_json",
+            "description": "<p>为0时为h5页面 1为json</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
             "field": "line_id",
             "description": "<p>line_id值</p>"
           }
@@ -1866,6 +2005,50 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503/index.php?m=Api&c=PackLine&a=getQualityLine"
+      }
+    ]
+  },
+  {
+    "type": "POST",
+    "url": "/index.php?m=Api&c=Pack&a=coverImg",
+    "title": "上传封面图",
+    "name": "PackCoverImg",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token值</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "cover_img",
+            "description": "<p>封面图</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": "Http/1.1    200 OK\n{\n     \"status\": 1,\n     \"msg\": \"上传成功\",\n     \"result\": []\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=coverImg"
       }
     ]
   },
@@ -1929,6 +2112,13 @@ define({ "api": [
             "optional": false,
             "field": "order_id",
             "description": "<p>订单id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "image",
+            "description": "<p>订单评论图片</p>"
           },
           {
             "group": "Parameter",
@@ -2041,6 +2231,43 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=publishLine"
+      }
+    ]
+  },
+  {
+    "type": "GET",
+    "url": "/index.php?m=Api&c=Pack&a=recharge_desc",
+    "title": "费用说明",
+    "name": "RechargeDesc",
+    "group": "Pack",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "id",
+            "description": "<p>24是id不为空 25是改退补偿</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response",
+          "content": " Http/1.1    200 OK\n{\n   \"status\": 1,\n   \"msg\": \"返回成功\",\n   \"result\": {\n       \"title\": \"费用补偿\",\n       \"content\": \"<p>这里是费用补偿</p>\"\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "application/api/controller/Pack.php",
+    "groupTitle": "Pack",
+    "sampleRequest": [
+      {
+        "url": "http://shz.api.bussiness.ruitukeji.cn:8503//index.php?m=Api&c=Pack&a=recharge_desc"
       }
     ]
   },
@@ -2797,6 +3024,20 @@ define({ "api": [
             "optional": false,
             "field": "img_url",
             "description": "<p>多个用| 隔开</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "signature",
+            "description": "<p>签名</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "area",
+            "description": "<p>示例：{&quot;country&quot; : &quot;1&quot;,&quot;province&quot;: &quot;100&quot;,&quot;city&quot;: &quot;200&quot;}</p>"
           }
         ]
       }
