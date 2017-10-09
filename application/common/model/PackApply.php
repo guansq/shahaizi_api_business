@@ -196,10 +196,12 @@ class PackApply extends Model
 //                jsonData(4004, "车牌号重复！",[]);
 //        }
 
-        if($car_id)
+        if($car_id){
+            $result['is_state'] = 0;//待审核
             $pack_car_info -> where("car_id = $car_id") -> save($result);
-        else
+        }else{
             $pack_car_info -> add($result);
+        }
 
         jsonData(1,"返回成功！",[]);
     }
