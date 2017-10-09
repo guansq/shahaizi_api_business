@@ -56,8 +56,9 @@ class Sms extends Model
         else
             dataJson(1,$httpRet["msg"],[]);
     }
-   public function checkSms ($is_return = 0,$mobiles = 0,$codes = 0)
+   public function checkSms ($is_return = 0,$mobiles = 0,$codes = 0)//绑定  注册
    {
+
        $mobile = $mobiles ?  $mobiles :I("mobile");
        $code = $codes ? $codes : I("code");
        if(!$mobile)
@@ -66,7 +67,8 @@ class Sms extends Model
        if(!$code)
            dataJson(4004,"code不能为空！", []);
 
-       $check = M("sms_info") -> where("mobile = '$mobile' AND is_check = 0") -> find();
+       $check = M("sms_info") -> where("mobile = '$mobile' AND is_check = 0 AND code = '$codes'") -> find();
+       //echo $check;die;->fetchSql(true)
        time() - $check["create_at"] > $this -> expire_time && dataJson(4004,"验证码已经失效！", []);
 
        if($check && $check["code"] == $code)
