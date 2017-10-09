@@ -21,7 +21,7 @@ use service\HttpService;
 class Sms extends Model
 {
     private $expire_time = 1800000;
-    private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
+    //private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
     public function sendSms ()
     {
         $mobile = I("mobile");
@@ -49,7 +49,7 @@ class Sms extends Model
         }
 
         $data = ["mobile"=> $mobile,"opt" => $type];
-        $httpRet = HttpService::post($this -> common_sms_url, $data);
+        $httpRet = HttpService::post(config('sms_url'), $data);
         $httpRet = json_decode($httpRet,true);
         if($httpRet["msg"] != "发送成功")
             dataJson(4004,$httpRet["msg"],[]);
