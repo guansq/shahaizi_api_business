@@ -89,8 +89,8 @@ class WorkStation extends Model
 
 
         $common_where = $where." AND is_pay = 1 AND `status` = 3 ";
-        $wait_where = $common_where." AND ( (type not in(1,2,5) AND $current_time < $up_time) OR (type in(1,2,5) AND start_time < $current_time) )";
-        $confirm_where = $common_where." AND ( (type not in(1,2,5) AND $current_time < $up_time) OR (type in(1,2,5) AND start_time >= $current_time) )";
+        $confirm_where = $common_where." AND ( (type not in(1,2,5) ) OR (type in(1,2,5) AND start_time < $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
+        $wait_where = $common_where." AND ( (type not in(1,2,5) ) OR (type in(1,2,5) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
 
         if($status == 3)
         {
@@ -112,6 +112,7 @@ class WorkStation extends Model
             $wait_confirm_num  = $this -> where($confirm_where) -> paginate(2);
             $this -> user_head_pic($wait_confirm_num);
             $wait_start = $this -> order_data_manage($wait_start_data, 3);
+            //dump($wait_start);die;
             $result["wait_start"] = $wait_start ? $wait_start  : [];
             $wait_confirm = $this -> order_data_manage($wait_confirm_num, 4);
 
@@ -254,10 +255,10 @@ class WorkStation extends Model
         {
             if($start_time - time() < 0)
             {
-                $order_status = 3;
+                $order_status = 4;
             }else
             {
-                $order_status = 4;
+                $order_status = 3;
             }
             return $order_status;
         }
