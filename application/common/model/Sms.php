@@ -69,8 +69,10 @@ class Sms extends Model
 
        $check = M("sms_info") -> where("mobile = '$mobile' AND is_check = 0 AND code = '$codes'") -> find();
        //echo $check;die;->fetchSql(true)
-       time() - $check["create_at"] > $this -> expire_time && dataJson(4004,"验证码已经失效！", []);
 
+       if($check){
+           (time() - $check["create_at"]) > $this -> expire_time && dataJson(4004,"验证码已经失效！", []);
+       }
        if($check && $check["code"] == $code)
        {
             if($is_return)
