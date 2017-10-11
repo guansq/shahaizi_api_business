@@ -35,6 +35,7 @@ class WorkStation extends Model
 
         if($data)
         {
+            $data = collection($data->items())->toArray();
             foreach ($data as $key => $val)
             {
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);
@@ -71,7 +72,7 @@ class WorkStation extends Model
         if(!$result)
             $results  = ["data" =>[] ,"count" => $count];
         else
-            $results  = ["data" =>$result ,"count" => $count];
+            $results  = ["data" =>$data ,"count" => $count];
 
          jsonData(1,"返回成功",$results);
 
@@ -143,9 +144,9 @@ class WorkStation extends Model
             $this->user_head_pic($result);
         }
 
-         $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
+        $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
 
-         $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
+        $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
 
         if(!$result)
             $result  = ["data" =>[] ];
@@ -154,6 +155,20 @@ class WorkStation extends Model
 
         $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
         $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
+        foreach($data as $key => &$val){
+            if($val["type"] == 3)
+            {
+                if($val["line_id"])
+                {
+                    $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
+                    $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
+                    $endline = end($line_detail);
+                    $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                    $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
+                    //                print_r($line_detail);die;
+                }
+            }
+        }
 
         jsonData(1,"返回成功",$result);
 
@@ -242,10 +257,10 @@ class WorkStation extends Model
             $where = "is_pay = 1 AND seller_order_status = 1 ";
         }
 
-//        if($status == "3,4") //所有进行中
-//        {
-//            $where = "is_pay = 1 AND status = 3";
-//        }
+        //        if($status == "3,4") //所有进行中
+        //        {
+        //            $where = "is_pay = 1 AND status = 3";
+        //        }
 
         return $where;
     }
@@ -337,22 +352,22 @@ class WorkStation extends Model
 
         $where = "seller_id = $seller_id AND air_id = $air_id";
         $data =
-        [
-            "seller_id" => $seller_id,
-            "air_id" => $air_id,
-            "is_read" => 1,
-            "is_refuse" => 1
-        ];
-//print_r($data);die;
+            [
+                "seller_id" => $seller_id,
+                "air_id" => $air_id,
+                "is_read" => 1,
+                "is_refuse" => 1
+            ];
+        //print_r($data);die;
         $pack_midstat = M("pack_midstat") -> where($where) -> find();
 
         if($pack_midstat["is_refuse"] == 1)
             jsonData(4004,"您已经拒绝过了！",[]);
 
         if($pack_midstat)
-             M("pack_midstat") -> where($where)-> save($data);
+            M("pack_midstat") -> where($where)-> save($data);
         else
-             M("pack_midstat")-> add($data);
+            M("pack_midstat")-> add($data);
 
         jsonData(1,"已拒绝",[]);
     }
@@ -384,7 +399,7 @@ class WorkStation extends Model
         if(empty(trim($air_id)))
             jsonData(4004,"air_id不能为空",[]);
 
-//        $where[]= "seller_id = $seller_id";
+        //        $where[]= "seller_id = $seller_id";
         $where[]= "air_id = $air_id";
         $whereCondition = implode(" AND ",$where);
         $data = $this->where($whereCondition) -> find();
@@ -406,7 +421,7 @@ class WorkStation extends Model
                 $endline = end($line_detail);
                 $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
                 $endline && $data["dest_address"] = $endline["port_detail"][0]["site_name"];
-//                print_r($line_detail);die;
+                //                print_r($line_detail);die;
             }
         }
         $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
@@ -425,21 +440,21 @@ class WorkStation extends Model
     public function statusAir ($seller_id)
     {
         $air_id = I("air_id");
-//        $car_id = I("car_id");
+        //        $car_id = I("car_id");
         $seller_data = $this -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
         if($seller_data)
             jsonData(4004,"该订单已被接单",[]);
         else
         {
-//            $car_info = getCarInfoNameBaseCarId($car_id);
-//            print_r($car_info);die;
+            //            $car_info = getCarInfoNameBaseCarId($car_id);
+            //            print_r($car_info);die;
             $car_data =
-            [
-//                "con_car_id" => $car_id,
-//                "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
-                "seller_id"=> $seller_id,
-                "status" => 3
-            ];
+                [
+                    //                "con_car_id" => $car_id,
+                    //                "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
+                    "seller_id"=> $seller_id,
+                    "status" => 3
+                ];
             $saveData = $this -> where("air_id = $air_id") -> save($car_data);
             if($saveData)
                 jsonData(1,"接单成功!",[]);
