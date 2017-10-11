@@ -611,6 +611,9 @@ class User extends Base {
 //            $result = MsgService::verifyCaptcha($mobile,'resetpwd',$code);
             if(model("common/Sms") -> checkSms(1,$user["country_code"].$mobile,$code))
             {
+                if($user['password'] == $password){
+                    $this->ajaxReturn(['status'=>-1,'msg'=>'新密码与原密码不能一样']);
+                }
                 $easemobUse = new  \emchat\EasemobUse();
                 $hx_user = md5($mobile);
                 $easemobUse -> setUserName($hx_user);
