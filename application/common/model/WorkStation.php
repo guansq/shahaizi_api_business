@@ -35,10 +35,14 @@ class WorkStation extends Model
 
         if($data)
         {
-            $data = collection($data->items())->toArray();
             foreach ($data as $key => $val)
             {
-                $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                $val["start_time_detail"] = packDateFormat($val["start_time"]);//如果是线路的start_time读线路的start_time
+                if($val['type'] == 3 && $val['line_id']){
+                    $week = ["周一","周二","周三","周四","周五","周六","周日"];
+                    $week_date = date("w",strtotime($val["work_at"]));
+                    $val["start_time_detail"] = date("Y-m-d", strtotime($val["work_at"]))." ".$week[$week_date-1];
+                }
                 $val["start_time"] = date("Y-m-d",$val["start_time"]);
                 $val["end_time"] = date("Y-m-d",$val["end_time"]);
 
@@ -49,6 +53,21 @@ class WorkStation extends Model
                 $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
                 $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
                 $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
+
+                if($val["type"] == 3)
+                {
+                    if($val["line_id"])
+                    {
+
+                        $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
+                        $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
+                        $endline = end($line_detail);
+                        $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+
+                        $val["dest_address"] = array_reverse($endline["port_detail"])[0]["site_name"];//反转数组
+                    }
+                }
+
                 $result[$key] = $val;
                 if($read)
                     $result[$key]["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
@@ -72,7 +91,7 @@ class WorkStation extends Model
         if(!$result)
             $results  = ["data" =>[] ,"count" => $count];
         else
-            $results  = ["data" =>$data ,"count" => $count];
+            $results  = ["data" =>$result ,"count" => $count];
 
          jsonData(1,"返回成功",$results);
 
@@ -91,8 +110,8 @@ class WorkStation extends Model
 
         $common_where = $where." AND is_pay = 1 AND `status` = 3 ";
         //
-        $confirm_where = $common_where." AND ( (type not in(1,2,5) AND $current_time > $up_time) OR (type in(1,2,5) AND start_time < $current_time) )";//上班时间>当前时间
-        $wait_where = $common_where." AND ( (type not in(1,2,5) AND $current_time <= $up_time) OR (type in(1,2,5) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
+        $confirm_where = $common_where." AND ( (type not in(1,2,6) AND $current_time > $up_time) OR (type in(1,2,6) AND start_time < $current_time) )";//上班时间>当前时间
+        $wait_where = $common_where." AND ( (type not in(1,2,6) AND $current_time <= $up_time) OR (type in(1,2,6) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
 
         if($status == 3)
         {
