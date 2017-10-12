@@ -445,7 +445,8 @@ class WorkStation extends Model
 
                 $week = ["周一","周二","周三","周四","周五","周六","周日"];
                 $week_date = date("w",strtotime($data["work_at"]));
-                $data["start_time_detail"] = date("Y-m-d", strtotime($data["work_at"]))." ".$week[$week_date-1];
+                $data["start_time_detail"] = $data["work_at"]." ".$week[$week_date-1];
+//                $data["start_time_detail"] = date("Y-m-d", strtotime($data["work_at"]))." ".$week[$week_date-1];
                 //$data["start_time_detail"] = packDateFormat($data["start_time"]);
             }
         }
