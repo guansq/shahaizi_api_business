@@ -109,9 +109,9 @@ class WorkStation extends Model
 
 
         $common_where = $where." AND is_pay = 1 AND `status` = 3 ";
-        //
-        $confirm_where = $common_where." AND ( (type not in(3,6) AND $current_time > $up_time) OR (type in(3,6) AND start_time < $current_time) )";//上班时间>当前时间
-        $wait_where = $common_where." AND ( (type not in(3,6) AND $current_time <= $up_time) OR (type in(3,6) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
+        //当天上班时间
+        $confirm_where = $common_where." AND ( (type in(3,6) AND $current_time > $up_time) OR (type not in(3,6) AND start_time < $current_time) )";//上班时间>当前时间
+        $wait_where = $common_where." AND ( (type in(3,6) AND $current_time <= $up_time) OR (type not in(3,6) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
 
         if($status == 3)
         {
@@ -286,7 +286,7 @@ class WorkStation extends Model
 
     public function time_status ($type, $start_time)
     {
-        if(in_array($type,[1,2,5]))
+        if(in_array($type,[1,2,4,5,7]))
         {
             if($start_time - time() < 0)
             {
@@ -298,7 +298,7 @@ class WorkStation extends Model
             return $order_status;
         }
 
-
+        //3 6 当前时间 和当天上班时间
         if($start_time - time() > 0)
         {
             $order_status = 3;

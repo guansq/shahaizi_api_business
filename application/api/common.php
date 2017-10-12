@@ -150,7 +150,7 @@ function getUpStartTime ()
 {
     $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
     $overtime_time = $config["overtime_time"].":0";
-    return ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(start_time,"%Y-%m-%d")," '.$overtime_time.'"))';
+    return ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(curdate(),"%Y-%m-%d")," '.$overtime_time.'"))';//当天的上班时间  二不是starttime的上班时间
 }
 
 
