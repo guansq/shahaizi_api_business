@@ -362,7 +362,7 @@ class PackApply extends Model
        $cover_img = I("cover_img");
        $bright_dot = I("bright_dot");
        $line_detail = I("line_detail");
-       $play_day = count(json_decode($line_detail,true));
+       $play_day = count(json_decode(htmlspecialchars_decode($line_detail),true));
        if(!$line_title)
            dataJson(4004,"线路标题不能为空！",[]);
 
@@ -491,7 +491,9 @@ class PackApply extends Model
                  ],
             ]
         ];
-        echo json_encode($line_detail);
+
+        $test =  json_encode($line_detail);
+        echo count(json_decode($test,true));
     }
 
     /**

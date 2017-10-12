@@ -477,6 +477,9 @@ class Pack extends Base {
         model("common/PackApply") -> publish_line($this -> user_id);
     }
 
+    public function testpublish(){
+        model("common/PackApply") -> line_detail2();
+    }
 
     /**
      * @api {GET}  /index.php?m=Api&c=Pack&a=lineDetail&token=37cd1e8ea0c8b81f1fcc03d178625599&line_id=8   线路详情done
