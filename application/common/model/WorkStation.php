@@ -110,8 +110,8 @@ class WorkStation extends Model
 
         $common_where = $where." AND is_pay = 1 AND `status` = 3 ";
         //
-        $confirm_where = $common_where." AND ( (type not in(1,2,6) AND $current_time > $up_time) OR (type in(1,2,6) AND start_time < $current_time) )";//上班时间>当前时间
-        $wait_where = $common_where." AND ( (type not in(1,2,6) AND $current_time <= $up_time) OR (type in(1,2,6) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
+        $confirm_where = $common_where." AND ( (type not in(3,6) AND $current_time > $up_time) OR (type in(3,6) AND start_time < $current_time) )";//上班时间>当前时间
+        $wait_where = $common_where." AND ( (type not in(3,6) AND $current_time <= $up_time) OR (type in(3,6) AND start_time >= $current_time) )";//上班时间>当前时间  AND $current_time < $up_time
 
         if($status == 3)
         {
