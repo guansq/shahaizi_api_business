@@ -428,6 +428,7 @@ class WorkStation extends Model
             if($data["seller_id"] != $seller_id)
                 jsonData(4004,"您已经错过该订单！",[]);
         }
+        $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
         if($data["status"] == 3)
             $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
 
@@ -441,9 +442,15 @@ class WorkStation extends Model
                 $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
                 $endline && $data["dest_address"] = $endline["port_detail"][0]["site_name"];
                 //                print_r($line_detail);die;
+
+                $week = ["周一","周二","周三","周四","周五","周六","周日"];
+                $week_date = date("w",strtotime($data["work_at"]));
+                $data["start_time_detail"] = date("Y-m-d", strtotime($data["work_at"]))." ".$week[$week_date-1];
+                //$data["start_time_detail"] = packDateFormat($data["start_time"]);
             }
         }
-        $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
+
+
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);
         $data["use_car_num"] = $this->useCarNum($data["use_car_adult"], $data["use_car_children"]);
