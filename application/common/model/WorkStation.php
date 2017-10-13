@@ -181,9 +181,14 @@ class WorkStation extends Model
                 {
                     $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
                     $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
-                    $endline = end($line_detail);
-                    $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
-                    $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
+                    if($line_detail){
+                        $endline = end($line_detail);
+                        $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                        $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
+                    }else{
+                        $val["work_address"] = '没有该路线';
+                        $val["dest_address"] = '没有该路线';
+                    }
                     //                print_r($line_detail);die;
                 }
             }

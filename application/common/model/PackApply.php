@@ -453,7 +453,7 @@ class PackApply extends Model
        if($pack_order["seller_id"])
        {
            $user_money = floatval($pack_order["real_price"]) + floatval($pack_order["add_recharge"]);
-           M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> save(["user_money" => $user_money]);
+           M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
        }
     }
 
