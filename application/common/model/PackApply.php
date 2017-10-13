@@ -426,26 +426,30 @@ class PackApply extends Model
         if($is_anonymous == "")
             dataJson(4004,"是否匿名不能为空！",[]);
 
+        $order_info = M('pack_order')->where("seller_id = $seller_id AND air_id = $order_id")->find();
         $data["order_id"] = $order_id;
         $data["seller_score"] = $score;
         $data["content"] = $content;
         $data["is_anonymous"] = $is_anonymous;
         $data["commemt_time"] = $commemt_time;
         $data["user_id"] = $seller_id;
-        $data["type"] = 2;
-        $data["image"] = $image;
-        $is_find = M("order_comment") -> where("order_id = $order_id AND user_id = $seller_id AND type = 2") -> find();
+        $data["type"] = 3;
+        $data["car_product_id"] = $order_info['car_product_id'];
+        $data["seller_id"] = $order_info['seller_id'];
+        $data["line_id"] = $order_info['line_id'];
+        $data["img"] = $image;
+        $is_find = M("order_comment") -> where("order_id = $order_id AND user_id = $seller_id AND type = 3") -> find();
         if($is_find)
             dataJson(0,"您已经评价过该订单了！",[]);
         //查询订单信息
-        $order_info = M('pack_order')->where("seller_id = $seller_id AND air_id = $order_id")->find();
+
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["seller_order_status" => 1]);
         if($order_info['user_order_status'] == 1){//如果用户端也评价了
             M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["status" => 6]);
         }
 
         $this -> addUserRecharge($order_id);
-        M("order_comment") -> add($data);
+        M("order_comment")->add($data);
         dataJson(1,"返回成功！",[]);
     }
 
@@ -610,7 +614,7 @@ class PackApply extends Model
         if(!$air_id)
             dataJson(4004,"air_id不能为空！",[]);
 
-        $pack_data = M("order_comment") -> where("type = 2 AND order_id = $air_id") -> paginate($pagesize ? $pagesize :10);
+        $pack_data = M("order_comment") -> where("order_id = $air_id") -> paginate($pagesize ? $pagesize :10);
 
         $pack_data = $pack_data -> toArray();
         $packData = $pack_data["data"];
