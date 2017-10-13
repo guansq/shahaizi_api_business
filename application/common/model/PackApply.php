@@ -437,8 +437,13 @@ class PackApply extends Model
         $is_find = M("order_comment") -> where("order_id = $order_id AND user_id = $seller_id AND type = 2") -> find();
         if($is_find)
             dataJson(0,"您已经评价过该订单了！",[]);
-
+        //查询订单信息
+        $order_info = M('pack_order')->where("seller_id = $seller_id AND air_id = $order_id")->find();
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["seller_order_status" => 1]);
+        if($order_info['user_order_status'] == 1){//如果用户端也评价了
+            M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["status" => 6]);
+        }
+
         $this -> addUserRecharge($order_id);
         M("order_comment") -> add($data);
         dataJson(1,"返回成功！",[]);
