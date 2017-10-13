@@ -381,6 +381,7 @@ class PackApply extends Model
             "cover_img" => $cover_img,
             "line_highlights" => $bright_dot,
             "line_detail" => $line_detail,
+            "is_state" => 0,//新发布都改为待审核
             "play_day" => $play_day
        ];
        if(!$line_id)
