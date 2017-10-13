@@ -625,6 +625,11 @@ class PackApply extends Model
             $packData[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
             $packData[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
             $packData[$key]["commemt_time"] = date("Y-m-d H:i:s",$packData[$key]["commemt_time"]);
+            if(!empty($val['img'])){
+                $packData[$key]["img"] = explode('|',$val['img']);
+            }else{
+                $packData[$key]["img"] = [];
+            }
         }
 
         if(!$packData)
