@@ -605,7 +605,7 @@ class PackApply extends Model
         if(!$air_id)
             dataJson(4004,"air_id不能为空！",[]);
 
-        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id AND order_id = $air_id") -> paginate($pagesize ? $pagesize :10);
+        $pack_data = M("order_comment") -> where("type = 2 AND order_id = $air_id") -> paginate($pagesize ? $pagesize :10);
 
         $pack_data = $pack_data -> toArray();
         $packData = $pack_data["data"];
