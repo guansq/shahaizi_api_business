@@ -446,7 +446,7 @@ class WorkStation extends Model
         }
         $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
         if($data["status"] == 3)
-            $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
+            $data["start_time"] && $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
 
         if($data["type"] == 3)
         {
