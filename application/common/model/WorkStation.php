@@ -149,7 +149,7 @@ class WorkStation extends Model
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);
                 $val["start_time"] = date("Y-m-d",$val["start_time"]);
                 $val["end_time"] = date("Y-m-d",$val["end_time"]);
-                $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 2") -> find();
+                $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 3") -> find();
                 $val["seller_order_status"] = $is_find ? 1 : 0;
                 $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
                 $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
