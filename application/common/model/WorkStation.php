@@ -35,8 +35,8 @@ class WorkStation extends Model
         //print_r($refuse);die;
         if($data)
         {
-            //print_r(collection($data->items())->toArray());die;
             $data = collection($data->items())->toArray();
+            //print_r($data);die;
             foreach ($data as $key => &$val)
             {
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);//如果是线路的start_time读线路的start_time
