@@ -452,12 +452,15 @@ class WorkStation extends Model
         {
             if($data["line_id"])
             {
+
                 $line_data = M("pack_line") -> where("line_id = ".$data["line_id"]) -> find();
                 $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
                 $endline = end($line_detail);
+
                 $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
-                $endline && $data["dest_address"] = $endline["port_detail"][0]["site_name"];
-                //                print_r($line_detail);die;
+                $endArray=end($endline["port_detail"]);
+                $endline && $data["dest_address"] = $endArray["site_name"];
+                // print_r($line_detail);die;
 
                 $week = ["周一","周二","周三","周四","周五","周六","周日"];
                 $week_date = date("w",strtotime($data["work_at"]));
