@@ -304,12 +304,13 @@ class WorkStation extends Model
         }
 
         //3 6 当前时间 和当天上班时间
-        if($start_time - time() > 0)
-        {
-            $order_status = 3;
-        }else
+        $up_time = getUpStartTime();
+        if($start_time - $up_time > 0)
         {
             $order_status = 4;
+        }else
+        {
+            $order_status = 3;
         }
         return  $order_status;
     }
