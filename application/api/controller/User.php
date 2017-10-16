@@ -65,15 +65,15 @@ class User extends Base {
     public function getMyInfo ()
     {
         $seller_info = M("seller")
-            -> field("seller_id,country_id,province,mandarin,signature,city,sex,nickname,language,head_pic, briefing,img_url")
-            ->where("seller_id = ".$this -> user_id)
+            -> field("seller_id,country_id,province,mandarin,signature,city,sex,nickname,language,head_pic, briefing, img_url")
+            -> where("seller_id = ".$this -> user_id)
             -> find();
         if($seller_info["img_url"])
             $seller_info["img_url"] = explode("|", $seller_info["img_url"]);
         else
             $seller_info["img_url"] = [];
 
-        $this->getAreaName($seller_info);
+        $this -> getAreaName($seller_info);
 
         jsonData(1,"返回成功",$seller_info);
     }

@@ -145,26 +145,32 @@ class WorkStation extends Model
 
         }else
         {
-            foreach ($data as $key => $val)
+            if($data)
             {
-                if($val["status"] == 3)
-                    $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
+                $data = $data ->toArray();
+                $data = $data["data"];
 
-                $val["start_time_detail"] = packDateFormat($val["start_time"]);
-                $val["start_time"] = date("Y-m-d",$val["start_time"]);
-                $val["end_time"] = date("Y-m-d",$val["end_time"]);
-                $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 3") -> find();
-                $val["seller_order_status"] = $is_find ? 1 : 0;
-                $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
-                $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
-                $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
-                $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
+                foreach ($data as $key => $val)
+                {
+                    if($val["status"] == 3)
+                        $val["start_time"] &&  $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
 
-                $result[$key] = $val;
+                    $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                    $val["start_time"] = date("Y-m-d",$val["start_time"]);
+                    $val["end_time"] = date("Y-m-d",$val["end_time"]);
+                    $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 3") -> find();
+                    $val["seller_order_status"] = $is_find ? 1 : 0;
+                    $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
+                    $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
+                    $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
+                    $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
+
+                    $result[$key] = $val;
+                }
+
+                $this->user_head_pic($result);
             }
 
-
-            $this->user_head_pic($result);
         }
 
         $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
