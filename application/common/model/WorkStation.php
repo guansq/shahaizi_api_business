@@ -22,7 +22,7 @@ class WorkStation extends Model
         $up_time = getUpStartTime();
         $current_time = time();
         $time = todayBeginEnd();
-        $missWhere = "is_pay = 1 AND `status` = 3  AND allot_seller_id like '%,$seller_id,%' AND seller_id <> $seller_id AND ((type in (1,2,5) AND create_at >= '{$time['start_time']}' AND create_at <= '{$time['end_time']}') OR (type not in(1,2,5) AND  $current_time < $up_time ))";
+        $missWhere = "is_pay = 1 AND `status` = 3  AND allot_seller_id like '%,$seller_id,%' AND seller_id <> $seller_id AND ((type not in (3,6) AND create_at >= '{$time['start_time']}' AND create_at <= '{$time['end_time']}') OR (type in(3,6) AND  $current_time < $up_time ))";
         return $missWhere;
     }
     public function getMyWorkStation ($seller_id)
