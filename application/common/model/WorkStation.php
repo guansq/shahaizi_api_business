@@ -32,10 +32,12 @@ class WorkStation extends Model
         $data = $this -> where(implode(" AND ",$where)) ->order("air_id desc") -> paginate($pagesize ? $pagesize : 4);
         $read = $this -> is_read ($seller_id);
         $refuse = $this -> is_refuse ($seller_id);
-
+        //print_r($refuse);die;
         if($data)
         {
-            foreach ($data as $key => $val)
+            //print_r(collection($data->items())->toArray());die;
+            $data = collection($data->items())->toArray();
+            foreach ($data as $key => &$val)
             {
                 $val["start_time_detail"] = packDateFormat($val["start_time"]);//如果是线路的start_time读线路的start_time
                 if($val['type'] == 3 && $val['line_id']){
@@ -68,31 +70,33 @@ class WorkStation extends Model
                     }
                 }
 
-                $result[$key] = $val;
+                //$result[] = $val;
                 if($read)
-                    $result[$key]["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
+                    $val["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
                 else
-                    $result[$key]["is_read"] = 0;
+                    $val["is_read"] = 0;
 
-                if($refuse && in_array($val["air_id"],$refuse))
-                    unset($result[$key]);
-
+                if($refuse && in_array($val["air_id"],$refuse)){
+                    array_splice($data,$key,1);
+                    //unset($data[$key]);
+                }
+                //$data = array_merge($data);
             }
             $this -> user_head_pic($data);
         }
-
+        //print_r($data);die;
         $where = $this->missWhere($seller_id);
 
         $count = M("pack_order")
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
             -> count();
-//        echo M("pack_order") -> getLastSql(true);die;
-        if(!$result)
+        //echo M("pack_order") -> getLastSql(true);die;
+        if(!$data)
             $results  = ["data" =>[] ,"count" => $count];
         else
-            $results  = ["data" =>$result ,"count" => $count];
-
+            $results  = ["data" =>$data ,"count" => $count];
+        //print_r($data);die;
          jsonData(1,"返回成功",$results);
 
     }
