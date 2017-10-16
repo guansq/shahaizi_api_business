@@ -156,6 +156,7 @@ class WorkStation extends Model
                         $val["start_time"] &&  $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
 
                     $val["start_time_detail"] = packDateFormat($val["start_time"]);
+
                     $val["start_time"] = date("Y-m-d",$val["start_time"]);
                     $val["end_time"] = date("Y-m-d",$val["end_time"]);
                     $is_find = M("order_comment") -> where("order_id = ".$val["air_id"]." AND user_id = $seller_id AND type = 3") -> find();
@@ -301,6 +302,8 @@ class WorkStation extends Model
 
     public function time_status ($type, $start_time)
     {
+        $start_time = intval($start_time);
+
         if(in_array($type,[1,2,4,5,7]))
         {
             if($start_time - time() < 0)
@@ -314,7 +317,7 @@ class WorkStation extends Model
         }
 
         //3 6 当前时间 和当天上班时间
-        $up_time = getUpStartTime();
+        $up_time = getUpStartTime(1);
         if($start_time - $up_time > 0)
         {
             $order_status = 4;

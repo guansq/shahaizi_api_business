@@ -146,11 +146,18 @@ function  getCarInfoNameBaseCarId($car_id)
     return $pack_info;
 }
 
-function getUpStartTime ()
+function getUpStartTime ($is_current_time = 0)
 {
     $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
-    $overtime_time = $config["overtime_time"].":0";
-    return ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(curdate(),"%Y-%m-%d")," '.$overtime_time.'"))';//当天的上班时间  二不是starttime的上班时间
+
+    $overtime_time = $config["overtime_time"].":00";
+//    echo $overtime_time;die;
+    if($is_current_time)
+    {
+        $current_date = date("Y-m-d",time());
+        return  strtotime($current_date." ".$overtime_time);
+    }
+    return  ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(curdate(),"%Y-%m-%d"),"'.$overtime_time.'"))';//当天的上班时间  二不是starttime的上班时间
 }
 
 
