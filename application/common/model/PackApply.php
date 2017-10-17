@@ -212,10 +212,11 @@ class PackApply extends Model
     public function getCarInfo ()
     {
         $brand_id = I("brand_id");
+        $where = "is_del = 1 ";
         if(empty($brand_id))
-            $where = "pid = 0";
+            $where .= "AND pid = 0";
         else
-            $where =  "pid = $brand_id";
+            $where .=  "AND pid = $brand_id";
 
         $pack_car_data = M("pack_car_bar") -> order("id,car_info,pid") -> where($where) -> select();
 
