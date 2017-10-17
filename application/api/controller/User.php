@@ -117,6 +117,8 @@ class User extends Base {
      *      "comment_count": 0,
      *      "order_count": 0,
      *      "star": 0
+     *      "level_seller": 0       //特权等级
+     *      "grade_seller": 0       //技能等级
      * }
      * }
      * @apiErrorExample {json}  Error-Response:
@@ -139,6 +141,7 @@ class User extends Base {
         $seller_info["order_count"] = $order_count ? $order_count : 0;
         $seller_info["star"] = $comment_count == 0 ? 0 : round($star_sum["star"]/$comment_count);
         $seller_info["level"] = 1;
+
         $this->getAreaName($seller_info);
         jsonData(1,"返回成功", $seller_info);
     }
@@ -244,6 +247,9 @@ class User extends Base {
      *   "district": "2339",
      *   "email_validated": "1",
      *   "nickname": "的广泛地"
+     *   "level_seller": 0       //特权等级
+     *   "grade_seller": 0       //技能等级
+     *
      *   "token": "9f3de86be794f81cdfa5ff3f30b99257"        // 用于 app 登录
      *   }
      *   }
