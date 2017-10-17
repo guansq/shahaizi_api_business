@@ -279,7 +279,7 @@ class WorkStation extends Model
             $where = "is_pay = 1 AND status = 2";
         }else if($status == 5)//待评价
         {
-            $where = "is_pay = 1 AND status >= 5 AND seller_order_status = 0";
+            $where = "is_pay = 1 AND status = 5 AND seller_order_status = 0";
         }else if($status == 6)//已完成
         {
             $where = "is_pay = 1 AND status = 6";
@@ -432,7 +432,6 @@ class WorkStation extends Model
 
     public function getMyWorkSingleStation ($seller_id)
     {
-
         $air_id = I("air_id");
         if(empty(trim($air_id)))
             jsonData(4004,"air_id不能为空",[]);
@@ -447,6 +446,7 @@ class WorkStation extends Model
             if($data["seller_id"] != $seller_id)
                 jsonData(4004,"您已经错过该订单！",[]);
         }
+
         $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
         if($data["status"] == 3)
             $data["start_time"] && $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
@@ -455,16 +455,18 @@ class WorkStation extends Model
         {
             if($data["line_id"])
             {
-
                 $line_data = M("pack_line") -> where("line_id = ".$data["line_id"]) -> find();
+
                 $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
-                $endline = end($line_detail);
+                if($line_detail)
+                {
+                    $endline = end($line_detail);
 
-                $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
-                $endArray=end($endline["port_detail"]);
-                $endline && $data["dest_address"] = $endArray["site_name"];
-                // print_r($line_detail);die;
-
+                    $line_detail[0] && $data["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                    $endArray=end($endline["port_detail"]);
+                    $endline && $data["dest_address"] = $endArray["site_name"];
+                    // print_r($line_detail);die;
+                }
                 $week = ["周一","周二","周三","周四","周五","周六","周日"];
                 $week_date = date("w",strtotime($data["work_at"]));
                 $data["start_time_detail"] = $data["work_at"]." ".$week[$week_date-1];
