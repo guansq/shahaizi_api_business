@@ -229,17 +229,28 @@ class WorkStation extends Model
     /**
      * 获取user_user_pic
      */
-    public function user_head_pic (&$data)
+    public function user_head_pic (&$data,$single=0)
     {
         if($data)
         {
-            foreach ($data  as $key => $val)
+            if($single)
             {
-                $user_id = $val["user_id"];
-                $headpic = M("users") -> field("head_pic,hx_user_name,nickname") -> where("user_id = $user_id") -> find();
-                $val["user_head_pic"] = $headpic["head_pic"];
-                $val["user_hx_user_name"] = $headpic["hx_user_name"];
-                $val["user_nickname"] = $headpic["nickname"];
+                $user_id = $data["user_id"];
+                $headpic = M("users") -> field("head_pic, hx_user_name, nickname") -> where("user_id = $user_id") -> find();
+                $data["user_head_pic"] = $headpic["head_pic"];
+                $data["user_hx_user_name"] = $headpic["hx_user_name"];
+                $data["user_nickname"] = $headpic["nickname"];
+            }else
+            {
+
+                foreach ($data  as $key => &$val)
+                {
+                    $user_id = $val["user_id"];
+                    $headpic = M("users") -> field("head_pic, hx_user_name, nickname") -> where("user_id = $user_id") -> find();
+                    $val["user_head_pic"] = $headpic["head_pic"];
+                    $val["user_hx_user_name"] = $headpic["hx_user_name"];
+                    $val["user_nickname"] = $headpic["nickname"];
+                }
             }
         }
         //print_r($data);die;
@@ -480,7 +491,7 @@ class WorkStation extends Model
         $data["end_time"] = date("Y-m-d",$data["end_time"]);
         $data["use_car_num"] = $this->useCarNum($data["use_car_adult"], $data["use_car_children"]);
         $this->order_readed($seller_id,$air_id);
-
+        $this -> user_head_pic($data,1);
         if(!$data)
             $data  = [];
         else
