@@ -30,7 +30,7 @@ class StoreLogic extends Model
     public function updateStoreScore($store_id){
         $store_where = array('store_id'=>$store_id,'deleted'=>0);
         $store['store_desccredit'] = M('order_comment')->where($store_where)->avg('describe_score');
-        $store['store_servicecredit'] = M('order_comment')->where($store_where)->avg('seller_score');
+        $store['store_servicecredit'] = M('order_comment')->where($store_where)->avg('pack_order_score');
         $store['store_deliverycredit'] = M('order_comment')->where($store_where)->avg('logistics_score');
         M('store')->where(array('store_id'=>$store_id))->save($store);
     }

@@ -134,7 +134,7 @@ class User extends Base {
         $seller_info = M("seller") -> field("password",ture) ->where("seller_id = ".$this -> user_id) -> find();
         $comment_count = M("order_comment") -> field("COUNT(order_comment_id) comment") ->where("type = 2 AND user_id = ".$this -> user_id) -> count();
         $order_count = M("pack_order") -> field("COUNT(pack_order) pack_order") ->where("seller_id = ".$this -> user_id) -> count();
-        $star_sum = M("order_comment") -> field("SUM(seller_score) star") ->where("type = 2 AND user_id = ".$this -> user_id) -> find();
+        $star_sum = M("order_comment") -> field("SUM(pack_order_score) star") ->where("type = 2 AND user_id = ".$this -> user_id) -> find();
 
 //        print_r($star_sum);die;
         $seller_info["comment_count"] = $comment_count ? $comment_count : 0;
@@ -875,7 +875,7 @@ class User extends Base {
         $data['order_id']         = input('post.order_id/d', 0);
         $data['rec_id']           = input('post.rec_id/d', 0);
         $data['goods_id']         = input('post.goods_id/d', 0);
-        $data['seller_score']     = input('post.service_rank', 0);   //卖家服务分数（0~5）(order_comment表)
+        $data['pack_order_score']     = input('post.service_rank', 0);   //卖家服务分数（0~5）(order_comment表)
         $data['logistics_score']  = input('post.deliver_rank', 0); //物流服务分数（0~5）(order_comment表)
         $data['describe_score']   = input('post.goods_rank', 0);  //描述服务分数（0~5）(order_comment表)
         $data['goods_rank']       = input('post.goods_score/d', 0);   //商品评价等级

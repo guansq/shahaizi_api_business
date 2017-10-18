@@ -242,7 +242,6 @@ class WorkStation extends Model
                 $data["user_nickname"] = $headpic["nickname"];
             }else
             {
-
                 foreach ($data  as $key => &$val)
                 {
                     $user_id = $val["user_id"];

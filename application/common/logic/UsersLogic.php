@@ -222,6 +222,7 @@ class UsersLogic extends Model
 
         $map['country_code'] = $country_code;
         $map['password'] = $password;
+        $map['hx_password'] = $password;
         $map['reg_time'] = time();
         $map['first_leader'] = cookie('first_leader'); // 推荐人id
         // 如果找到他老爸还要找他爷爷他祖父等
@@ -283,6 +284,7 @@ class UsersLogic extends Model
         M("seller") -> where("seller_id = {$user_id}") -> save(["drv_code" => $drv_code]);
         $user["drv_code"] = $drv_code;
         $user['hx_user_name'] = $hx_user;
+        $user['hx_password'] = $password;
 //        // 会员注册送优惠券
 //        $coupon = M('coupon')->where("send_end_time > ".time()." and ((createnum - send_num) > 0 or createnum = 0) and type = 2")->select();
 //        if(!empty($coupon)){

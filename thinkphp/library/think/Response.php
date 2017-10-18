@@ -90,6 +90,7 @@ class Response
      */
     public function send()
     {
+
         // 处理输出数据
         $data = $this->getContent();
 
@@ -301,6 +302,7 @@ class Response
      */
     public function getContent()
     {
+
         if (null == $this->content) {
             $content = $this->output($this->data);
 

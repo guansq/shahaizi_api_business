@@ -24,7 +24,6 @@ class Sms extends Model
     //private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
     public function sendSms ()
     {
-
         $mobile = I("mobile");
         $country_code = I("country_code");
         $type = I("opt");

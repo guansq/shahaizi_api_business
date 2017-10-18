@@ -178,7 +178,7 @@ function getUserInfo($comment_info)
 {
     if($comment_info["type"] == 1)
         return M("users")->field("nickname,head_pic") -> where("user_id = {$comment_info["user_id"]}") -> find();
-    elseif($comment_info["type"] == 2)
+    elseif($comment_info["type"] == 3)
         return M("seller")->field("nickname,head_pic") -> where("seller_id = {$comment_info["user_id"]}") -> find();
 }
 

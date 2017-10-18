@@ -429,7 +429,7 @@ class PackApply extends Model
 
         $order_info = M('pack_order')->where("seller_id = $seller_id AND air_id = $order_id")->find();
         $data["order_id"] = $order_id;
-        $data["seller_score"] = $score;
+        $data["pack_order_score"] = $score;
         $data["content"] = $content;
         $data["is_anonymous"] = $is_anonymous;
         $data["commemt_time"] = $commemt_time;
@@ -643,19 +643,25 @@ class PackApply extends Model
     public function getOrderAllComment ($seller_id)
     {
         $pagesize = I("pagesize");
-        $pack_data = M("order_comment") -> where("type = 2 AND user_id = $seller_id") -> paginate($pagesize ? $pagesize :10);
+        $pack_data = M("order_comment") -> where("type = 3 AND user_id = $seller_id") -> paginate($pagesize ? $pagesize :10);
         $pack_data = $pack_data -> toArray();
         $packData = $pack_data["data"];
 
         foreach ($packData as $key => $val)
         {
             $user_info = getUserInfo($val);
+
+            $val["order_id"] && $pack_order_data = M("pack_order") -> where("air_id=".$val["order_id"]) -> find();
+
+            $packData[$key]["order_sn"] = $pack_order_data ? $pack_order_data["order_sn"] : '';
             $packData[$key]["head_pic"] = $user_info["head_pic"] ? $user_info["head_pic"] : "" ;
             $packData[$key]["nickname"] = $user_info["nickname"] ? $user_info["nickname"] : "" ;
             $packData[$key]["commemt_time"] = date("Y-m-d H:i:s",$packData[$key]["commemt_time"]);
-            if(!empty($val['img'])){
+            if(!empty($val['img']))
+            {
                 $packData[$key]["img"] = explode('|',$val['img']);
-            }else{
+            }else
+            {
                 $packData[$key]["img"] = [];
             }
         }
@@ -669,7 +675,7 @@ class PackApply extends Model
     {
         $cover_img = I("cover_img");
         if(!$cover_img)
-            dataJson(4004,"封面图片不能为空");
+            dataJson(4004, "封面图片不能为空");
         M("seller") -> where("seller_id = $seller_id") -> save(["cover_img" => $cover_img]);
         dataJson(1,"上传成功",[]);
     }
