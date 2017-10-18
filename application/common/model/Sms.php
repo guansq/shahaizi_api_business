@@ -24,6 +24,7 @@ class Sms extends Model
     //private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
     public function sendSms ()
     {
+
         $mobile = I("mobile");
         $country_code = I("country_code");
         $type = I("opt");
@@ -39,7 +40,7 @@ class Sms extends Model
         if($seller)
             $country_code = $seller["country_code"];
 
-        $mobile = $country_code.$mobile;
+        //$mobile = $country_code.$mobile;
         $where = "mobile = $mobile";
         $sms_info = M("sms_info") -> where($where) -> find();
 
@@ -48,7 +49,8 @@ class Sms extends Model
             M("sms_info") -> where($where) -> save(["is_check" => 0,"create_time"=> time()]);
         }
 
-        $data = ["mobile"=> $mobile,"opt" => $type];
+        $data = ["mobile"=> $mobile,"countroy_code"=> $country_code,"opt" => $type];
+        //print_r($data);die;
         $httpRet = HttpService::post(config('sms_url'), $data);
         $httpRet = json_decode($httpRet,true);
         if($httpRet["msg"] != "发送成功")
