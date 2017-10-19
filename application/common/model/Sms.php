@@ -21,7 +21,7 @@ use service\HttpService;
 class Sms extends Model
 {
     private $expire_time = 1800000;
-    //private $common_sms_url = "http://shz.api.user.ruitukeji.cn:8502/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
+//    private $common_sms_url = "http://user.api.shahaizi.shop/index.php?m=Api&c=BaseMessage&a=sendInterCaptcha";
     public function sendSms ()
     {
         $mobile = I("mobile");
