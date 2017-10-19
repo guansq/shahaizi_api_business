@@ -142,10 +142,10 @@ class PackApply extends Model
 
     function getArea ()
     {
-        $continent = I("continent"); //大洲
-        $country = I("country"); //国家
-        $province = I("province"); //省
-        $city = I("city"); //市
+        $continent = I("continent",0); //大洲
+        $country = I("country",0); //国家
+        $province = I("province",0); //省
+        $city = I("city",0); //市
         if(!$continent)
             $where =  "level = 1";
         else
