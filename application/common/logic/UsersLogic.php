@@ -76,8 +76,9 @@ class UsersLogic extends Model
             $push_id && $data['push_id'] = $push_id;
             $data["device_no"] = $device_no;
             $data["device_type"] = $device_type;
-            M('seller')->where("seller_id", $user['seller_id'])->save($data);
-            $result = array('status'=>1,'msg'=>'登陆成功','result'=>$user);
+            $device_no && M('seller')->where("device_no = '$device_no'")->save(["device_no" => ""]);
+            M('seller')->where("seller_id", $user['seller_id']) -> save($data);
+            $result = array('status'=>1,'msg'=>'登陆成功','result' => $user);
         }
         return $result;
     }

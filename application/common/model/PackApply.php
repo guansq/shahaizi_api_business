@@ -162,8 +162,9 @@ class PackApply extends Model
             }
 
             $area_data = M("region") -> where($whereRegion) -> select();
-            if($area_data)
-                jsonData(1,"返回成功！",$area_data);
+
+            jsonData(1,"返回成功！",$area_data);
+
         }
 
         $getCountry = M("region_country") -> where($where) -> select();
