@@ -49,7 +49,7 @@ class Users extends Model
             $area_data = json_decode(htmlspecialchars_decode($area), true);
             $area_data["country"] && $data["country_id"]  = $area_data["country"];
             $area_data["province"] && $data["province"]  = $area_data["province"];
-            $area_data["city"] && $data["city"]  = $area_data["city"];
+             $data["city"]  = $area_data["city"];
         }
 
         if($nickname)
@@ -153,10 +153,10 @@ class Users extends Model
 
         foreach($withData as $key => $val)
         {
-            $val["create_time"] = date("Y-m-d",$val["create_time"]);
+            $val["create_time"] = date("Y-m-d", $val["create_time"]);
             $withData[$key] = $val;
         }
-        dataJson(1,"返回成功",$withData);
+        dataJson(1,"返回成功", $withData);
     }
 
     /**
