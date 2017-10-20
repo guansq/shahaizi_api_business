@@ -140,7 +140,7 @@ class Users extends Model
         }else
             M("driver_withdrawals")-> add($data);
 
-        dataJson(1,"操作成功！",[])
+        dataJson(1,"操作成功！",[]);
     }
 
     //获取提现列表
