@@ -173,13 +173,14 @@ class WorkStation extends Model
             }
 
         }
-        if($status ==3){
-            $result = array_filter($result, 'order_filter_three');
-        }else if($status ==4){
-            $result = array_filter($result, 'order_filter_four');
-        }
 
-        $result = array_merge($result);
+//        if($status ==3){
+//            $result && $result= array_filter($result, 'order_filter_three');
+//        }else if($status ==4){
+//            $result = array_filter($result, 'order_filter_four');
+//        }
+
+
         $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
 
         $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
@@ -318,8 +319,6 @@ class WorkStation extends Model
 
     public function time_status ($type, $start_time)
     {
-        $start_time = intval($start_time);
-
         if(in_array($type,[1,2,4,5,7]))
         {
             if($start_time - time() < 0)
@@ -332,10 +331,13 @@ class WorkStation extends Model
             return $order_status;
         }
 
-        //3 6 当前时间 和当天上班时间
-        $up_time = getUpStartTime(1);//2017-10-23 8:30:0
+        //3 6 当前时间和当天上班时间比
+        $up_time = getUpStartTime(2);//2017-10-23 8:30:0
+
+        $current_date = date("Y-m-d",$start_time) . " " .$up_time;;
+
         //echo $start_time;die;//2017-10-23 8:0:0
-        if($start_time - $up_time > 0)
+        if($current_date - $up_time > 0)
         {
             $order_status = 4;//待确认
         }else

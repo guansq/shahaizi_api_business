@@ -152,10 +152,13 @@ function getUpStartTime ($is_current_time = 0)
 
     $overtime_time = $config["overtime_time"].":00";
 //    echo $overtime_time;die;
-    if($is_current_time)
+    if($is_current_time == 1)
     {
         $current_date = date("Y-m-d",time());
         return  strtotime($current_date." ".$overtime_time);
+    }elseif($is_current_time == 2)
+    {
+        return  $overtime_time;
     }
     return  ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(curdate(),"%Y-%m-%d"),"'.$overtime_time.'"))';//当天的上班时间  二不是starttime的上班时间
 }
