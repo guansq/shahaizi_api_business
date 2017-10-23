@@ -39,9 +39,7 @@ class Users extends Model
         $language && $data["language"] = $language;
         $briefing && $data["briefing"] = $briefing;
         $mandarin && $data["mandarin"] = $mandarin;
-        if(!empty($img_url)){
-            $data["img_url"] = $img_url;
-        }
+        $data["img_url"] = $img_url;
         $signature && $data["signature"] = $signature;
 
         if($area)
