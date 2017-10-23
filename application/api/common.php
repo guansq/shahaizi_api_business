@@ -219,6 +219,14 @@ function number2chinese($num,$mode = true,$sim = true){
     return $retval;
 }
 
+//筛选数组 3
+function order_filter_three($elem){
+    return $elem['status'] == 3;
+}
+//筛选数组 4
+function order_filter_four($elem){
+    return $elem['status'] == 4;
+}
 function order_type($type,$order_id)
 {
     //1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游

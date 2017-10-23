@@ -173,7 +173,13 @@ class WorkStation extends Model
             }
 
         }
+        if($status ==3){
+            $result = array_filter($result, 'order_filter_three');
+        }else if($status ==4){
+            $result = array_filter($result, 'order_filter_four');
+        }
 
+        $result = array_merge($result);
         $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
 
         $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
@@ -318,22 +324,23 @@ class WorkStation extends Model
         {
             if($start_time - time() < 0)
             {
-                $order_status = 4;
+                $order_status = 4;//待确认
             }else
             {
-                $order_status = 3;
+                $order_status = 3;//待开始
             }
             return $order_status;
         }
 
         //3 6 当前时间 和当天上班时间
-        $up_time = getUpStartTime(1);
+        $up_time = getUpStartTime(1);//2017-10-23 8:30:0
+        //echo $start_time;die;//2017-10-23 8:0:0
         if($start_time - $up_time > 0)
         {
-            $order_status = 4;
+            $order_status = 4;//待确认
         }else
         {
-            $order_status = 3;
+            $order_status = 3;//待开始
         }
         return  $order_status;
     }
