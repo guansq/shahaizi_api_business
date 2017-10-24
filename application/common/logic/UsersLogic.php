@@ -73,7 +73,7 @@ class UsersLogic extends Model
             {
                 return  array('status'=>-3,'msg'=>'该账号已加入黑名单！！！','result'=>(object)[]);
             }
-            $user['token'] = md5(time().mt_rand(1,999999999));
+            $user['token'] = md5(time().mt_rand(1, 999999999));
             $device_no = I("device_no");
             $device_type = I("device_type");
             $data = ['token' => $user['token'], 'last_login' => time(),"device_no" => $device_no,"device_type" =>$device_type ];

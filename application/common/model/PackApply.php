@@ -213,7 +213,7 @@ class PackApply extends Model
     public function getCarInfo ()
     {
         $brand_id = I("brand_id");
-        $where = "is_del = 1 ";
+        $where = "is_del = 0 ";
         if(empty($brand_id))
             $where .= "AND pid = 0";
         else
