@@ -32,6 +32,7 @@ class Users extends Model
         $area = I("area");
         $mandarin = I("mandarin");
         $signature = I("signature");
+        $gps_name = I("gps_name");
 
         $head_pic && $data["head_pic"] = $head_pic;
         $nickname && $data["nickname"] = $nickname;
@@ -41,6 +42,7 @@ class Users extends Model
         $mandarin && $data["mandarin"] = $mandarin;
         $data["img_url"] = $img_url;
         $signature && $data["signature"] = $signature;
+        $gps_name && $data['gps_name'] = $gps_name;
 
         if($area)
         {
