@@ -163,6 +163,12 @@ function getUpStartTime ($is_current_time = 0)
     return  ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(curdate(),"%Y-%m-%d"),"'.$overtime_time.'"))';//当天的上班时间  二不是starttime的上班时间
 }
 
+function getPlatformCharge()
+{
+    $config = M("config") -> where("inc_type = 'car_setting_money' AND name = 'name_line'") -> find();
+    return  $config["value"]."%";
+}
+
 
 function  diffHour ($startDate,$endData)
 {

@@ -538,7 +538,9 @@ class PackApply extends Model
             }
 //            print_r($pack_line);die;
         }
-        dataJson(1, "返回成功！", $pack_line);
+        $data = $pack_line -> toArray();
+        $data["employee_money"] = getPlatformCharge();
+        dataJson(1, "返回成功！", $data);
     }
 
     public function getLineDetail ($seller_id, $isReturn = 0)
