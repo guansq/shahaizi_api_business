@@ -132,9 +132,9 @@ class WorkStation extends Model
 
         if($status == "3,4") //进行中
         {
-            $wait_start_data  = $this -> where($wait_where) -> paginate(2);
+            $wait_start_data  = $this -> order("air_id desc") -> where($wait_where) -> paginate(2);
             $this -> user_head_pic($wait_start_data);
-            $wait_confirm_num  = $this -> where($confirm_where) -> paginate(2);
+            $wait_confirm_num  = $this -> order("air_id desc") -> where($confirm_where) -> paginate(2);
             $this -> user_head_pic($wait_confirm_num);
             $wait_start = $this -> order_data_manage($wait_start_data, 3);
             //dump($wait_start);die;
