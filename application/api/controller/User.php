@@ -132,14 +132,12 @@ class User extends Base {
     public function getMine ()
     {
         $seller_info = M("seller") -> field("password",ture) ->where("seller_id = ".$this -> user_id) -> find();
-        $comment_count = M("order_comment") -> field("COUNT(order_comment_id) comment") ->where("type = 2 AND user_id = ".$this -> user_id) -> count();
         $order_count = M("pack_order") -> field("COUNT(pack_order) pack_order") ->where("seller_id = ".$this -> user_id) -> count();
-        $star_sum = M("order_comment") -> field("SUM(pack_order_score) star") ->where("type = 2 AND user_id = ".$this -> user_id) -> find();
+        $star_sum = M("order_comment") -> field("AVG(pack_order_score) star") ->where("type = 3 AND user_id = ".$this -> user_id) -> find();
 
 //        print_r($star_sum);die;
-        $seller_info["comment_count"] = $comment_count ? $comment_count : 0;
         $seller_info["order_count"] = $order_count ? $order_count : 0;
-        $seller_info["star"] = $comment_count == 0 ? 0 : round($star_sum["star"]/$comment_count);
+        $seller_info["star"] = round($star_sum["star"]);
         $seller_info["level"] = 1;
 
         $this->getAreaName($seller_info);

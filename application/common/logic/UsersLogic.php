@@ -69,7 +69,11 @@ class UsersLogic extends Model
         } /* elseif (!capache([], SESSION_ID, $capache)) {
             $result = array('status'=>-4,'msg'=>'图形验证码错误！');
         } */  else {
-            $user['token'] = md5(time().mt_rand(1,999999999));
+            if(!$user["enabled"])
+            {
+                return  array('status'=>-3,'msg'=>'该账号已加入黑名单！！！','result'=>(object)[]);
+            }
+            $user['token'] = md5(time().mt_rand(1, 999999999));
             $device_no = I("device_no");
             $device_type = I("device_type");
             $data = ['token' => $user['token'], 'last_login' => time(),"device_no" => $device_no,"device_type" =>$device_type ];
