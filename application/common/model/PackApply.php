@@ -374,6 +374,8 @@ class PackApply extends Model
        if(!$car_id)
            dataJson(4004,"car_id不能为空！",[]);
 
+       $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id AND line_id = $line_id") -> find();
+
        $line_body =
        [
             "seller_id" => $seller_id,
@@ -384,7 +386,8 @@ class PackApply extends Model
             "line_highlights" => $bright_dot,
             "line_detail" => $line_detail,
             "is_state" => 0,//新发布都改为待审核
-            "play_day" => $play_day
+            "play_day" => $play_day,
+            "city" => $seller_data["gps_name"]
        ];
        if(!$line_id)
        {
@@ -394,6 +397,7 @@ class PackApply extends Model
        }else
        {
            $line_body["update_at"] = time();
+
            if(M("pack_line") -> where("seller_id = $seller_id AND line_id = $line_id") -> save($line_body))
                dataJson(1,"修改成功！",[]);
        }
