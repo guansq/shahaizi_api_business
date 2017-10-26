@@ -128,6 +128,7 @@ class WorkStation extends Model
         $this -> order_status($status) && $where = $where . " AND ".$this -> order_status($status);
 
         $data = $this -> order("air_id desc") -> where($where) -> paginate($pagesize ? $pagesize : 4);
+        $order_size = $this -> order("air_id desc") -> where($where) -> count();
 
 
         if($status == "3,4") //进行中
@@ -190,6 +191,7 @@ class WorkStation extends Model
         else
             $result  = ["data" => $result ];
 
+        $result["order_size"] = $order_size;
         $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
         $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
         foreach($data as $key => &$val){
