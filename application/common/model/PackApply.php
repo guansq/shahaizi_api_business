@@ -374,8 +374,7 @@ class PackApply extends Model
        if(!$car_id)
            dataJson(4004,"car_id不能为空！",[]);
 
-       $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id AND line_id = $line_id") -> find();
-
+       $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
        $line_body =
        [
             "seller_id" => $seller_id,
