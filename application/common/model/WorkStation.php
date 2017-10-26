@@ -218,6 +218,24 @@ class WorkStation extends Model
 
     }
 
+    public function orderNum ($seller_id)
+    {
+
+        $where = "seller_id = $seller_id AND seller_order_status = 0";
+
+        $result = $this -> field("status,COUNT(air_id) status_count") -> group("`status`")-> where($where) -> select();
+        foreach($result as $key => $val)
+        {
+            $data[$val["status"]] = $val["status_count"];
+        }
+
+        $final["progress"] = $data[3] ? $data[3] : 0;
+        $final["wait_comment"] = $data[5] ? $data[5] : 0;
+
+        jsonData(1,"返回成功",$final);
+
+    }
+
     public function order_data_manage ($data,$status)
     {
         foreach ($data as $key => $val)

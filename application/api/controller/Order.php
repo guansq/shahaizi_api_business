@@ -230,6 +230,11 @@ class Order extends Base
         model("common/WorkStation") -> orderList($this -> user_id);
     }
 
+    public function orderNum ()
+    {
+        model("common/WorkStation") -> orderNum($this -> user_id);
+    }
+
     /**
      * @api {GET}   /index.php?m=Api&c=Order&a=singleWork  获取详细订单done
      * @apiName     PackSingleWork
