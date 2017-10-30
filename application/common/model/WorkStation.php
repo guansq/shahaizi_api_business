@@ -191,7 +191,7 @@ class WorkStation extends Model
         $final["order_size"] = $order_size;
         $final["wait_start_num"] = $wait_start_num ? $wait_start_num : 0;
         $final["wait_confirm_num"] = $wait_confirm_num ? $wait_confirm_num : 0;
-        $final["data"] = $result ? $result : "";
+        $final["data"] = $result ? $result : [];
 
         jsonData(1,"返回成功",$final);
 
