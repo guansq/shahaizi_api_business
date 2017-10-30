@@ -134,15 +134,18 @@ class WorkStation extends Model
 
         if($status == "3,4") //进行中
         {
+
             $wait_start_data  = $this -> order("air_id desc") -> where($wait_where) -> paginate(2);
             $this -> user_head_pic($wait_start_data);
             $wait_confirm_num  = $this -> order("air_id desc") -> where($confirm_where) -> paginate(2);
             $this -> user_head_pic($wait_confirm_num);
             $wait_start = $this -> order_data_manage($wait_start_data, 3);
             //dump($wait_start);die;
+            $this->resultBatch($wait_start);
+
             $result["wait_start"] = $wait_start ? $wait_start  : [];
             $wait_confirm = $this -> order_data_manage($wait_confirm_num, 4);
-
+            $this->resultBatch($wait_confirm);
             $result["wait_confirm"] = $wait_confirm ? $wait_confirm : [];
 
         }else
@@ -170,7 +173,7 @@ class WorkStation extends Model
 
                     $result[$key] = $val;
                 }
-
+                $this->resultBatch($result);
                 $this->user_head_pic($result);
             }
 
@@ -183,47 +186,22 @@ class WorkStation extends Model
 //        }
 
 
-        $result_num["wait_start_num"]  = $this -> where($wait_where) -> count();
+        $wait_start_num  = $this -> where($wait_where) -> count();
+        $wait_confirm_num  = $this -> where($confirm_where) -> count();
 
-        $result_num["wait_confirm_num"]  = $this -> where($confirm_where) -> count();
+        $result["order_size"] = $order_size;
+        $result["wait_start_num"] = $wait_start_num ? $wait_start_num : 0;
+        $result["wait_confirm_num"] = $wait_confirm_num ? $wait_confirm_num : 0;
+
 
         if(!$result)
             $result  = ["data" =>[] ];
         else
             $result  = ["data" => $result ];
-
-        $result["order_size"] = $order_size;
-        $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
-        $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
-
-        if($result["data"])
-        {
-            foreach($result["data"] as $key => &$val){
-                if($val["type"] == 3)
-                {
-                    if($val["line_id"])
-                    {
-                        $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
-                        $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
-                        if($line_detail)
-                        {
-                            $endline = end($line_detail);
-                            $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
-                            $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
-                        }else{
-                            $val["work_address"] = '没有该路线';
-                            $val["dest_address"] = '没有该路线';
-                        }
-                        //                print_r($line_detail);die;
-                    }
-                }
-                $val && $val["is_admin"] = $val["line_id"] ? $this->getAdminBaseLineId($val["line_id"]) : 1;
-            }
-        }
-
         jsonData(1,"返回成功",$result);
 
     }
+
 
     public function getAdminBaseLineId ($line_id)
     {
@@ -246,6 +224,36 @@ class WorkStation extends Model
         $final["wait_comment"] = $data[5] ? $data[5] : 0;
 
         jsonData(1,"返回成功",$final);
+
+    }
+
+    public function resultBatch (&$result)
+    {
+       if($result)
+       {
+           foreach($result as $key => $val)
+           {
+               if($val["type"] == 3)
+               {
+                   if($val["line_id"])
+                   {
+                       $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
+                       $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
+                       if($line_detail)
+                       {
+                           $endline = end($line_detail);
+                           $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                           $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
+                       }else{
+                           $val["work_address"] = '没有该路线';
+                           $val["dest_address"] = '没有该路线';
+                       }
+                       //                print_r($line_detail);die;
+                   }
+               }
+               $val && $val["is_admin"] = $val["line_id"] ? $this->getAdminBaseLineId($val["line_id"]) : 1;
+           }
+       }
 
     }
 
