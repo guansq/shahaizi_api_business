@@ -905,7 +905,8 @@ class Pack extends Base {
      * @api {GET}  /index.php?m=Api&c=Pack&a=recharge_desc  费用说明
      * @apiName   RechargeDesc
      * @apiGroup  Pack
-     * @apiParam {string} id  24是id不为空 25是改退补偿
+     * @apiParam {string} order_type   订单类型 1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游7快捷订单
+     * @apiParam {string} recharge_id  1是费用说明 2是该退补偿
      * @apiSuccessExample {json}    Success-Response
      *  Http/1.1    200 OK
      * {
@@ -922,16 +923,30 @@ class Pack extends Base {
      */
     public function  recharge_desc ()
     {
-        $article_id = I("id");
-        if(!$article_id)
-            jsonData(0,"id不能为空！",[]);
+        $order_id = I("order_id");
+        $order_type = I("order_type");
+        if(!$order_type)
+            jsonData(0,"order_type不能为空！",[]);
 
-        $article = M("article") -> field("title,content") -> where("article_id = $article_id") -> find();
+        $where = "order_type = $order_type";
+
+        $article = M("article") -> field("title,content") -> where($where) -> select(false);
+
+        foreach($article as $key => $val)
+        {
+            if($val["recharge_type"] == 1)
+                $result["statement"] = $val["content"];
+            elseif($val["recharge_type"] == 2)
+                $result["compensation"] = $val["content"];
+        }
+
         $article["content"] = htmlspecialchars_decode($article["content"]);
         jsonData(1,"返回成功",$article);
     }
 
     /**
+     *
+     * 
      * @api {GET}  /index.php?m=Api&c=Pack&a=getOrderComment  获取订单评论
      * @apiName   GetOrderComment
      * @apiGroup  Pack

@@ -1,6 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
  * User: Administrator
  * Date: 2017/9/5
  * Time: 14:34
@@ -163,9 +162,11 @@ function getUpStartTime ($is_current_time = 0)
     return  ' UNIX_TIMESTAMP(concat(FROM_UNIXTIME(curdate(),"%Y-%m-%d"),"'.$overtime_time.'"))';//当天的上班时间  二不是starttime的上班时间
 }
 
-function getPlatformCharge()
+function getPlatformCharge($return_value = 0)
 {
     $config = M("config") -> where("inc_type = 'car_setting_money' AND name = 'name_line'") -> find();
+    if($return_value)
+        return $config["value"];
     return  $config["value"]."%";
 }
 
@@ -267,3 +268,4 @@ function order_type($type,$order_id)
 
     return $find_data;
 }
+

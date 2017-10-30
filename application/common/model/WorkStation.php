@@ -70,6 +70,8 @@ class WorkStation extends Model
                     }
                 }
 
+
+                $val["is_admin"] = $val["line_id"] ? $this->getAdminBaseLineId($val["line_id"]) : 1;
                 //$result[] = $val;
                 if($read)
                     $val["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
@@ -103,7 +105,6 @@ class WorkStation extends Model
 
     public function orderList ($seller_id)
     {
-
         $where = "seller_id = $seller_id";
 
         $status = trim(I("status"));
@@ -194,28 +195,40 @@ class WorkStation extends Model
         $result["order_size"] = $order_size;
         $result["wait_start_num"] = $result_num["wait_start_num"] ? $result_num["wait_start_num"] : 0;
         $result["wait_confirm_num"] = $result_num["wait_confirm_num"] ? $result_num["wait_confirm_num"] : 0;
-        foreach($data as $key => &$val){
-            if($val["type"] == 3)
-            {
-                if($val["line_id"])
+
+        if($result["data"])
+        {
+            foreach($result["data"] as $key => &$val){
+                if($val["type"] == 3)
                 {
-                    $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
-                    $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
-                    if($line_detail){
-                        $endline = end($line_detail);
-                        $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
-                        $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
-                    }else{
-                        $val["work_address"] = '没有该路线';
-                        $val["dest_address"] = '没有该路线';
+                    if($val["line_id"])
+                    {
+                        $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
+                        $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
+                        if($line_detail)
+                        {
+                            $endline = end($line_detail);
+                            $line_detail[0] && $val["work_address"] = $line_detail[0]["port_detail"][0]["site_name"];
+                            $endline && $val["dest_address"] = $endline["port_detail"][0]["site_name"];
+                        }else{
+                            $val["work_address"] = '没有该路线';
+                            $val["dest_address"] = '没有该路线';
+                        }
+                        //                print_r($line_detail);die;
                     }
-                    //                print_r($line_detail);die;
                 }
+                $val && $val["is_admin"] = $val["line_id"] ? $this->getAdminBaseLineId($val["line_id"]) : 1;
             }
         }
 
         jsonData(1,"返回成功",$result);
 
+    }
+
+    public function getAdminBaseLineId ($line_id)
+    {
+        $line_data = M("pack_line") -> field("is_admin") -> where("line_id = $line_id") -> find();
+        return $line_data["is_admin"] ? 1 : 0;
     }
 
     public function orderNum ($seller_id)
@@ -240,8 +253,8 @@ class WorkStation extends Model
     {
         foreach ($data as $key => $val)
         {
-            $val["order_title"] = $this->order_title($val["work_address"],$val["type"]);
-            $val["use_car_num"] = $this->useCarNum($val["use_car_adult"], $val["use_car_children"]);
+            $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
+            $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
             $val["start_time_detail"] = packDateFormat($val["start_time"]);
             $val["start_time"] = date("Y-m-d",$val["start_time"]);
             $val["end_time"] = date("Y-m-d",$val["end_time"]);
@@ -354,7 +367,7 @@ class WorkStation extends Model
         //3 6 当前时间和当天上班时间比
         $up_time = getUpStartTime(2);//2017-10-23 8:30:0
 
-        $current_date = date("Y-m-d",$start_time) . " " .$up_time;;
+        $current_date = date("Y-m-d", $start_time) . " " .$up_time;
 
         //echo $start_time;die;//2017-10-23 8:0:0
         if($current_date - $up_time > 0)
@@ -429,12 +442,12 @@ class WorkStation extends Model
 
         $where = "seller_id = $seller_id AND air_id = $air_id";
         $data =
-            [
-                "seller_id" => $seller_id,
-                "air_id" => $air_id,
-                "is_read" => 1,
-                "is_refuse" => 1
-            ];
+        [
+            "seller_id" => $seller_id,
+            "air_id" => $air_id,
+            "is_read" => 1,
+            "is_refuse" => 1
+        ];
         //print_r($data);die;
         $pack_midstat = M("pack_midstat") -> where($where) -> find();
 
@@ -514,6 +527,7 @@ class WorkStation extends Model
             }
         }
 
+        $data && $data["is_admin"] = $data["line_id"] ? $this->getAdminBaseLineId($data["line_id"]) : 1;
 
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);
