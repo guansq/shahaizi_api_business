@@ -134,7 +134,6 @@ class WorkStation extends Model
 
         if($status == "3,4") //进行中
         {
-
             $wait_start_data  = $this -> order("air_id desc") -> where($wait_where) -> paginate(2);
             $this -> user_head_pic($wait_start_data);
             $wait_confirm_num  = $this -> order("air_id desc") -> where($confirm_where) -> paginate(2);
@@ -173,12 +172,13 @@ class WorkStation extends Model
 
                     $result[$key] = $val;
                 }
+
                 $this->resultBatch($result);
+
                 $this->user_head_pic($result);
             }
 
         }
-
 //        if($status ==3){
 //            $result && $result= array_filter($result, 'order_filter_three');
 //        }else if($status ==4){
@@ -188,17 +188,12 @@ class WorkStation extends Model
 
         $wait_start_num  = $this -> where($wait_where) -> count();
         $wait_confirm_num  = $this -> where($confirm_where) -> count();
+        $final["order_size"] = $order_size;
+        $final["wait_start_num"] = $wait_start_num ? $wait_start_num : 0;
+        $final["wait_confirm_num"] = $wait_confirm_num ? $wait_confirm_num : 0;
+        $final["data"] = $result ? $result : "";
 
-        $result["order_size"] = $order_size;
-        $result["wait_start_num"] = $wait_start_num ? $wait_start_num : 0;
-        $result["wait_confirm_num"] = $wait_confirm_num ? $wait_confirm_num : 0;
-
-
-        if(!$result)
-            $result  = ["data" =>[] ];
-        else
-            $result  = ["data" => $result ];
-        jsonData(1,"返回成功",$result);
+        jsonData(1,"返回成功",$final);
 
     }
 
