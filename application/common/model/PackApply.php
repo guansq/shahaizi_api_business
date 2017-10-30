@@ -274,7 +274,6 @@ class PackApply extends Model
             $car_info = [];
         else
             $car_info = removeNull($car_info);
-
         if($car_info)
         {
             $result = getCarInfoName($car_info["brand_id"],$car_info["car_type_id"]);
