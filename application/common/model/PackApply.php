@@ -467,7 +467,7 @@ class PackApply extends Model
        {
            $employee = getPlatformCharge(1);
            $real_price = floatval($pack_order["real_price"]);
-           $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee);
+           $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
            M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
        }
     }
