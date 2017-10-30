@@ -231,7 +231,7 @@ class WorkStation extends Model
     {
        if($result)
        {
-           foreach($result as $key => $val)
+           foreach($result as $key => &$val)
            {
                if($val["type"] == 3)
                {
@@ -254,7 +254,6 @@ class WorkStation extends Model
                $val && $val["is_admin"] = $val["line_id"] ? $this->getAdminBaseLineId($val["line_id"]) : 1;
            }
        }
-
     }
 
     public function order_data_manage ($data,$status)
