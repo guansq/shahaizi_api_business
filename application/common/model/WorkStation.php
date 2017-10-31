@@ -27,10 +27,10 @@ class WorkStation extends Model
     }
     public function getMyWorkStation ($seller_id)
     {
-        $where[]= "seller_id = 0 AND allot_seller_id like '%,".$seller_id.",%'";
+        $where[]= "s.seller_id = 0 AND s.allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
-        $data = $this -> where(implode(" AND ",$where)) ->order("air_id desc") -> paginate($pagesize ? $pagesize : 4);
-        $read = $this -> is_read ($seller_id);
+        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc") -> paginate($pagesize ? $pagesize : 4);
+//        $read = $this -> is_read ($seller_id);
         $refuse = $this -> is_refuse ($seller_id);
         //print_r($refuse);die;
         if($data)
@@ -60,7 +60,6 @@ class WorkStation extends Model
                 {
                     if($val["line_id"])
                     {
-
                         $line_data = M("pack_line") -> where("line_id = ".$val["line_id"]) -> find();
                         $line_detail = json_decode(htmlspecialchars_decode($line_data["line_detail"]),true);
                         $endline = end($line_detail);
@@ -73,11 +72,11 @@ class WorkStation extends Model
 
                 $val["is_admin"] = $val["line_id"] ? $this->getAdminBaseLineId($val["line_id"]) : 1;
                 //$result[] = $val;
-                if($read)
-                    $val["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
-                else
-                    $val["is_read"] = 0;
-
+//                if($read)
+//                    $val["is_read"] = in_array($val["air_id"],$read) ? 1 :  0;
+//                else
+//                    $val["is_read"] = 0;
+                $val["is_read"] = $val["is_read"] ? 1 :  0;
                 if($refuse && in_array($val["air_id"],$refuse)){
                     array_splice($data,$key,1);
                     //unset($data[$key]);
