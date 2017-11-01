@@ -29,10 +29,15 @@ class WorkStation extends Model
     {
         $where[]= "s.seller_id = 0 AND s.allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
-        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc") -> paginate($pagesize ? $pagesize : 4);
+
+        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id AND s.seller_id = p.seller_id","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc") -> paginate($pagesize ? $pagesize : 4);
+
+//        echo $this -> getLastSql();die;
 //        $read = $this -> is_read ($seller_id);
+//            print_r($data);die;
         $refuse = $this -> is_refuse ($seller_id);
         //print_r($refuse);die;
+
         if($data)
         {
             $data = collection($data->items()) -> toArray();
@@ -85,6 +90,7 @@ class WorkStation extends Model
             }
             $this -> user_head_pic($data);
         }
+
         //print_r($data);die;
         $where = $this->missWhere($seller_id);
 
@@ -92,12 +98,14 @@ class WorkStation extends Model
             -> field("type,work_address,dest_address,real_price,create_at")
             -> where($where)
             -> count();
+
         //echo M("pack_order") -> getLastSql(true);die;
         if(!$data)
             $results  = ["data" =>[] ,"count" => $count];
         else
             $results  = ["data" =>$data ,"count" => $count];
         //print_r($data);die;
+
          jsonData(1,"返回成功",$results);
 
     }

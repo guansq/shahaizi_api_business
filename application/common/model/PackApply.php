@@ -34,10 +34,10 @@ class PackApply extends Model
                 $status_text = "未认证";
                 break;
             case 1 :
-                $status_text = "认证通过";
+                $status_text = "认证中";
                 break;
             case 2 :
-                $status_text = "认证中";
+                $status_text = "认证通过";
                 break;
             case 3 :
                 $status_text = "认证失败";

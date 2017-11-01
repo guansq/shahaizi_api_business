@@ -526,7 +526,7 @@ class Pack extends Base {
     public function collegeList ()
     {
         $pagesize = I("pagesize");
-        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 29") -> paginate($pagesize ? $pagesize : 10);
+        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 64") -> paginate($pagesize ? $pagesize : 10);
         dataJson(1,"返回成功！",$article_lists);
     }
 
@@ -536,7 +536,7 @@ class Pack extends Base {
     public function noticeList ()
     {
         $pagesize = I("pagesize");
-        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 36") -> paginate($pagesize ? $pagesize : 10);
+        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 73") -> paginate($pagesize ? $pagesize : 10);
         dataJson(1,"返回成功！",$article_lists);
     }
     /**
@@ -1037,4 +1037,31 @@ class Pack extends Base {
         model("common/PackApply") -> uploadCoverImg($this -> user_id);
     }
 
+    //订单回收机制
+    public function recyclingOrder()
+    {
+        $recycling_m=M('config')->where(array("name"=>"carset_order_time","inc_type"=>"car_setting_order"))->order("id desc")->select();
+        //获取回收时间
+        $recycling_time=$recycling_m[0]['value']*60;
+        //$recycling_time="30";
+        //在  已派单待接单的情况下  如果超过时间 则  回收订单
+        $new_time=time();
+        $save_data=array();
+        $where['is_del']='0';
+        $where['status']='2';
+        $where['allot_time']=array('exp','IS NOT NULL');
+        //$where['allot_time']=array('eq','0');
+        $list=M('pack_order')->where($where)->select();
+        foreach($list as $k=>$v){
+            $allot_time=$v['allot_time']+$recycling_time;
+            if($new_time>$allot_time){
+                //则为分配过期订单    则修改订单的状态
+                $save_data['status']='1';
+                $save_data['is_callback']='1';
+                $save_data['allot_seller_id']='';
+                $save_data['allot_time']=null;
+                M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+            }
+        }
+    }
 }

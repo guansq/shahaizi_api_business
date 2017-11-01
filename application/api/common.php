@@ -115,7 +115,8 @@ function packDateFormat($date)
 {
     $week = ["周一","周二","周三","周四","周五","周六","周日"];
     $week_date = date("w",$date);
-    return date("Y-m-d", $date)." ".$week[$week_date-1].date("H:i:s", $date);
+//    return date("Y-m-d", $date)." ".$week[$week_date-1].date("H:i:s", $date);
+    return date("Y-m-d", $date)." ".$week[$week_date-1];
 }
 
 function  getCarInfoName($brand_id = 0, $type_id = 0)
