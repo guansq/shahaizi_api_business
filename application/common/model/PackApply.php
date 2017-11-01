@@ -299,6 +299,7 @@ class PackApply extends Model
 
         $data["status"] = $status;
         $data["end_time"] = $time;
+        $data["seller_confirm"] = 1;
         $order_data = $this->judgeComment($air_id);
         if($order_data)
         {
@@ -307,18 +308,6 @@ class PackApply extends Model
 
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save($data);
         dataJson(1,"确认成功！",[]);
-    }
-
-    /**
-     * 判断是否评价完成
-     */
-    public function judgeComment ($air_id)
-    {
-        $user = M("pack_order") -> where("air_id=$air_id AND user_id = 1") -> find();
-        if($user)
-            return 1;
-        else
-            return 0;
     }
 
     public function getOverTime ($seller_id, $is_post = 0)
@@ -479,12 +468,15 @@ class PackApply extends Model
     public function addUserRecharge ($air_id)
     {
        $pack_order = M("pack_order") -> where("air_id = $air_id") -> find();
-       if($pack_order["seller_id"])
+       if($pack_order["user_confirm"])
        {
-           $employee = getPlatformCharge(1);
-           $real_price = floatval($pack_order["real_price"]);
-           $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
-           M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
+           if($pack_order["seller_id"])
+           {
+               $employee = getPlatformCharge(1);
+               $real_price = floatval($pack_order["real_price"]);
+               $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
+               M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
+           }
        }
     }
 
