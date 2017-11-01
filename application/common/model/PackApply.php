@@ -299,9 +299,26 @@ class PackApply extends Model
 
         $data["status"] = $status;
         $data["end_time"] = $time;
+        $order_data = $this->judgeComment($air_id);
+        if($order_data)
+        {
+            $this -> addUserRecharge($air_id);
+        }
 
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save($data);
         dataJson(1,"确认成功！",[]);
+    }
+
+    /**
+     * 判断是否评价完成
+     */
+    public function judgeComment ($air_id)
+    {
+        $user = M("pack_order") -> where("air_id=$air_id AND user_id = 1") -> find();
+        if($user)
+            return 1;
+        else
+            return 0;
     }
 
     public function getOverTime ($seller_id, $is_post = 0)
@@ -452,7 +469,6 @@ class PackApply extends Model
             M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["status" => 6]);
         }
 
-        $this -> addUserRecharge($order_id);
         M("order_comment")->add($data);
         dataJson(1,"返回成功！",[]);
     }

@@ -35,7 +35,7 @@ class WorkStation extends Model
         //print_r($refuse);die;
         if($data)
         {
-            $data = collection($data->items())->toArray();
+            $data = collection($data->items()) -> toArray();
             //print_r($data);die;
             foreach ($data as $key => &$val)
             {
