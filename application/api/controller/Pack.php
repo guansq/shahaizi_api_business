@@ -525,8 +525,9 @@ class Pack extends Base {
      */
     public function collegeList ()
     {
+        sendJGMsg("nihao","nihao","wo shi damowang");die;
         $pagesize = I("pagesize");
-        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 64") -> paginate($pagesize ? $pagesize : 10);
+        $article_lists = M("article") -> field("article_id,title,description,content") -> where("cat_id = 64") -> paginate($pagesize ? $pagesize : 10);
         dataJson(1,"返回成功！",$article_lists);
     }
 
@@ -536,8 +537,11 @@ class Pack extends Base {
     public function noticeList ()
     {
         $pagesize = I("pagesize");
-        $article_lists = M("article") -> field("article_id,title,description") -> where("cat_id = 73") -> paginate($pagesize ? $pagesize : 10);
-        dataJson(1,"返回成功！",$article_lists);
+        $article_lists = M("article") -> field("article_id,title,description,content") -> where("cat_id = 73") -> paginate($pagesize ? $pagesize : 10);
+//        echo M("article") -> getLastSql();die;
+        dataJson(1,"返回成功！", $article_lists);
+
+
     }
     /**
      * @api {GET}  /index.php?m=Api&c=Pack&a=college&id=19  司导学院文章详情done
@@ -554,7 +558,7 @@ class Pack extends Base {
         if(!$id)
             dataJson(4004,"文章id不能为空！",[]);
 
-        $article = M("article") -> where("cat_id = 29 AND article_id = $id") -> find();
+        $article = M("article") -> where("cat_id = 64 AND article_id = $id") -> find();
 //        print_r($article);die;
         $article["content"] = htmlspecialchars_decode($article["content"]);
         $this->assign("article",$article);
@@ -567,8 +571,8 @@ class Pack extends Base {
         if(!$id)
             dataJson(4004,"文章id不能为空！",[]);
 
-        $article = M("article") -> where("cat_id = 36 AND article_id = $id") -> find();
-//        print_r($article);die;
+        $article = M("article") -> where("cat_id = 73 AND article_id = $id") -> find();
+
         $article["content"] = htmlspecialchars_decode($article["content"]);
         $this->assign("article",$article);
         return $this-> fetch("college");

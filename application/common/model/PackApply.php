@@ -300,7 +300,9 @@ class PackApply extends Model
         $data["status"] = $status;
         $data["end_time"] = $time;
         $data["seller_confirm"] = 1;
+
         $order_data = $this->judgeComment($air_id);
+
         if($order_data)
         {
             $this -> addUserRecharge($air_id);
@@ -461,7 +463,17 @@ class PackApply extends Model
         M("order_comment")->add($data);
         dataJson(1,"返回成功！",[]);
     }
-
+    /**
+     * 判断是否评价完成
+     */
+    public function judgeComment ($air_id)
+    {
+        $user = M("pack_order") -> where("air_id=$air_id AND type = 1") -> find();
+        if($user)
+            return 1;
+        else
+            return 0;
+    }
     /**
      * 根据订单号增加用户余额
      */
@@ -568,6 +580,8 @@ class PackApply extends Model
             -> where("seller_id = $seller_id AND line_id = $line_id AND is_del = 0")
             -> find();
 
+        $car_info = getCarInfoNameBaseCarId($pack_line["car_id"]);
+        $pack_line["car_name"] = $car_info["brand_name"]." ".$car_info["car_type_name"];
         $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
         $pack_line["line_price"] =  $pack_line["line_price"];
 

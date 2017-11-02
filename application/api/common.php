@@ -270,3 +270,32 @@ function order_type($type,$order_id)
     return $find_data;
 }
 
+
+/**
+ * 发送极光消息
+ */
+function sendJGMsg ()
+{
+    $appKey = '2017ShaHaiZiSeller_kiXhfpZs7XdfjwE1_QPhJn8lSkWVtt1RR';      // rt_appkey
+    $secret = 'si1f1Ir6JL2cNF5a_2zYNJ5CPTaDZeFBe_IjJ5RXP34y2nuPv7';// 密钥
+    $action = 'sendText';   // 请求方法名，即请求接口最后一段。
+    $reqTime = time();      // 当前时时间戳
+    $params = [$appKey, $action,$reqTime];
+    $secretArr = explode('_', $secret); //切割密钥
+    $DesUtils =  new \DesUtils\DesUtils();
+    $naturalOrdering = $DesUtils -> naturalOrdering($params); //自然排序
+    $sign = $DesUtils -> strEnc($naturalOrdering, $secretArr[0], $secretArr[1], $secretArr[2]);    //生成签名
+    $url="http://mps.ruitukeji.com/push";
+    $data =
+    [
+        "rt_appkey" => $appKey,
+        "req_time" => $reqTime,
+        "req_action" => $action,
+        "sign" => $sign,
+        "platform" =>  'all',
+        "alert" =>  'hehe',
+        "msg_title" =>  'sdfsd',
+        "msg_content" =>  'hahah'
+    ];
+   echo \service\HttpService::post($url,$data);
+}
