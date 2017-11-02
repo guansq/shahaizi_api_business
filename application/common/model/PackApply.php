@@ -294,19 +294,17 @@ class PackApply extends Model
 //        $pack_order_data = M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
         if(!$air_id)
             dataJson(4004,"air_id不能为0或空",[]);
-        $status = 5; //待评价
+        $data["status"] = 3; //进行中
         $time = time();
 
-        $data["status"] = $status;
         $data["end_time"] = $time;
         $data["seller_confirm"] = 1;
+//        $order_data = $this->judgeComment($air_id);
 
-        $order_data = $this->judgeComment($air_id);
+        $is_confirm = $this -> addUserRecharge($air_id);
 
-        if($order_data)
-        {
-            $this -> addUserRecharge($air_id);
-        }
+        if($is_confirm)
+            $data["status"]=5;
 
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save($data);
         dataJson(1,"确认成功！",[]);
@@ -463,17 +461,7 @@ class PackApply extends Model
         M("order_comment")->add($data);
         dataJson(1,"返回成功！",[]);
     }
-    /**
-     * 判断是否评价完成
-     */
-    public function judgeComment ($air_id)
-    {
-        $user = M("pack_order") -> where("air_id=$air_id AND type = 1") -> find();
-        if($user)
-            return 1;
-        else
-            return 0;
-    }
+
     /**
      * 根据订单号增加用户余额
      */
@@ -490,6 +478,7 @@ class PackApply extends Model
                M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
            }
        }
+       return $pack_order["user_confirm"];
     }
 
     public function line_detail2 ()

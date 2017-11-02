@@ -30,7 +30,7 @@ class WorkStation extends Model
         $where[]= "s.seller_id = 0 AND s.allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
 
-        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id AND s.seller_id = p.seller_id","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc") -> paginate($pagesize ? $pagesize : 4);
+        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id AND p.seller_id = $seller_id","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc") -> paginate($pagesize ? $pagesize : 4);
 
 //        echo $this -> getLastSql();die;
 //        $read = $this -> is_read ($seller_id);
@@ -44,7 +44,12 @@ class WorkStation extends Model
             //print_r($data);die;
             foreach ($data as $key => &$val)
             {
-                $val["start_time_detail"] = packDateFormat($val["start_time"]);//如果是线路的start_time读线路的start_time
+                //如果是线路的start_time读线路的start_time
+                if($val["type"] == 6)
+                    $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
+                else
+                    $val["start_time_detail"] = packDateFormat($val["start_time"]);
+
                 if($val['type'] == 3 && $val['line_id']){
                     $week = ["周一","周二","周三","周四","周五","周六","周日"];
                     $week_date = date("w",strtotime($val["work_at"]));
@@ -166,7 +171,10 @@ class WorkStation extends Model
                     if($val["status"] == 3)
                         $val["start_time"] &&  $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
 
-                    $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                    if($val["type"] == 6)
+                        $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
+                    else
+                        $val["start_time_detail"] = packDateFormat($val["start_time"]);
 
                     $val["start_time"] = date("Y-m-d",$val["start_time"]);
                     $val["end_time"] = date("Y-m-d",$val["end_time"]);
@@ -176,7 +184,6 @@ class WorkStation extends Model
                     $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
                     $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
                     $val["customer_head"] = $seller_info ? $seller_info["head_pic"] : "";
-
                     $result[$key] = $val;
                 }
 
@@ -204,7 +211,23 @@ class WorkStation extends Model
 
     }
 
-
+    /**
+     * 按天包车游时间
+     */
+    public function byDataTravel ($air_id)
+    {
+        if($air_id)
+        {
+            $pack_time = M("pack_base_by_day") -> where("base_id = $air_id") -> find();
+            $pack_data = explode("|",$pack_time["pack_time"]);
+            if($pack_data)
+            {
+                foreach ($pack_data as $key => $val)
+                    $str[] = date("Y-m-d",$val);
+            }
+            return implode(",",$str);
+        }
+    }
     public function getAdminBaseLineId ($line_id)
     {
         $line_data = M("pack_line") -> field("is_admin") -> where("line_id = $line_id") -> find();
@@ -264,7 +287,12 @@ class WorkStation extends Model
         {
             $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
             $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
-            $val["start_time_detail"] = packDateFormat($val["start_time"]);
+
+            if($val["type"] == 6)
+                $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
+            else
+                $val["start_time_detail"] = packDateFormat($val["start_time"]);
+
             $val["start_time"] = date("Y-m-d",$val["start_time"]);
             $val["end_time"] = date("Y-m-d",$val["end_time"]);
             $val['seller_id']  && $seller_info = M("seller") -> where("seller_id = {$val['seller_id']}") -> find();
@@ -508,7 +536,14 @@ class WorkStation extends Model
                 jsonData(4004,"您已经错过该订单！",[]);
         }
 
-        $data && $data["start_time_detail"] = packDateFormat($data["start_time"]);
+        if($data)
+        {
+            if($data["type"] == 6)
+                $data["start_time_detail"] = $this -> byDataTravel($data["air_id"]);
+            else
+                $data["start_time_detail"] = packDateFormat($data["start_time"]);
+        }
+
         if($data["status"] == 3)
             $data["start_time"] && $data["status"] = $this -> time_status($data["type"],$data["start_time"]);
 
