@@ -1304,8 +1304,7 @@ class User extends Base {
     //获取提现列表
     public function getWithdrawalList()
     {
-//        model("common/Users") -> getWithdrawalList($this -> user_id);
-        model("common/PackApply") -> depositLog($this -> user_id);
+        model("common/Users") -> getWithdrawalList($this -> user_id);
     }
 
     /**
