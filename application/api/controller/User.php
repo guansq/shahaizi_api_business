@@ -302,41 +302,41 @@ class User extends Base {
      * @apiSuccessExample   {json}  Success-response
      *      Http/1.1    200 Ok
      * {
-        * "status": 1,
-        * "msg": "登陆成功",
-        * "result": {
-        * "user_id": "12",
-        * "email": "",
-        * "password": "",
-        * "sex": "0",
-        * "birthday": "0000-00-00",
-        * "user_money": "0.00",
-        * "frozen_money": "0.00",
-        * "pay_points": "0",
-        * "address_id": "0",
-        * "reg_time": "1452331498",
-        * "last_login": "0",
-        * "last_ip": "",
-        * "qq": "",
-        * "mobile": "",
-        * "mobile_validated": "0",
-        * "oauth": "wx",
-        * "openid": "2",
-        * "head_pic": null,
-        * "province": "0",
-        * "city": "0",
-        * "district": "0",
-        * "email_validated": "0",
-        * "nickname": ""
-        * }
+     * "status": 1,
+     * "msg": "登陆成功",
+     * "result": {
+     * "user_id": "12",
+     * "email": "",
+     * "password": "",
+     * "sex": "0",
+     * "birthday": "0000-00-00",
+     * "user_money": "0.00",
+     * "frozen_money": "0.00",
+     * "pay_points": "0",
+     * "address_id": "0",
+     * "reg_time": "1452331498",
+     * "last_login": "0",
+     * "last_ip": "",
+     * "qq": "",
+     * "mobile": "",
+     * "mobile_validated": "0",
+     * "oauth": "wx",
+     * "openid": "2",
+     * "head_pic": null,
+     * "province": "0",
+     * "city": "0",
+     * "district": "0",
+     * "email_validated": "0",
+     * "nickname": ""
+     * }
      * }
      * @apiErrorExample     {json}  Error-response
      *              Http/1.1    200 OK
      *   {
-        "status": -1,
-        "msg": "参数有误",
-        "result": ""
-        }
+    "status": -1,
+    "msg": "参数有误",
+    "result": ""
+    }
      */
     public function thirdLogin(){
         $unique_id = I("unique_id"); // 唯一id  类似于 pc 端的session id
@@ -443,7 +443,7 @@ class User extends Base {
     "msg": "账号已存在",
     "result": ""
     }
-    */
+     */
     public function reg(){
         $username = I('post.username','');
         $password = I('post.password','');
@@ -583,7 +583,7 @@ class User extends Base {
 
         $data['mobile'] = $mobile;
         if (!$this->userLogic->update_info($this->user_id, $data)) {
-           $this->ajaxReturn(['status' => -1, 'msg' => '手机号码更新失败']);
+            $this->ajaxReturn(['status' => -1, 'msg' => '手机号码更新失败']);
         }
 
         $this->ajaxReturn(['status'=>1, 'msg'=>'更改成功']);
@@ -693,9 +693,9 @@ class User extends Base {
 
         //@mobify by wangqh
         if ($row)
-           exit(json_encode(array('status'=>1,'msg'=>'删除成功','result'=>'')));
+            exit(json_encode(array('status'=>1,'msg'=>'删除成功','result'=>'')));
         else
-           exit(json_encode(array('status'=>1,'msg'=>'删除失败','result'=>'')));
+            exit(json_encode(array('status'=>1,'msg'=>'删除失败','result'=>'')));
     }
 
     /*
@@ -774,30 +774,30 @@ class User extends Base {
                 $coupon = $v['coupon'];
 
                 if($coupon){
-                        if($money == 0  || ($money > 0 && $coupon['condition'] <  $money)){      //金额限制
-                            $coupon['limit_store'] = $store_arr[$coupon['store_id']]['store_name'];
-                            switch ($coupon['use_type']){//0全店通用1指定商品可用2指定分类商品可用
-                                case 0 :
-                                    $returnCoupon['limit_store'] = $coupon['limit_store'].'全店通用';
-                                    break;
-                                case 1 :
-                                    $returnCoupon['limit_store'] = $coupon['limit_store'].'指定商品可用';
-                                    break;
-                                case 2 :
-                                    $returnCoupon['limit_store'] = $coupon['limit_store'].'指定分类商品可用';
-                                    break;
-                                case 3 :
-                                    $returnCoupon['limit_store'] = '全平台可用';
-                                    break;
-                            }
-                            $returnCoupon['id'] = $v['id'];
-                            $returnCoupon['name'] = $coupon['name'];
-                            $returnCoupon['money'] = $coupon['money'];
-                            $returnCoupon['condition'] = $coupon['condition'];
-                            $returnCoupon['use_start_time'] = $coupon['use_start_time'];
-                            $returnCoupon['use_end_time'] = $coupon['use_end_time'];
-                            $returnCoupon['store_id'] = $v['store_id'];
-                            $returnCouponList[] = $returnCoupon;
+                    if($money == 0  || ($money > 0 && $coupon['condition'] <  $money)){      //金额限制
+                        $coupon['limit_store'] = $store_arr[$coupon['store_id']]['store_name'];
+                        switch ($coupon['use_type']){//0全店通用1指定商品可用2指定分类商品可用
+                            case 0 :
+                                $returnCoupon['limit_store'] = $coupon['limit_store'].'全店通用';
+                                break;
+                            case 1 :
+                                $returnCoupon['limit_store'] = $coupon['limit_store'].'指定商品可用';
+                                break;
+                            case 2 :
+                                $returnCoupon['limit_store'] = $coupon['limit_store'].'指定分类商品可用';
+                                break;
+                            case 3 :
+                                $returnCoupon['limit_store'] = '全平台可用';
+                                break;
+                        }
+                        $returnCoupon['id'] = $v['id'];
+                        $returnCoupon['name'] = $coupon['name'];
+                        $returnCoupon['money'] = $coupon['money'];
+                        $returnCoupon['condition'] = $coupon['condition'];
+                        $returnCoupon['use_start_time'] = $coupon['use_start_time'];
+                        $returnCoupon['use_end_time'] = $coupon['use_end_time'];
+                        $returnCoupon['store_id'] = $v['store_id'];
+                        $returnCouponList[] = $returnCoupon;
                     }
                 }
             }
@@ -933,7 +933,7 @@ class User extends Base {
     public function account(){
 
         $unique_id = I("unique_id"); // 唯一id  类似于 pc 端的session id
-       // $user_id = I('user_id/d'); // 用户id
+        // $user_id = I('user_id/d'); // 用户id
         //获取账户资金记录
 
         $data = $this->userLogic->get_account_log($this->user_id,I('get.type'));
@@ -1061,7 +1061,7 @@ class User extends Base {
     {
         $type = I('type','all');
         $usersLogic = new UsersLogic;
-    	$result = $usersLogic->points($this->user_id, $type);
+        $result = $usersLogic->points($this->user_id, $type);
 
         $json_arr = ['status' => 1, 'msg' => '获取成功', 'result' => $result['account_log']];
         exit(json_encode($json_arr));
@@ -1241,23 +1241,23 @@ class User extends Base {
      */
     public function account_list()
     {
-    	$type = I('type','all');
+        $type = I('type','all');
         $is_json = I('is_json', 0); //json数据请求
-    	$usersLogic = new UsersLogic;
-    	$result = $usersLogic->account($this->user_id, $type);
+        $usersLogic = new UsersLogic;
+        $result = $usersLogic->account($this->user_id, $type);
 
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['account_log']]);
         }
 
-    	$this->assign('type', $type);
-    	$showpage = $result['page']->show();
-    	$this->assign('account_log', $result['account_log']);
-    	$this->assign('page', $showpage);
-    	if (I('is_ajax')) {
-    		return $this->fetch('ajax_acount_list');
-    	}
-    	return $this->fetch();
+        $this->assign('type', $type);
+        $showpage = $result['page']->show();
+        $this->assign('account_log', $result['account_log']);
+        $this->assign('page', $showpage);
+        if (I('is_ajax')) {
+            return $this->fetch('ajax_acount_list');
+        }
+        return $this->fetch();
     }
 
     /**
@@ -1268,15 +1268,15 @@ class User extends Base {
     {
         $type = I('type','all');
         $is_json = I('is_json', 0); //json数据请求
-    	$usersLogic = new UsersLogic;
-    	$result = $usersLogic->points($this->user_id, $type);
+        $usersLogic = new UsersLogic;
+        $result = $usersLogic->points($this->user_id, $type);
 
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['account_log']]);
         }
 
         $this->assign('type', $type);
-		$showpage = $result['page']->show();
+        $showpage = $result['page']->show();
         $this->assign('account_log', $result['account_log']);
         $this->assign('page', $showpage);
         if (I('is_ajax')) {
@@ -1304,7 +1304,8 @@ class User extends Base {
     //获取提现列表
     public function getWithdrawalList()
     {
-        model("common/Users") -> getWithdrawalList($this -> user_id);
+//        model("common/Users") -> getWithdrawalList($this -> user_id);
+        model("common/PackApply") -> depositLog($this -> user_id);
     }
 
     /**
@@ -1314,19 +1315,19 @@ class User extends Base {
     public function recharge_list()
     {
         $is_json = I('is_json', 0); //json数据请求
-    	$usersLogic = new UsersLogic;
-    	$result= $usersLogic->get_recharge_log($this->user_id);  //充值记录
+        $usersLogic = new UsersLogic;
+        $result= $usersLogic->get_recharge_log($this->user_id);  //充值记录
 
         if ($is_json) {
             $this->ajaxReturn(['status' => 1, 'msg' => '获取成功', 'result' => $result['result']]);
         }
 
         $this->assign('page', $result['show']);
-    	$this->assign('lists', $result['result']);
-    	if (I('is_ajax')) {
-    		return $this->fetch('ajax_recharge_list');
-    	}
-    	return $this->fetch();
+        $this->assign('lists', $result['result']);
+        if (I('is_ajax')) {
+            return $this->fetch('ajax_recharge_list');
+        }
+        return $this->fetch();
     }
 
     /**

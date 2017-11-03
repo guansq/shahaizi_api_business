@@ -50,51 +50,51 @@ class PackApply extends Model
         $ruit_pack_driver_apply_result["auth_info"] = $ruit_pack_driver_apply["auth_info"] ? $ruit_pack_driver_apply["auth_info"] : "";
         $ruit_pack_driver_apply_result["status_text"] = $status_text ? $status_text : "";
         $ruit_pack_driver_apply_result["img"] =
-        [
-               [
-                   "is_must" => 1,
-                   "title" => "车检证",
-                   "img_url" => $ruit_pack_driver_apply["car_check_img"] ? $ruit_pack_driver_apply["car_check_img"]: '',
-                   "img_key" => "car_check_img"
-               ],
-               [
-                   "is_must" => 1,
-                   "title" => "驾驶证",
-                   "img_url" => $ruit_pack_driver_apply["driver_img"] ? $ruit_pack_driver_apply["driver_img"] : '',
-                   "img_key" => "driver_img"
-               ],
-               [
-                   "is_must" => 1,
-                   "title" => "手持身份证正面照",
-                   "img_url" => $ruit_pack_driver_apply["drv_hold_img"] ? $ruit_pack_driver_apply["drv_hold_img"] : '',
-                   "img_key" => "drv_hold_img"
-               ],
-               [
-                   "is_must" => 1,
-                   "title" => "身份证正面",
-                   "img_url" => $ruit_pack_driver_apply["drv_front_img"] ? $ruit_pack_driver_apply["drv_front_img"] : '',
-                   "img_key" => "drv_front_img"
-               ],
-               [
-                   "is_must" => 1,
-                   "title" => "身份证反面",
-                   "img_url" => $ruit_pack_driver_apply["drv_back_img"] ? $ruit_pack_driver_apply["drv_back_img"] : '',
-                   "img_key" => "drv_back_img"
-               ],
-               [
-                   "is_must" => 0,
-                   "title" => "导游证",
-                   "img_url" => $ruit_pack_driver_apply["guide_img"] ? $ruit_pack_driver_apply["guide_img"] : '',
-                   "img_key" => "guide_img"
-               ],
-               [
-                   "is_must" => 0,
-                   "title" => "游艇驾驶证",
-                   "img_url" => $ruit_pack_driver_apply["boat_img"] ? $ruit_pack_driver_apply["boat_img"] : '',
-                   "img_key" => "boat_img"
-               ]
+            [
+                [
+                    "is_must" => 1,
+                    "title" => "车检证",
+                    "img_url" => $ruit_pack_driver_apply["car_check_img"] ? $ruit_pack_driver_apply["car_check_img"]: '',
+                    "img_key" => "car_check_img"
+                ],
+                [
+                    "is_must" => 1,
+                    "title" => "驾驶证",
+                    "img_url" => $ruit_pack_driver_apply["driver_img"] ? $ruit_pack_driver_apply["driver_img"] : '',
+                    "img_key" => "driver_img"
+                ],
+                [
+                    "is_must" => 1,
+                    "title" => "手持身份证正面照",
+                    "img_url" => $ruit_pack_driver_apply["drv_hold_img"] ? $ruit_pack_driver_apply["drv_hold_img"] : '',
+                    "img_key" => "drv_hold_img"
+                ],
+                [
+                    "is_must" => 1,
+                    "title" => "身份证正面",
+                    "img_url" => $ruit_pack_driver_apply["drv_front_img"] ? $ruit_pack_driver_apply["drv_front_img"] : '',
+                    "img_key" => "drv_front_img"
+                ],
+                [
+                    "is_must" => 1,
+                    "title" => "身份证反面",
+                    "img_url" => $ruit_pack_driver_apply["drv_back_img"] ? $ruit_pack_driver_apply["drv_back_img"] : '',
+                    "img_key" => "drv_back_img"
+                ],
+                [
+                    "is_must" => 0,
+                    "title" => "导游证",
+                    "img_url" => $ruit_pack_driver_apply["guide_img"] ? $ruit_pack_driver_apply["guide_img"] : '',
+                    "img_key" => "guide_img"
+                ],
+                [
+                    "is_must" => 0,
+                    "title" => "游艇驾驶证",
+                    "img_url" => $ruit_pack_driver_apply["boat_img"] ? $ruit_pack_driver_apply["boat_img"] : '',
+                    "img_key" => "boat_img"
+                ]
             ];
-            jsonData(1,"返回成功",$ruit_pack_driver_apply_result);
+        jsonData(1,"返回成功",$ruit_pack_driver_apply_result);
     }
 
 
@@ -252,7 +252,7 @@ class PackApply extends Model
     {
         $car_id = I("car_id");
         if($car_id)
-             M("pack_car_info") -> where("car_id in ($car_id) AND seller_id = $seller_id") -> delete();
+            M("pack_car_info") -> where("car_id in ($car_id) AND seller_id = $seller_id") -> delete();
         else
             dataJson(4004,"car_id不能为空",[]);
 
@@ -362,49 +362,49 @@ class PackApply extends Model
      */
     public function publish_line ($seller_id)
     {
-       $line_id = I("line_id");
-       $line_title = I("line_title");
-       $line_price = I("line_price");
-       $car_id = I("car_id");
-       $cover_img = I("cover_img");
-       $bright_dot = I("bright_dot");
-       $line_detail = I("line_detail");
-       $play_day = count(json_decode(htmlspecialchars_decode($line_detail),true));
-       if(!$line_title)
-           dataJson(4004,"线路标题不能为空！",[]);
+        $line_id = I("line_id");
+        $line_title = I("line_title");
+        $line_price = I("line_price");
+        $car_id = I("car_id");
+        $cover_img = I("cover_img");
+        $bright_dot = I("bright_dot");
+        $line_detail = I("line_detail");
+        $play_day = count(json_decode(htmlspecialchars_decode($line_detail),true));
+        if(!$line_title)
+            dataJson(4004,"线路标题不能为空！",[]);
 
-       if(!$line_price)
-           dataJson(4004,"线路价格不能为空！",[]);
+        if(!$line_price)
+            dataJson(4004,"线路价格不能为空！",[]);
 
-       if(!$car_id)
-           dataJson(4004,"car_id不能为空！",[]);
+        if(!$car_id)
+            dataJson(4004,"car_id不能为空！",[]);
 
-       $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
-       $line_body =
-       [
-            "seller_id" => $seller_id,
-            "line_title" => $line_title,
-            "line_price" => $line_price,
-            "car_id" => $car_id,
-            "cover_img" => $cover_img,
-            "line_highlights" => $bright_dot,
-            "line_detail" => $line_detail,
-            "is_state" => 0,//新发布都改为待审核
-            "play_day" => $play_day,
-            "city" => $seller_data["gps_name"]
-       ];
-       if(!$line_id)
-       {
-           $line_body["create_at"] = time();
-           if(M("pack_line") -> add($line_body))
-               dataJson(1,"发布成功！",[]);
-       }else
-       {
-           $line_body["update_at"] = time();
+        $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
+        $line_body =
+            [
+                "seller_id" => $seller_id,
+                "line_title" => $line_title,
+                "line_price" => $line_price,
+                "car_id" => $car_id,
+                "cover_img" => $cover_img,
+                "line_highlights" => $bright_dot,
+                "line_detail" => $line_detail,
+                "is_state" => 0,//新发布都改为待审核
+                "play_day" => $play_day,
+                "city" => $seller_data["gps_name"]
+            ];
+        if(!$line_id)
+        {
+            $line_body["create_at"] = time();
+            if(M("pack_line") -> add($line_body))
+                dataJson(1,"发布成功！",[]);
+        }else
+        {
+            $line_body["update_at"] = time();
 
-           if(M("pack_line") -> where("seller_id = $seller_id AND line_id = $line_id") -> save($line_body))
-               dataJson(1,"修改成功！",[]);
-       }
+            if(M("pack_line") -> where("seller_id = $seller_id AND line_id = $line_id") -> save($line_body))
+                dataJson(1,"修改成功！",[]);
+        }
         dataJson(1,"操作失败！",[]);
     }
 
@@ -467,58 +467,72 @@ class PackApply extends Model
      */
     public function addUserRecharge ($air_id)
     {
-       $pack_order = M("pack_order") -> where("air_id = $air_id") -> find();
-       if($pack_order["user_confirm"])
-       {
-           if($pack_order["seller_id"])
-           {
-               $employee = getPlatformCharge(1);
-               $real_price = floatval($pack_order["real_price"]);
-               $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
-               M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
-           }
-       }
-       return $pack_order["user_confirm"];
+        $pack_order = M("pack_order") -> where("air_id = $air_id") -> find();
+        if($pack_order["user_confirm"])
+        {
+            if($pack_order["seller_id"])
+            {
+                $employee = getPlatformCharge(1);
+                $real_price = floatval($pack_order["real_price"]);
+                $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
+                $seller_money = M("seller") -> where("seller_id=".$pack_order["seller_id"]) -> find();
+                setAccountLog($pack_order["seller_id"],round(floatval($seller_money["user_money"]) + $user_money ,2),$user_money,"司导提现",$air_id);
+                M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
+            }
+        }
+        return $pack_order["user_confirm"];
+    }
+
+    public function depositLog ($seller_id)
+    {
+        $pagesize = I("pagesize");
+        $result = M("account_log_seller") ->where("seller_id = ".$seller_id) -> paginate($pagesize ? $pagesize : 10);
+        foreach($result as $key => $val)
+        {
+            $val["seller_money"]= floatval($val["seller_money"]) >= 0 ? "+".$val["seller_money"] : $val["seller_money"];
+            $final[$key] = $val;
+        }
+        dataJson(1,"返回成功！",$final);
     }
 
     public function line_detail2 ()
     {
         $line_detail =
-        [
             [
-                "date_num" => 1,
-                "summary" => "这是摘要1",
-                "port_detail" =>
-                 [
-                     [
-                         "port_num" => 1,
-                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-                         "port_detail" => "这是第一站1"
-                     ],
-                     [
-                         "port_num" => 2,
-                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-                         "port_detail" => "这是第二站2"
-                     ]
-                 ],
-            ],
-            [
-                "date_num" => 2,
-                "summary" => "这是摘要1",
-                "port_detail" =>
-                 [
-                     [
-                         "port_num" => 1,
-                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-                         "port_detail" => "这是第一站1"
-                     ],
-                     ["port_num" => 2,
-                         "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
-                         "port_detail" => "这是第二站2"
-                     ]
-                 ],
-            ]
-        ];
+                [
+                    "date_num" => 1,
+                    "summary" => "这是摘要1",
+                    "port_detail" =>
+                        [
+                            [
+                                "port_num" => 1,
+                                "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                                "port_detail" => "这是第一站1"
+                            ],
+                            [
+                                "port_num" => 2,
+                                "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                                "port_detail" => "这是第二站2"
+                            ]
+                        ],
+                ],
+                [
+                    "date_num" => 2,
+                    "summary" => "这是摘要1",
+                    "port_detail" =>
+                        [
+                            [
+                                "port_num" => 1,
+                                "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                                "port_detail" => "这是第一站1"
+                            ],
+                            ["port_num" => 2,
+                                "port_coverImg" => "http://ovwiqces1.bkt.clouddn.com/cee31c276bb2c1ee71391ac799ed78cc.png",
+                                "port_detail" => "这是第二站2"
+                            ]
+                        ],
+                ]
+            ];
 
         $test =  json_encode($line_detail);
         echo count(json_decode($test,true));

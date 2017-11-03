@@ -181,7 +181,7 @@ function  diffHour ($startDate,$endData)
     $end_date_data = date("Y-m-d H:i:s",$endData); //结束时间
     $hour_num  = round((strtotime($end_date_data)-strtotime($go_off_time_concat))%86400/3600);
     $price = $hour_num * $config["charge"];
-   return  ["overtime_hour" => $hour_num,"charge" => $price];
+    return  ["overtime_hour" => $hour_num,"charge" => $price];
 }
 
 //根据订单评论信息获取用户信息
@@ -265,37 +265,47 @@ function order_type($type,$order_id)
     }
     $find_data = M($table) -> where("base_id = $order_id") -> find();
     if($find_data)
-         $find_data["user_car_time"] = date("Y-m-d H:i:s",$find_data["user_car_time"]);
+        $find_data["user_car_time"] = date("Y-m-d H:i:s",$find_data["user_car_time"]);
 
     return $find_data;
 }
 
+function setAccountLog ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
+{
+    $data =
+        [
+            "seller_id" => $seller_id,
+            "add_money" => $add_money,
+            "seller_money" => $seller_money,
+            "change_time" => time(),
+            "desc" => $desc,
+            "order_id" => $order_id
+        ];
+    M("account_log_seller") -> add($data);
+}
 
 /**
  * 发送极光消息
  */
-function sendJGMsg ()
+function sendJGMsg ($alert,$msg_title,$msg_content,$device)
 {
-    $appKey = '2017ShaHaiZiSeller_kiXhfpZs7XdfjwE1_QPhJn8lSkWVtt1RR';      // rt_appkey
-    $secret = 'si1f1Ir6JL2cNF5a_2zYNJ5CPTaDZeFBe_IjJ5RXP34y2nuPv7';// 密钥
-    $action = 'sendText';   // 请求方法名，即请求接口最后一段。
-    $reqTime = time();      // 当前时时间戳
-    $params = [$appKey, $action,$reqTime];
-    $secretArr = explode('_', $secret); //切割密钥
-    $DesUtils =  new \DesUtils\DesUtils();
-    $naturalOrdering = $DesUtils -> naturalOrdering($params); //自然排序
-    $sign = $DesUtils -> strEnc($naturalOrdering, $secretArr[0], $secretArr[1], $secretArr[2]);    //生成签名
-    $url="http://mps.ruitukeji.com/push";
-    $data =
-    [
-        "rt_appkey" => $appKey,
-        "req_time" => $reqTime,
-        "req_action" => $action,
-        "sign" => $sign,
-        "platform" =>  'all',
-        "alert" =>  'hehe',
-        "msg_title" =>  'sdfsd',
-        "msg_content" =>  'hahah'
-    ];
-   echo \service\HttpService::post($url,$data);
+
+}
+
+function pushMsgText ($code)
+{
+    $codeData =
+        [
+            "0" =>
+                [
+                    "title" => "title",
+                    "content" => "content",
+                ],
+            "1" =>
+                [
+                    "title" => "title",
+                    "content" => "content",
+                ]
+        ];
+    return $codeData[$code];
 }
