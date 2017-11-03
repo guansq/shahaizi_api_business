@@ -525,11 +525,6 @@ class Pack extends Base {
      */
     public function collegeList ()
     {
-        require (VENDOR_PATH."jpush/jpush/autoload.php");
-        $appkey="17f7ed4f812eeb340553963d";
-        $secert="7f49e6a381ee00c4b3a7507a";
-        echo 333;die;
-        $client = new \Jpush\Client($appkey,$secert);die;
         $pagesize = I("pagesize");
         $article_lists = M("article") -> field("article_id,title,description,content") -> where("cat_id = 64") -> paginate($pagesize ? $pagesize : 10);
         dataJson(1,"返回成功！",$article_lists);

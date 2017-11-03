@@ -140,6 +140,8 @@ class Users extends Model
         }else
             M("driver_withdrawals")-> add($data);
 
+        sendJGMsg(5,$seller_id,2);
+
         dataJson(1,"操作成功！",[]);
     }
 

@@ -286,10 +286,62 @@ function setAccountLog ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
 
 /**
  * 发送极光消息
+ * @param $user_id 用户id
+ * @param int $user_type 用户类型 1是用户端 2是商家端
+ * @param $msg_title
+ * @param $msg_content
+ * @param $device
  */
-function sendJGMsg ($alert,$msg_title,$msg_content,$device)
+function sendJGMsg ($code,$user_id = 0,$user_type = 1)
 {
+    require_once VENDOR_PATH."jpush/jpush/autoload.php";
 
+    if(!$user_id)
+        $user_id = 0;
+    $text = pushMsgText($code);
+    if($user_type == 1)
+    {
+        $appkey = "ae18520eca229fc7e23c5f86";
+        $secert = "7e5df030845bb7bcdfce058d";
+        $where = "user_id = $user_id";
+        $users = M("users") -> field("push_id") -> where($where) -> find();
+        $registration_id = $users["push_id"];
+    }else
+    {
+        $appkey = "17f7ed4f812eeb340553963d";
+        $secert = "7f49e6a381ee00c4b3a7507a";
+        $where = "seller_id = $user_id";
+        $users = M("seller") -> field("push_id") -> where($where) -> find();
+        $registration_id = $users["device_no"];
+    }
+    if($registration_id)
+    {
+        $client = new \JPush\Client($appkey,$secert);
+        $push_payload = $client -> push()
+            ->setPlatform('all')
+//            ->addAllAudience()
+            ->addRegistrationId($registration_id)
+            ->message($text["content"], array(
+                'title' => $text["title"],
+                // 'content_type' => 'text',
+                'extras' => array(
+                    'key' => 'value',
+                    'jiguang'
+                ),
+            ));
+//            ->setNotificationAlert('');
+        try {
+            $response = $push_payload->send();
+
+//            print_r($response);
+        } catch (\JPush\Exceptions\APIConnectionException $e) {
+            // try something here
+//            print $e;
+        } catch (\JPush\Exceptions\APIRequestException $e) {
+            // try something here
+//            print $e;
+        }
+    }
 }
 
 function pushMsgText ($code)
@@ -298,14 +350,46 @@ function pushMsgText ($code)
         [
             "0" =>
                 [
-                    "title" => "title",
-                    "content" => "content",
+                    "title" => "订单已接单",
+                    "content" => "您的订单已被司导接单，如有问题请及时联系司导哟",
                 ],
             "1" =>
                 [
-                    "title" => "title",
-                    "content" => "content",
+                    "title" => "订单已拒绝",
+                    "content" => "您的订单已被司导拒绝，司导正在忙，换个司导为您服务吧",
+                ],
+            "2" =>
+                [
+                    "title" => "订单时间已修改",
+                    "content" => "您的订单开始时间已与司导友好协商，订单时间已被司导修改",
+                ],
+            "3" =>
+                [
+                    "title" => "订单确认结束",
+                    "content" => "您的出行服务已结束，司导已确认结束",
+                ],
+            "4" =>
+                [
+                    "title" => "订单结束，司导已评价",
+                    "content" => "您的订单确认结束，服务您的司导已对订单进行评价",
+                ],
+            "5" =>
+                [
+                    "title" => "提现申请",
+                    "content" => "您申请的一笔金额提现，正在处理中，请耐心等候",
                 ]
+
         ];
     return $codeData[$code];
+}
+
+/**
+ * 根据订单ID 返回用户id
+ * @param int $air_id
+ * @param String $air_id
+ */
+function returnUserId($air_id,$type)
+{
+    $user_data =  M("pack_order") -> field("user_id,seller_id") -> where("air_id = $air_id") -> find();
+    return $user_data[$type];
 }

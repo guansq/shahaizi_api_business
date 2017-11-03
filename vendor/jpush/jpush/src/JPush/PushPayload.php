@@ -165,7 +165,8 @@ class PushPayload {
     }
 
     public function setNotificationAlert($alert) {
-        if (!is_string($alert)) {
+        if (!is_string($alert))
+        {
             throw new InvalidArgumentException("Invalid alert value");
         }
         $this->notificationAlert = $alert;

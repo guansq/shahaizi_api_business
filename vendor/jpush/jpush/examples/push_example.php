@@ -31,8 +31,8 @@ try {
         // 即是说一般情况下，下面三个方法和没有列出的 addTagAnd 一共四个，只适用一个便可满足大多数的场景需求
 
         // ->addAlias('alias')
-        ->addTag(array('tag1', 'tag2'))
-        // ->addRegistrationId($registration_id)
+//        ->addTag(array('tag1', 'tag2'))
+         ->addRegistrationId($registration_id)
 
         ->setNotificationAlert('Hi, JPush')
         ->iosNotification('Hello IOS', array(

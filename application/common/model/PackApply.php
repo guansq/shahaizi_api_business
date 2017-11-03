@@ -307,6 +307,7 @@ class PackApply extends Model
             $data["status"]=5;
 
         M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> save($data);
+        sendJGMsg(3,returnUserId($air_id, "user_id"));
         dataJson(1,"确认成功！",[]);
     }
 
@@ -458,6 +459,7 @@ class PackApply extends Model
             M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["status" => 6]);
         }
 
+        sendJGMsg(4,returnUserId($order_id, "user_id"));
         M("order_comment")->add($data);
         dataJson(1,"返回成功！",[]);
     }

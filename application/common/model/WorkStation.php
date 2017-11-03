@@ -495,7 +495,7 @@ class WorkStation extends Model
             M("pack_midstat") -> where($where)-> save($data);
         else
             M("pack_midstat")-> add($data);
-
+        sendJGMsg(1,returnUserId($air_id, "user_id"));
         jsonData(1,"已拒绝",[]);
     }
 
@@ -605,7 +605,10 @@ class WorkStation extends Model
                 ];
             $saveData = $this -> where("air_id = $air_id") -> save($car_data);
             if($saveData)
+            {
+                sendJGMsg(0,returnUserId($air_id, "user_id"));
                 jsonData(1,"接单成功!",[]);
+            }
             else
                 jsonData(4005,"接单失败!",[]);
         }
@@ -637,6 +640,9 @@ class WorkStation extends Model
             jsonData(4004,"不能大于下班时间!",[]);
 
         M("pack_order") -> where("air_id = $air_id AND seller_id = $seller_id") -> save(["start_time" => $time_new]);
-        jsonData(4004,"不能大于下班时间!",[]);
+
+
+        sendJGMsg(2,returnUserId($air_id, "user_id"));
+        jsonData(1,"时间更新成功!",[]);
     }
 }
