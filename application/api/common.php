@@ -281,8 +281,9 @@ function setAccountLog ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
             "desc" => $desc,
             "order_id" => $order_id
         ];
-    M("account_log_seller") -> add($data);
+    M("driver_withdrawals") -> add($data);
 }
+
 
 /**
  * 发送极光消息

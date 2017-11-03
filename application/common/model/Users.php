@@ -140,6 +140,10 @@ class Users extends Model
         }else
             M("driver_withdrawals")-> add($data);
 
+        $seller_data = M("seller") -> field("user_money") -> where("seller_id =" . $seller_id) -> find();
+
+        setAccountLog($seller_id,$money,$seller_data["user_money"],"司导提现",0);
+
         M("seller") -> where("seller_id =" . $seller_id) -> setDec("user_money",$money);
 
         sendJGMsg(5,$seller_id,2);
@@ -147,20 +151,33 @@ class Users extends Model
         dataJson(1,"操作成功！",[]);
     }
 
-    //获取提现列表
+//    //获取提现列表
+//    public function getWithdrawalList ($seller_id)
+//    {
+//        $paginate = I("pagesize");
+//        $withData = M("driver_withdrawals")
+//            -> where("seller_id = $seller_id")
+//            -> paginate($paginate ? $paginate : 10);
+//
+//        foreach($withData as $key => $val)
+//        {
+//            $val["create_time"] = date("Y-m-d", $val["create_time"]);
+//            $withData[$key] = $val;
+//        }
+//        dataJson(1,"返回成功", $withData);
+//    }
+
+
     public function getWithdrawalList ($seller_id)
     {
-        $paginate = I("pagesize");
-        $withData = M("driver_withdrawals")
-            -> where("seller_id = $seller_id")
-            -> paginate($paginate ? $paginate : 10);
-
-        foreach($withData as $key => $val)
+        $pagesize = I("pagesize");
+        $result = M("account_log_seller") ->where("seller_id = ".$seller_id) -> paginate($pagesize ? $pagesize : 10);
+        foreach($result as $key => $val)
         {
-            $val["create_time"] = date("Y-m-d", $val["create_time"]);
-            $withData[$key] = $val;
+            $val["seller_money"]= floatval($val["seller_money"]) >= 0 ? "+".$val["seller_money"] : $val["seller_money"];
+            $final[$key] = $val;
         }
-        dataJson(1,"返回成功", $withData);
+        dataJson(1,"返回成功！",$final);
     }
 
     /**

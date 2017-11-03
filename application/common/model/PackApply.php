@@ -478,24 +478,13 @@ class PackApply extends Model
                 $real_price = floatval($pack_order["real_price"]);
                 $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
                 $seller_money = M("seller") -> where("seller_id=".$pack_order["seller_id"]) -> find();
-                setAccountLog($pack_order["seller_id"],round(floatval($seller_money["user_money"]) + $user_money ,2),$user_money,"司导提现",$air_id);
+                setAccountLog($pack_order["seller_id"],$user_money,round(floatval($seller_money["user_money"]) + $user_money ,2),"司导提现",$air_id);
                 M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
             }
         }
         return $pack_order["user_confirm"];
     }
 
-    public function depositLog ($seller_id)
-    {
-        $pagesize = I("pagesize");
-        $result = M("account_log_seller") ->where("seller_id = ".$seller_id) -> paginate($pagesize ? $pagesize : 10);
-        foreach($result as $key => $val)
-        {
-            $val["seller_money"]= floatval($val["seller_money"]) >= 0 ? "+".$val["seller_money"] : $val["seller_money"];
-            $final[$key] = $val;
-        }
-        dataJson(1,"返回成功！",$final);
-    }
 
     public function line_detail2 ()
     {

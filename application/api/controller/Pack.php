@@ -1040,9 +1040,9 @@ class Pack extends Base {
         model("common/PackApply") -> uploadCoverImg($this -> user_id);
     }
 
+
     //订单回收机制
-    public function recyclingOrder()
-    {
+    public function recyclingOrder(){
         $recycling_m=M('config')->where(array("name"=>"carset_order_time","inc_type"=>"car_setting_order"))->order("id desc")->select();
         //获取回收时间
         $recycling_time=$recycling_m[0]['value']*60;
@@ -1063,8 +1063,53 @@ class Pack extends Base {
                 $save_data['is_callback']='1';
                 $save_data['allot_seller_id']='';
                 $save_data['allot_time']=null;
+
+                if(strlen($v['not_seller_id'])>0){
+                    $midstat_str = substr($v['allot_seller_id'],1);
+                    $save_data['not_seller_id'].=$v['not_seller_id'].$midstat_str;
+                }else{
+                    $save_data['not_seller_id'].=$v['allot_seller_id'];
+                }
+                $save_data['not_seller_id']=$v['allot_seller_id'];
+                M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+            }
+        }
+
+        $this->packMidstat();
+    }
+    //如果订单都拒绝
+    public function packMidstat()
+    {
+        $where['status']='2';
+        $midstat_arr=array();
+        $midstat_str=",";
+        $list=M('pack_order')->where($where)->select();
+        foreach($list as $k=>$v){
+            //拆分分配的司导id
+            $allot_seller=explode(',',$v['allot_seller_id']);
+            $allot_seller_new=array_filter($allot_seller);
+            $seller_list=M('pack_midstat')->where(array("air_id"=>$v['air_id'],"is_refuse"=>'1'))->select();
+            foreach ($seller_list as $key=>$value){
+                $midstat_arr[]=$value['seller_id'];
+                $midstat_str.=$value['seller_id'].",";
+            }
+            //获取差集
+            $diff_num=array_diff($allot_seller_new,$midstat_arr);
+            if(count($diff_num)==0){
+                //说明商家都拒绝了       执行重新分配操作
+                $save_data['status']='1';
+                $save_data['is_callback']='1';
+                $save_data['allot_seller_id']='';
+                $save_data['allot_time']=null;
+                if(strlen($v['not_seller_id'])>0){
+                    $midstat_str = substr($midstat_str,1);
+                    $save_data['not_seller_id'].=$v['not_seller_id'].$midstat_str;
+                }else{
+                    $save_data['not_seller_id'].=$midstat_str;
+                }
                 M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
             }
         }
     }
+
 }
