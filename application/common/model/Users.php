@@ -171,10 +171,58 @@ class Users extends Model
     public function getWithdrawalList ($seller_id)
     {
         $pagesize = I("pagesize");
-        $result = M("account_log_seller") ->where("seller_id = ".$seller_id) -> paginate($pagesize ? $pagesize : 10);
+        $filterTime=I("filter",0);
+        $where[] = "seller_id = ".$seller_id;
+
+        $currentDate = strtotime(date("Y-m-d",time()));
+        if($filterTime == 1)//今天
+        {
+            $where[] = "change_time >= '".$currentDate."'";
+        }elseif($filterTime == 2)
+        {
+            //本周
+            $sdefaultDate = date("Y-m-d");
+            $first=1;
+            $w=date('w',strtotime($sdefaultDate));
+
+            $week_start = strtotime("$sdefaultDate -".($w ? $w - $first : 6).' days');
+            $where[] = "change_time >= '".$week_start."' AND change_time <= '".$currentDate."'";
+        }elseif($filterTime == 3)
+        {
+            //本月
+            $currentMoth = date("Y-m-01");
+            $where[] = "change_time >= '".$currentMoth."' AND change_time <= '".$currentDate."'";
+        }elseif($filterTime == 4)
+        {
+            $thirtyDate = date("Y-m-d",strtotime("-30 day"));
+            $where[] = "change_time >= '".$thirtyDate."' AND change_time <= '".$currentDate."'";
+        }
+        elseif($filterTime == 5)
+        {
+            $sixtyDate = date("Y-m-d",strtotime("-60 day"));
+            $where[] = "change_time >= '".$sixtyDate."' AND change_time <= '".$currentDate."'";
+        }
+        elseif($filterTime == 6)
+        {
+            $nintyDate = date("Y-m-d",strtotime("-90 day"));
+            $where[] = "change_time >= '".$nintyDate."' AND change_time <= '".$currentDate."'";
+        }elseif($filterTime == 7)
+        {
+            $oneYearDate = date("Y-m-d",strtotime("-365 day"));
+            $where[] = "change_time >= '".$oneYearDate."' AND change_time <= '".$currentDate."'";
+        }
+        elseif($filterTime == 8)
+        {
+            $twoYearDate = date("Y-m-d",strtotime("-730 day"));
+            $where[] = "change_time >= '".$twoYearDate."' AND change_time <= '".$currentDate."'";
+        }
+
+        $result = M("account_log_seller") ->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 10);
+
         foreach($result as $key => $val)
         {
             $val["seller_money"]= floatval($val["seller_money"]) >= 0 ? "+".$val["seller_money"] : $val["seller_money"];
+            $val["change_time"] = date("Y-m-d", $val["change_time"]);
             $final[$key] = $val;
         }
         dataJson(1,"返回成功！",$final);
