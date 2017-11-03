@@ -225,6 +225,7 @@ class Users extends Model
             $val["change_time"] = date("Y-m-d", $val["change_time"]);
             $final[$key] = $val;
         }
+        $final = $final ? $final : [];
         dataJson(1,"返回成功！",$final);
     }
 
