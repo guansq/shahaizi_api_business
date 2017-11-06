@@ -82,16 +82,16 @@ class PackApply extends Model
                     "img_key" => "drv_back_img"
                 ],
                 [
+                    "is_must" => 1,
+                    "title" => "车险证",
+                    "img_url" => $ruit_pack_driver_apply["boat_img"] ? $ruit_pack_driver_apply["boat_img"] : '',
+                    "img_key" => "boat_img"
+                ],
+                [
                     "is_must" => 0,
                     "title" => "导游证",
                     "img_url" => $ruit_pack_driver_apply["guide_img"] ? $ruit_pack_driver_apply["guide_img"] : '',
                     "img_key" => "guide_img"
-                ],
-                [
-                    "is_must" => 0,
-                    "title" => "游艇驾驶证",
-                    "img_url" => $ruit_pack_driver_apply["boat_img"] ? $ruit_pack_driver_apply["boat_img"] : '',
-                    "img_key" => "boat_img"
                 ]
             ];
         jsonData(1,"返回成功",$ruit_pack_driver_apply_result);
