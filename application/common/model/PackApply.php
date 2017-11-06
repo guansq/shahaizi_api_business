@@ -59,6 +59,12 @@ class PackApply extends Model
                 ],
                 [
                     "is_must" => 1,
+                    "title" => "车险证",
+                    "img_url" => $ruit_pack_driver_apply["boat_img"] ? $ruit_pack_driver_apply["boat_img"] : '',
+                    "img_key" => "boat_img"
+                ],
+                [
+                    "is_must" => 1,
                     "title" => "驾驶证",
                     "img_url" => $ruit_pack_driver_apply["driver_img"] ? $ruit_pack_driver_apply["driver_img"] : '',
                     "img_key" => "driver_img"
@@ -80,12 +86,6 @@ class PackApply extends Model
                     "title" => "身份证反面",
                     "img_url" => $ruit_pack_driver_apply["drv_back_img"] ? $ruit_pack_driver_apply["drv_back_img"] : '',
                     "img_key" => "drv_back_img"
-                ],
-                [
-                    "is_must" => 1,
-                    "title" => "车险证",
-                    "img_url" => $ruit_pack_driver_apply["boat_img"] ? $ruit_pack_driver_apply["boat_img"] : '',
-                    "img_key" => "boat_img"
                 ],
                 [
                     "is_must" => 0,
