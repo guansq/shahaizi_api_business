@@ -371,7 +371,7 @@ class App
         
         if (is_null($instance) && $controller == 'Distribut') {
 			header("Content-type: text/html; charset=utf-8");
-			exit('要使用分销模块请联系TPshop官网客服,官网地址 www.tp-shop.cn');
+			exit('要使用分销模块请联系睿途官网客服,官网地址 www.tp-shop.cn');
         }    		    
         
         if (is_null($instance)) {
@@ -393,7 +393,7 @@ class App
 		//echo $instance.$actionName ;
         if ($actionName == 'pre_sell_list') {
 			header("Content-type: text/html; charset=utf-8");
-			exit('要使用预售功能请联系TPshop官网客服,官网地址 www.tp-shop.cn');
+			exit('要使用预售功能请联系睿途官网客服,官网地址 www.tp-shop.cn');
         } 				
 			
             // 操作不存在

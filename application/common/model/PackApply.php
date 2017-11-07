@@ -669,7 +669,7 @@ class PackApply extends Model
     public function getOrderAllComment ($seller_id)
     {
         $pagesize = I("pagesize");
-        $pack_data = M("order_comment") -> where("type = 1 AND user_id = $seller_id") -> paginate($pagesize ? $pagesize :10);
+        $pack_data = M("order_comment") -> order("commemt_time desc") -> where("type = 1 AND seller_id = $seller_id") -> paginate($pagesize ? $pagesize :10);
         $pack_data = $pack_data -> toArray();
         $packData = $pack_data["data"];
 

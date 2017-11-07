@@ -155,7 +155,7 @@ EOF;
 
     function transfer($data){
     header("Content-type: text/html; charset=utf-8");
-    exit('请联系TPshop官网客服购买高级版支持此功能'); 
+    exit('请联系睿途官网客服购买高级版支持此功能');
     }
     
     /**
@@ -218,6 +218,6 @@ EOF;
     //支付金额原路退还
     public function payment_refund($data){
          header("Content-type: text/html; charset=utf-8");
-         exit('请联系TPshop官网客服购买高级版支持此功能'); 
+         exit('请联系睿途官网客服购买高级版支持此功能');
     }
 }

@@ -164,22 +164,22 @@ class alipay extends Model
     //支付宝批量付款到支付宝账户有密接口接口
     function transfer($data){
     	 header("Content-type: text/html; charset=utf-8");
-         exit('请联系TPshop官网客服购买高级版支持此功能'); 
+         exit('请联系睿途官网客服购买高级版支持此功能');
     }
     
     function transfer_response(){
      header("Content-type: text/html; charset=utf-8");
-     exit('请联系TPshop官网客服购买高级版支持此功能');
+     exit('请联系睿途官网客服购买高级版支持此功能');
     }
     
     //支付宝即时到账批量退款有密接口接口
     public function payment_refund($data){
     	header("Content-type: text/html; charset=utf-8");
-        exit('请联系TPshop官网客服购买高级版支持此功能');
+        exit('请联系睿途官网客服购买高级版支持此功能');
     }
     
     public function  refund_respose(){
     	header("Content-type: text/html; charset=utf-8");
-        exit('请联系TPshop官网客服购买高级版支持此功能');
+        exit('请联系睿途官网客服购买高级版支持此功能');
     
 }
