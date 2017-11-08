@@ -354,8 +354,11 @@ class PackApply extends Model
     {
         $pagesize = I("pagesize");
         $pagesize = $pagesize ? $pagesize : 10;
-        $article = M("article") -> where("cat_id = 22") -> paginate($pagesize);
-        dataJson(1,"返回成功！",$article);
+        $article = M("article") -> where("cat_id = 66") -> paginate($pagesize);
+        $data = $article -> toArray();
+        foreach($data["data"] as $key => &$val)
+            $val["content"] = strip_tags(htmlspecialchars_decode($val["content"]));
+        dataJson(1,"返回成功！",$data);
     }
 
     /**
@@ -424,6 +427,8 @@ class PackApply extends Model
         $content = I("content");
         $is_anonymous = I("is_anonymous");
         $image = I("image");
+        $seller_pointlng  = I("seller_pointlng ");
+        $seller_pointlat  = I("seller_pointlat ");
         $commemt_time = time();
         if(!$order_id)
             dataJson(4004,"订单id不能为空！",[]);
@@ -453,12 +458,13 @@ class PackApply extends Model
         if($is_find)
             dataJson(0,"您已经评价过该订单了！",[]);
         //查询订单信息
-
-        M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["seller_order_status" => 1]);
+        $sellerData["seller_pointlng"] = $seller_pointlng;
+        $sellerData["seller_pointlat"] = $seller_pointlat;
+        $sellerData["seller_order_status"] = 1;
         if($order_info['user_order_status'] == 1){//如果用户端也评价了
-            M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save(["status" => 6]);
+            $sellerData["status"] = 6;
         }
-
+        M("pack_order") -> where("seller_id = $seller_id AND air_id = $order_id") -> save($sellerData);
         sendJGMsg(4,returnUserId($order_id, "user_id"));
         M("order_comment")->add($data);
         dataJson(1,"返回成功！",[]);

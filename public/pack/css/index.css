@@ -79,7 +79,7 @@ input, button {
 .article_detail{
     width: 100%;
     position: absolute;
-    top:60px;
+    top:0px;
 }
 
 .article_detail h1{
@@ -89,9 +89,13 @@ input, button {
 }
 .article_detail p
 {
-    padding-left:16px;
-    line-height:20px;
+    line-height:26px;
     font-size:14px;
+    padding-left:2%;
+}
+.article_detail img{
+    display:block;
+    width: 98%;
 }
 /*================================================线路详情====================================================*/
 .shz-rd-pic{

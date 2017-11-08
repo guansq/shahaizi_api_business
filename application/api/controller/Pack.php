@@ -526,7 +526,7 @@ class Pack extends Base {
     public function collegeList ()
     {
         $pagesize = I("pagesize");
-        $article_lists = M("article") -> field("article_id,title,description,content") -> where("cat_id = 64") -> paginate($pagesize ? $pagesize : 10);
+        $article_lists = M("article") -> field("article_id,title,description,content") -> where("is_open = 1 AND cat_id = 64") -> paginate($pagesize ? $pagesize : 10);
         dataJson(1,"返回成功！",$article_lists);
     }
 
@@ -1040,7 +1040,6 @@ class Pack extends Base {
         model("common/PackApply") -> uploadCoverImg($this -> user_id);
     }
 
-
     //订单回收机制
     public function recyclingOrder(){
         $recycling_m=M('config')->where(array("name"=>"carset_order_time","inc_type"=>"car_setting_order"))->order("id desc")->select();
@@ -1059,22 +1058,13 @@ class Pack extends Base {
             $allot_time=$v['allot_time']+$recycling_time;
             if($new_time>$allot_time){
                 //则为分配过期订单    则修改订单的状态
-                $save_data['status']='1';
-                $save_data['is_callback']='1';
-                $save_data['allot_seller_id']='';
-                $save_data['allot_time']=null;
-
-                if(strlen($v['not_seller_id'])>0){
-                    $midstat_str = substr($v['allot_seller_id'],1);
-                    $save_data['not_seller_id'].=$v['not_seller_id'].$midstat_str;
-                }else{
-                    $save_data['not_seller_id'].=$v['allot_seller_id'];
-                }
-                $save_data['not_seller_id']=$v['allot_seller_id'];
-                M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+                $save_data['status'] = '1';
+                $save_data['is_callback'] = '1';
+                $save_data['allot_seller_id'] = '';
+                $save_data['allot_time'] = null;
+                M('pack_order')->where(array("air_id" => $v['air_id']))->save($save_data);
             }
         }
-
         $this->packMidstat();
     }
     //如果订单都拒绝
