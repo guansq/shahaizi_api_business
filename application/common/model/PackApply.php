@@ -374,6 +374,7 @@ class PackApply extends Model
         $bright_dot = I("bright_dot");
         $line_detail = I("line_detail");
         $config_id = I("config_id");
+        $cost_statement = I("cost_statement");
         $play_day = count(json_decode(htmlspecialchars_decode($line_detail),true));
         if(!$line_title)
             dataJson(4004,"线路标题不能为空！",[]);
@@ -391,6 +392,7 @@ class PackApply extends Model
               "line_title" => $line_title,
               "config_id" => $config_id,
               "line_price" => $line_price,
+              "cost_statement" => $cost_statement,
               "car_id" => $car_id,
               "cover_img" => $cover_img,
               "line_highlights" => $bright_dot,
@@ -399,18 +401,20 @@ class PackApply extends Model
               "play_day" => $play_day,
               "city" => $seller_data["gps_name"]
         ];
+
         if(!$line_id)
         {
             $line_body["create_at"] = time();
-            if(M("pack_line") -> add($line_body))
+            if (M("pack_line") -> add($line_body))
                 dataJson(1,"发布成功！",[]);
         }else
         {
             $line_body["update_at"] = time();
 
-            if(M("pack_line") -> where("seller_id = $seller_id AND line_id = $line_id") -> save($line_body))
+            if(M("pack_line") -> where("seller_id = $seller_id AND line_id = $line_id") -> save( $line_body ))
                 dataJson(1,"修改成功！",[]);
         }
+
         dataJson(1,"操作失败！",[]);
     }
 
