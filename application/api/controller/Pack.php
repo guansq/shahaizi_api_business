@@ -973,6 +973,15 @@ class Pack extends Base {
     }
 
     /**
+     * 退改说明信息
+     */
+    public function backInfo ()
+    {
+        $config = M("config") -> field("id,name,value,desc") -> where("inc_type = 'policy'") -> select();
+        jsonData(1,"返回成功",$config);
+    }
+
+    /**
      *
      * 
      * @api {GET}  /index.php?m=Api&c=Pack&a=getOrderComment  获取订单评论

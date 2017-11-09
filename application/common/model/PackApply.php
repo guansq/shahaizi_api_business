@@ -373,6 +373,7 @@ class PackApply extends Model
         $cover_img = I("cover_img");
         $bright_dot = I("bright_dot");
         $line_detail = I("line_detail");
+        $config_id = I("config_id");
         $play_day = count(json_decode(htmlspecialchars_decode($line_detail),true));
         if(!$line_title)
             dataJson(4004,"线路标题不能为空！",[]);
@@ -388,6 +389,7 @@ class PackApply extends Model
         [
               "seller_id" => $seller_id,
               "line_title" => $line_title,
+              "config_id" => $config_id,
               "line_price" => $line_price,
               "car_id" => $car_id,
               "cover_img" => $cover_img,
