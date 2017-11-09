@@ -376,6 +376,9 @@ class PackApply extends Model
         $config_id = I("config_id");
         $cost_statement = I("cost_statement");
         $play_day = count(json_decode(htmlspecialchars_decode($line_detail),true));
+        if(!$config_id)
+            dataJson(4004,"config_id不能为空！",[]);
+
         if(!$line_title)
             dataJson(4004,"线路标题不能为空！",[]);
 
