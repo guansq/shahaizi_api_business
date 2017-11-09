@@ -385,18 +385,18 @@ class PackApply extends Model
 
         $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
         $line_body =
-            [
-                "seller_id" => $seller_id,
-                "line_title" => $line_title,
-                "line_price" => $line_price,
-                "car_id" => $car_id,
-                "cover_img" => $cover_img,
-                "line_highlights" => $bright_dot,
-                "line_detail" => $line_detail,
-                "is_state" => 0,//新发布都改为待审核
-                "play_day" => $play_day,
-                "city" => $seller_data["gps_name"]
-            ];
+        [
+              "seller_id" => $seller_id,
+              "line_title" => $line_title,
+              "line_price" => $line_price,
+              "car_id" => $car_id,
+              "cover_img" => $cover_img,
+              "line_highlights" => $bright_dot,
+              "line_detail" => $line_detail,
+              "is_state" => 0,//新发布都改为待审核
+              "play_day" => $play_day,
+              "city" => $seller_data["gps_name"]
+        ];
         if(!$line_id)
         {
             $line_body["create_at"] = time();
