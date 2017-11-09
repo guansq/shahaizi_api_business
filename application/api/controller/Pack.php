@@ -978,6 +978,10 @@ class Pack extends Base {
     public function backInfo ()
     {
         $config = M("config") -> field("id,name,value,desc") -> where("inc_type = 'policy'") -> select();
+        foreach ($config as &$val)
+        {
+            $val["value"] = htmlspecialchars_decode($val["value"]);
+        }
         jsonData(1,"返回成功",$config);
     }
 
