@@ -962,8 +962,13 @@ class Pack extends Base {
         {
             $produce_data = M("pack_car_product") -> where("id = $produce_id") -> field("cost_statement,cost_compensation") -> find();
         }
-        $produce_data["cost_statement"] = !$produce_data["cost_statement"] ? "暂无说明" : $produce_data["cost_compensation"];
-        $produce_data["cost_compensation"] = !$produce_data["cost_compensation"] ? "暂无说明" : $produce_data["cost_compensation"];
+        if($produce_data["cost_compensation"])
+        {
+            $cost_statement = trim(strstr($produce_data["cost_compensation"], "###"),"###");
+        }
+
+        $produce_data["cost_statement"] = !$produce_data["cost_statement"] ? "暂无说明" : $produce_data["cost_statement"];
+        $produce_data["cost_compensation"] = !$cost_statement ? "暂无说明" : $cost_statement;
         jsonData(1,"返回成功",$produce_data);
     }
 
