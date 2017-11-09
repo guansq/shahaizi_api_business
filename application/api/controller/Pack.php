@@ -948,6 +948,26 @@ class Pack extends Base {
     }
 
     /**
+     * 订单退改说明
+     */
+    public function back_edit()
+    {
+        $air_id = I("air_id");
+        if(!$air_id)
+            jsonData(0,"air_id不能为空！",[]);
+
+        $produce_id = M("pack_order") -> where("air_id = $air_id") -> value("produce_id");
+
+        if($produce_id)
+        {
+            $produce_data = M("pack_car_product") -> where("id = $produce_id") -> field("cost_statement,cost_compensation") -> find();
+        }
+        $produce_data["cost_statement"] = !$produce_data["cost_statement"] ? "暂无说明" : $produce_data["cost_compensation"];
+        $produce_data["cost_compensation"] = !$produce_data["cost_compensation"] ? "暂无说明" : $produce_data["cost_compensation"];
+        jsonData(1,"返回成功",$produce_data);
+    }
+
+    /**
      *
      * 
      * @api {GET}  /index.php?m=Api&c=Pack&a=getOrderComment  获取订单评论
