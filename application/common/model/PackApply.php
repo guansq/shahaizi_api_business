@@ -436,8 +436,8 @@ class PackApply extends Model
         $content = I("content");
         $is_anonymous = I("is_anonymous");
         $image = I("image");
-        $seller_pointlng  = I("seller_pointlng ");
-        $seller_pointlat  = I("seller_pointlat ");
+        $seller_pointlng  = I("seller_pointlng");
+        $seller_pointlat  = I("seller_pointlat");
         $commemt_time = time();
         if(!$order_id)
             dataJson(4004,"订单id不能为空！",[]);

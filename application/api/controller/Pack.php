@@ -1101,8 +1101,10 @@ class Pack extends Base {
                 $save_data['allot_seller_id'] = '';
                 $save_data['allot_time'] = null;
                 M('pack_order')->where(array("air_id" => $v['air_id']))->save($save_data);
+                sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
             }
         }
+
         $this->packMidstat();
     }
     //如果订单都拒绝

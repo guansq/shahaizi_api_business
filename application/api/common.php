@@ -378,6 +378,11 @@ function pushMsgText ($code)
                 [
                     "title" => "提现申请",
                     "content" => "您申请的一笔金额提现，正在处理中，请耐心等候",
+                ],
+            "6" =>
+                [
+                    "title" => "订单超时",
+                    "content" => "您的订单已超时回收",
                 ]
 
         ];
