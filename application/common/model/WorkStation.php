@@ -45,12 +45,10 @@ class WorkStation extends Model
             foreach ($data as $key => &$val)
             {
                 //如果是线路的start_time读线路的start_time
-                if($val["type"] == 6)
+                if($val["type"] == 6 || $val["type"] == 3)
                     $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
-                elseif ($val["type"] == 1)
-                    $val["start_time_detail"] = packDateFormat($val["start_time"],1);
                 else
-                    $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                    $val["start_time_detail"] = packDateFormat($val["start_time"],1);
 
                 if($val['type'] == 3 && $val['line_id']){
                     $week = ["周一","周二","周三","周四","周五","周六","周日"];
@@ -173,10 +171,10 @@ class WorkStation extends Model
                     if($val["status"] == 3)
                         $val["start_time"] &&  $val["status"] = $this -> time_status($val["type"],$val["start_time"]);
 
-                    if($val["type"] == 6)
+                    if($val["type"] == 6 || $val["type"] == 3)
                         $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
                     else
-                        $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                        $val["start_time_detail"] = packDateFormat($val["start_time"],1);
 
                     $val["start_time"] = date("Y-m-d",$val["start_time"]);
                     $val["end_time"] = date("Y-m-d",$val["end_time"]);
@@ -290,10 +288,10 @@ class WorkStation extends Model
             $val["order_title"] = $this -> order_title($val["work_address"],$val["type"]);
             $val["use_car_num"] = $this -> useCarNum($val["use_car_adult"], $val["use_car_children"]);
 
-            if($val["type"] == 6)
+            if($val["type"] == 6 || $val["type"] == 3)
                 $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
             else
-                $val["start_time_detail"] = packDateFormat($val["start_time"]);
+                $val["start_time_detail"] = packDateFormat($val["start_time"], 1);
 
             $val["start_time"] = date("Y-m-d",$val["start_time"]);
             $val["end_time"] = date("Y-m-d",$val["end_time"]);
@@ -540,12 +538,10 @@ class WorkStation extends Model
 
         if($data)
         {
-            if($data["type"] == 6)
+            if($data["type"] == 3 || $data["type"] == 6)
                 $data["start_time_detail"] = $this -> byDataTravel($data["air_id"]);
-            elseif($data["type"] == 1)
-                $data["start_time_detail"] = packDateFormat($data["start_time"],1);
             else
-                $data["start_time_detail"] = packDateFormat($data["start_time"]);
+                $data["start_time_detail"] = packDateFormat($data["start_time"], 1);
         }
 
         if($data["status"] == 3)
