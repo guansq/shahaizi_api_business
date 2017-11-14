@@ -111,11 +111,13 @@ if(!function_exists('removeNull')){
  * 司导日期转换
  * @param $date
  */
-function packDateFormat($date)
+function packDateFormat($date,$isHour = 0)
 {
     $week = ["周一","周二","周三","周四","周五","周六","周日"];
     $week_date = date("w",$date);
-//    return date("Y-m-d", $date)." ".$week[$week_date-1].date("H:i:s", $date);
+    if($isHour)
+       return date("Y-m-d", $date)." ".$week[$week_date-1].date("H:i", $date);
+
     return date("Y-m-d", $date)." ".$week[$week_date-1];
 }
 
@@ -312,7 +314,7 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $appkey = "17f7ed4f812eeb340553963d";
         $secert = "7f49e6a381ee00c4b3a7507a";
         $where = "seller_id = $user_id";
-        $users = M("seller") -> field("push_id") -> where($where) -> find();
+        $users = M("seller") -> field("device_no") -> where($where) -> find();
         $registration_id = $users["device_no"];
     }
     if($registration_id)

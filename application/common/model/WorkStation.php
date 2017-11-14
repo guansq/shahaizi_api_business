@@ -47,6 +47,8 @@ class WorkStation extends Model
                 //如果是线路的start_time读线路的start_time
                 if($val["type"] == 6)
                     $val["start_time_detail"] = $this -> byDataTravel($val["air_id"]);
+                elseif ($val["type"] == 1)
+                    $val["start_time_detail"] = packDateFormat($val["start_time"],1);
                 else
                     $val["start_time_detail"] = packDateFormat($val["start_time"]);
 
@@ -540,6 +542,8 @@ class WorkStation extends Model
         {
             if($data["type"] == 6)
                 $data["start_time_detail"] = $this -> byDataTravel($data["air_id"]);
+            elseif($data["type"] == 1)
+                $data["start_time_detail"] = packDateFormat($data["start_time"],1);
             else
                 $data["start_time_detail"] = packDateFormat($data["start_time"]);
         }

@@ -144,7 +144,7 @@ class Users extends Model
 
         setAccountLog($seller_id,$money,$seller_data["user_money"],"司导提现",0);
 
-        M("seller") -> where("seller_id =" . $seller_id) -> setDec("user_money",$money);
+        M("seller") -> where("seller_id =" . $seller_id) -> setDec("user_money", $money);
 
         sendJGMsg(5,$seller_id,2);
 

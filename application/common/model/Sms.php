@@ -40,12 +40,13 @@ class Sms extends Model
             $country_code = $seller["country_code"];
 
         //$mobile = $country_code.$mobile;
-        $where = "mobile = $mobile";
+        $where = "mobile = '$mobile'";
         $sms_info = M("sms_info") -> where($where) -> find();
 
         if($sms_info)
         {
-            M("sms_info") -> where($where) -> save(["is_check" => 0,"create_time"=> time()]);
+            M("sms_info") -> where($where) -> save(["is_check" => 0,"create_at"=> time()]);
+            die;
         }
 
         $data = ["mobile"=> $mobile,"countroy_code"=> $country_code,"opt" => $type];
@@ -59,7 +60,6 @@ class Sms extends Model
     }
    public function checkSms ($is_return = 0,$mobiles = 0,$codes = 0)//绑定  注册
    {
-
        $mobile = $mobiles ?  $mobiles :I("mobile");
        $code = $codes ? $codes : I("code");
        if(!$mobile)
@@ -69,8 +69,8 @@ class Sms extends Model
            dataJson(4004,"code不能为空！", []);
 
        $check = M("sms_info") -> where("mobile = '$mobile' AND is_check = 0 AND code = '$codes'") -> find();
-       //echo $check;die;->fetchSql(true)
 
+       //echo $check;die;->fetchSql(true)
        if($check){
            (time() - $check["create_at"]) > $this -> expire_time && dataJson(4004,"验证码已经失效！", []);
        }

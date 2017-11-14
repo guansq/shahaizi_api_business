@@ -461,7 +461,7 @@ class User extends Base {
 
         if(model("common/Sms") -> checkSms(1,$country_code.$username,$code))
         {
-            $data = $this->userLogic->reg($username,$password , $password, $push_id,$country_code,$apply_code);
+            $data = $this -> userLogic -> reg($username,$password , $password, $push_id,$country_code,$apply_code);
             exit(json_encode($data));
         }
     }
