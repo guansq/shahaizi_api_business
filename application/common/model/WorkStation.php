@@ -219,15 +219,21 @@ class WorkStation extends Model
         if($air_id)
         {
             $pack_time = M("pack_base_by_day") -> where("base_id = $air_id") -> find();
-            $pack_data = explode("|",$pack_time["pack_time"]);
+            $pack_data = array_filter(explode("|",$pack_time["pack_time"]));
             if($pack_data)
             {
                 foreach ($pack_data as $key => $val)
                     $str[] = date("Y-m-d",$val);
             }
-            return implode(",",$str);
+            return $str ? implode(",",$str) : "";
         }
     }
+
+    /**
+     * 根据线路id判断是否是管理员
+     * @param $line_id
+     * @return int
+     */
     public function getAdminBaseLineId ($line_id)
     {
         $line_data = M("pack_line") -> field("is_admin") -> where("line_id = $line_id") -> find();
