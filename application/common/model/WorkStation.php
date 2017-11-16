@@ -631,7 +631,7 @@ class WorkStation extends Model
             $saveData = $this -> where("air_id = $air_id") -> save($car_data);
             if($saveData)
             {
-                sendJGMsg(0,returnUserId($air_id, "user_id"));
+                sendJGMsg(0, returnUserId($air_id, "user_id"));
                 jsonData(1,"接单成功!",[]);
             }
             else
