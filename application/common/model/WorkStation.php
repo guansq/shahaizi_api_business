@@ -619,12 +619,12 @@ class WorkStation extends Model
             jsonData(4004,"该订单已被接单",[]);
         else
         {
-                        $car_info = getCarInfoNameBaseCarId($car_id);
+            $car_info = getCarInfoNameBaseCarId($car_id);
             //            print_r($car_info);die;
             $car_data =
                 [
-                                    "con_car_id" => $car_id,
-                                    "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
+                    "con_car_id" => $car_id,
+                    "con_car_type" => $car_info["brand_name"]." ".$car_info["car_type_name"],
                     "seller_id"=> $seller_id,
                     "status" => 3
                 ];
