@@ -242,7 +242,6 @@ class WorkStation extends Model
 
     public function orderNum ($seller_id)
     {
-
         $where = "seller_id = $seller_id AND seller_order_status = 0";
 
         $result = $this -> field("status,COUNT(air_id) status_count") -> group("`status`")-> where($where) -> select();
@@ -578,6 +577,26 @@ class WorkStation extends Model
         }
 
         $data && $data["is_admin"] = $data["line_id"] ? $this->getAdminBaseLineId($data["line_id"]) : 1;
+        $cost_compensation = array_filter(explode("###",$data["cost_compensation"]));
+
+        if($cost_compensation)
+        {
+            if($cost_compensation[0] == "cover_img_k")
+                $data["cost_compensation_txt"] = "宽松";
+            elseif($cost_compensation[0] == "cover_img_z")
+                $data["cost_compensation_txt"] = "中等";
+            elseif($cost_compensation[0] == "cover_img_y")
+                $data["cost_compensation_txt"] = "严格";
+            elseif($cost_compensation[0] == "cover_img_n")
+                $data["cost_compensation_txt"] = "不退订";
+
+            $data["cost_compensation"] = $cost_compensation[1];
+        }else
+        {
+            $data["cost_compensation_txt"] = "宽松";
+            $data["cost_compensation"] = "";
+        }
+
 
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);

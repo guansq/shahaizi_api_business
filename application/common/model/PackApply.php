@@ -233,13 +233,17 @@ class PackApply extends Model
     public function getMyAllCar ($user_id)
     {
         $all_car_info = M("pack_car_info") -> where("seller_id = $user_id") -> select();
+
         foreach($all_car_info as $key => $val)
         {
             $car_info = getCarInfoName2($val["brand_id"], $val["car_type_id"]);
             $val["brand_name"] = $car_info["brand_name"];
             $val["car_type_name"] = $car_info["car_type_name"];
             $car_img = explode("|",$val["car_img"]);
+
             $val["car_img"] = array_filter($car_img) ? $car_img : [];
+            $data = M("pack_car_bar") -> where("id = ".$val["car_id"]) -> find();
+            $val["car_level"] = $data["car_level"] ? $data["car_level"] : 0;
             $result[] = $val;
         }
         dataJson(1,"返回成功",$result);

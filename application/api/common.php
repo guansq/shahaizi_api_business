@@ -131,10 +131,10 @@ function  getCarInfoName($brand_id = 0, $type_id = 0)
 
 function  getCarInfoName2($brand_id = 0, $type_id = 0)
 {
-    $pack_info = M("pack_car_bar") -> where("id in ($brand_id, $type_id)") -> column("pid,car_info");
-    $pack_info = array_values($pack_info);
-    $pack_info["brand_name"] = $pack_info[0];
-    $pack_info["car_type_name"] = $pack_info[1];
+    $pack_info = M("pack_car_bar") -> where("id in ($brand_id, $type_id)") -> select();
+
+    $pack_info["brand_name"] = $pack_info[0]["car_info"];
+    $pack_info["car_type_name"] = $pack_info[1]["car_info"];
     return $pack_info;
 }
 
