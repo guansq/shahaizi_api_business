@@ -952,7 +952,8 @@ class Pack extends Base {
      * 53 送机的费用说明
      * 55 单次接送的费用说明
      * 75 单次接送的退订政策
-     * 58 快速预订费用说明
+     * 74 快速预定的费用说明
+     * 58 司导线路费用说明
      * 59 私人定制费用说明
      * 62 按天包车游费用说明
      * 76 私人定制的退订政策
@@ -967,7 +968,7 @@ class Pack extends Base {
         if(!$cat_id)
             jsonData(0,"cat_id不能为空！",[]);
 
-       $data = M("article") -> where("cat_id = $cat_id") -> find();
+       $data = M("article") -> where("cat_id = $cat_id AND is_open = 1") -> find();
         $data["content"] = htmlspecialchars_decode($data["content"]);
         if($is_filter)
             $data["content"] = strip_tags($data["content"]);
