@@ -309,14 +309,37 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $where = "user_id = $user_id";
         $users = M("users") -> field("push_id") -> where($where) -> find();
         $registration_id = $users["push_id"];
-    }else
+        sendPush($registration_id,$appkey,$secert,$text);
+    }elseif($user_type == 2)
     {
         $appkey = "17f7ed4f812eeb340553963d";
         $secert = "7f49e6a381ee00c4b3a7507a";
         $where = "seller_id = $user_id";
         $users = M("seller") -> field("device_no") -> where($where) -> find();
         $registration_id = $users["device_no"];
+        sendPush($registration_id,$appkey,$secert,$text);
+    }elseif($user_type == 3)
+    {
+        $appkey = "17f7ed4f812eeb340553963d";
+        $secert = "7f49e6a381ee00c4b3a7507a";
+
+        $user_id_data = explode(",", $user_id);
+        if(is_array($user_id_data))
+        {
+            foreach ( $user_id_data as $key => $val )
+            {
+                $users = M("seller") -> field("device_no") -> where("seller_id = $val") -> find();
+                sendPush($users["device_no"],$appkey,$secert,$text);
+            }
+        }
+
     }
+
+
+}
+
+function sendPush ($registration_id,$appkey,$secert,$text)
+{
     if($registration_id)
     {
         $client = new \JPush\Client($appkey,$secert);
@@ -326,7 +349,7 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
             ->addRegistrationId($registration_id)
             ->message($text["content"], array(
                 'title' => $text["title"],
-                // 'content_type' => 'text',
+                // 'content_type' => 'text', 
                 'extras' => array(
                     'key' => 'value',
                     'jiguang'
@@ -398,6 +421,11 @@ function pushMsgText ($code)
  */
 function returnUserId($air_id,$type)
 {
-    $user_data =  M("pack_order") -> field("user_id,seller_id") -> where("air_id = $air_id") -> find();
+    $user_data =  M("pack_order") -> field("user_id,seller_id,allot_seller_id") -> where("air_id = $air_id") -> find();
+    if( $type == "allot_seller_id" )
+    {
+        $allot_data = trim($user_data["allot_seller_id"],",");
+        $user_data["allot_seller_id"] = $allot_data;
+    }
     return $user_data[$type];
 }

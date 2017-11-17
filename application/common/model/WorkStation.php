@@ -534,7 +534,6 @@ class WorkStation extends Model
         $where[]= "air_id = $air_id";
         $whereCondition = implode(" AND ",$where);
         $data = $this->where($whereCondition) -> find();
-
         if($data["seller_id"])
         {
             if($data["seller_id"] != $seller_id)
@@ -575,7 +574,6 @@ class WorkStation extends Model
                 //$data["start_time_detail"] = packDateFormat($data["start_time"]);
             }
         }
-
         $data && $data["is_admin"] = $data["line_id"] ? $this->getAdminBaseLineId($data["line_id"]) : 1;
         $cost_compensation = array_filter(explode("###",$data["cost_compensation"]));
 

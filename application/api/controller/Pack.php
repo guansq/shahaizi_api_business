@@ -948,28 +948,31 @@ class Pack extends Base {
     }
 
     /**
+     * 51 接机的费用说明
+     * 53 送机的费用说明
+     * 55 单次接送的费用说明
+     * 75 单次接送的退订政策
+     * 58 快速预订费用说明
+     * 59 私人定制费用说明
+     * 62 按天包车游费用说明
+     * 76 私人定制的退订政策
+     */
+    /**
      * 订单退改说明
      */
     public function back_edit()
     {
-        $air_id = I("air_id");
-        if(!$air_id)
-            jsonData(0,"air_id不能为空！",[]);
+        $cat_id = I("cat_id");
+        $is_filter = I("is_filter",0);
+        if(!$cat_id)
+            jsonData(0,"cat_id不能为空！",[]);
 
-        $produce_id = M("pack_order") -> where("air_id = $air_id") -> value("produce_id");
+       $data = M("article") -> where("cat_id = $cat_id") -> find();
+        $data["content"] = htmlspecialchars_decode($data["content"]);
+        if($is_filter)
+            $data["content"] = strip_tags($data["content"]);
 
-        if($produce_id)
-        {
-            $produce_data = M("pack_car_product") -> where("id = $produce_id") -> field("cost_statement,cost_compensation") -> find();
-        }
-        if($produce_data["cost_compensation"])
-        {
-            $cost_statement = trim(strstr($produce_data["cost_compensation"], "###"),"###");
-        }
-
-        $produce_data["cost_statement"] = !$produce_data["cost_statement"] ? "暂无说明" : $produce_data["cost_statement"];
-        $produce_data["cost_compensation"] = !$cost_statement ? "暂无说明" : $cost_statement;
-        jsonData(1,"返回成功",$produce_data);
+        jsonData(1,"返回成功",["content" => $data["content"]]);
     }
 
     /**
@@ -1101,7 +1104,7 @@ class Pack extends Base {
                 $save_data['allot_seller_id'] = '';
                 $save_data['allot_time'] = null;
                 M('pack_order')->where(array("air_id" => $v['air_id']))->save($save_data);
-                sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
+                sendJGMsg(6,returnUserId($v['air_id'], "allot_seller_id"),3);
             }
         }
 
