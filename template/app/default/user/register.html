@@ -28,28 +28,47 @@
 </head>
 <body>
 
-<div class="hsh-page">
-    <ul class="hsh-login-list">
-        <li class="user"><span>区号</span>
-            <span>
-            <select class="code_select">
-                <foreach name="country_code" item="codes">
-                    <option value="{$codes.mobile_prefix}">{$codes.country}+{$codes.mobile_prefix}</option>
-                </foreach>
-        </select>
-        </span></li>
-        <li class="user"><span>手机号</span><input id="phone" type="tel" placeholder="请输入手机号码"/></li>
-        <li>
-            <span>验证码</span><input class="code" id="register_code_ipt" type="number" placeholder="请输入验证码"/>
-            <input type="button" id="test" class="code-btn btn-blue" style="-webkit-appearance: none;" value="获取验证码">
-        </li>
-        <li><span>密码</span><input id="password" type="password" placeholder="请输入密码"/></li>
-        <li><span>邀请码</span><input id="apply_code" type="text" value="{:input('apply_code')}" placeholder="必填"/></li>
-        <li class="explain">点击注册，即表示您同意 <p style="color:#2cd052">《傻孩子注册协议》</p></li>
-        <li id="register" class="register">
-            <button class="btn-blue" id="reg_sub">注册</button>
-        </li>
-    </ul>
+<div class="reg_box">
+    <div class="hsh-page">
+        <div class="head_imgbox">
+            <img src="/public/pack/image/bj_zhuce1@2x.png" alt="">
+        </div>
+        <ul class="hsh-login-list">
+            <li class="user bor_ra"><span>区号</span>
+                <span>
+                <select class="code_select">
+                    <foreach name="country_code" item="codes">
+                        <option value="{$codes.mobile_prefix}">{$codes.country}+{$codes.mobile_prefix}</option>
+                    </foreach>
+                </select>
+            </span>
+            </li>
+            <li class="user bor_ra">
+                <!--<span>手机号</span>-->
+                <input id="phone" type="tel" placeholder="请输入手机号码"/>
+            </li>
+            <li class="bor_ra">
+                <!--<span>验证码</span>-->
+                <input class="code" id="register_code_ipt" type="number" placeholder="请输入验证码"/>
+                <input type="button" id="test" class="code-btn btn-blue" style="-webkit-appearance: none;" value="获取验证码">
+            </li>
+            <li class="bor_ra">
+                <!--<span>密码</span>-->
+                <input id="password" type="password" placeholder="请输入密码"/>
+            </li>
+            <li class="bor_ra invite_li">
+                <span>邀请码</span>
+                <input id="apply_code" class="invite" type="text" value="{:input('apply_code')}" placeholder="必填"/>
+            </li>
+            <li class="explain">点击注册，即表示您同意 <p style="color:#2cd052">《傻孩子注册协议》</p></li>
+            <li id="register" class="register">
+                <button class="btn-blue" id="reg_sub">注册并下载</button>
+            </li>
+        </ul>
+        <div class="foot_imgbox">
+            <img src="/public/pack/image/bj_zhuce2@2x.png" alt="">
+        </div>
+    </div>
 </div>
 </body>
 <script type="text/javascript" src="/public/user/lib/jQuery/jquery-min.js"></script>
