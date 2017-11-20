@@ -108,6 +108,7 @@ function toRegister() {
         data: registerParams
     }).done(function (res) {
         if (res.status == 1) {
+            $(".bomb_box").show();
             location.href="index.html";//待修改
             return false;
         }
