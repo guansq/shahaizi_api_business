@@ -149,7 +149,7 @@ class PackApply extends Model
         if(!$continent)
             $where =  "level = 1";
         else
-            $where =  "parent_id = $continent";
+            $where =  "parent_id = $continent AND id <> 7";
 
         if($country)
         {
@@ -274,13 +274,17 @@ class PackApply extends Model
             dataJson(4004,"car_id不能为0或空",[]);
 
         $car_info = M("pack_car_info") -> where("car_id = $car_id AND seller_id = $seller_id") -> find();
+        $data = M("pack_car_bar") -> where("id = ".$car_info["car_id"]) -> find();
+        $car_info["car_level"] = $data["car_level"] ? $data["car_level"] : 0;
+//        print_r($car_info);die;
         if(!$car_info)
             $car_info = [];
         else
             $car_info = removeNull($car_info);
+
         if($car_info)
         {
-            $result = getCarInfoName($car_info["brand_id"],$car_info["car_type_id"]);
+            $result = getCarInfoName($car_info["brand_id"], $car_info["car_type_id"]);
             $car_info["brand_name"] = $result["brand_name"];
             $car_info["car_type_name"] = $result["car_type_name"];
             $car_img = explode("|",$car_info["car_img"]);
