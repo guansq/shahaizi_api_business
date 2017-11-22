@@ -1127,7 +1127,7 @@ class Pack extends Base {
             $map['allot_seller_id']="";
             $order_list=M('pack_order')->where($map)->select();
             foreach($order_list  as  $k=>$v){
-                  $this->give_seller($v,$sending,$debug);
+                $this->give_seller($v,$sending,$debug);
             }
         }else{
             $this->recycling_order();
@@ -1183,9 +1183,13 @@ class Pack extends Base {
                     //获取订单回收后重新分配的比率
                     $carset_pre=M('config')->where(array("name"=>"carset_order_money"))->find();
                     $carset_pre=$carset_pre['value']*$order_info['pre_num'];
-                    $per=$config_str['value']+$carset_pre;
+                    $per=$config_str['value']-$carset_pre;
                     $data['commission_money']=$order_info['real_price']*$per/100;//佣金金额
                     $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
+                    //如果司导金额大于用户实付金额  则跳过
+                    if($data['seller_money']>=$order_info['real_price']){
+                        return false;
+                    }
                 }else{
                     $data['commission_money']=$order_info['real_price']*$config_str['value']/100;//佣金金额
                     $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
@@ -1215,22 +1219,24 @@ class Pack extends Base {
             $allot_seller=explode(',',$v['allot_seller_id']);
             $allot_seller_new=array_filter($allot_seller);
             $seller_list=M('pack_midstat')->where(array("air_id"=>$v['air_id'],"is_refuse"=>'1'))->select();
-            foreach ($seller_list as $key=>$value){
-                $midstat_arr[]=$value['seller_id'];
-                $midstat_str.=$value['seller_id'].",";
-            }
+            if (!count($seller_list)) {
+                foreach ($seller_list as $key=>$value){
+                    $midstat_arr[]=$value['seller_id'];
+                    $midstat_str.=$value['seller_id'].",";
+                }
 
-            //获取差集
-            $diff_num=array_diff($allot_seller_new,$midstat_arr);
-            if(count($diff_num)==0){
-                //说明商家都拒绝了       执行重新分配操作
-                $save_data['status']='1';
-                $save_data['is_callback']='1';
-                $save_data['allot_seller_id']='';
-                $save_data['allot_time']=null;
-                $save_data['not_seller_id'].=$midstat_str;
-                sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
-                M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+                //获取差集
+                $diff_num=array_diff($allot_seller_new,$midstat_arr);
+                if(count($diff_num)==0){
+                    //说明商家都拒绝了       执行重新分配操作
+                    $save_data['status']='1';
+                    $save_data['is_callback']='1';
+                    $save_data['allot_seller_id']='';
+                    $save_data['allot_time']=null;
+                    $save_data['not_seller_id'].=$midstat_str;
+                    sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
+                    M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+                }
             }
         }
     }
