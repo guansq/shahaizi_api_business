@@ -236,7 +236,7 @@ class PackApply extends Model
         $all_car_info = M("pack_car_info")->alias('i')
             ->field("i.*,b.seat_num,b.car_level")
             ->join("ruit_pack_car_bar b",'i.car_type_id = b.id','LEFT JOIN')
-            -> where("seller_id = $user_id") -> select();
+            -> where("i.seller_id = $user_id") -> select();
 
         foreach($all_car_info as $key => $val)
         {
