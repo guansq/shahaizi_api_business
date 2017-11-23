@@ -149,7 +149,7 @@ class PackApply extends Model
         if(!$continent)
             $where =  "level = 1";
         else
-            $where =  "parent_id = $continent";
+            $where =  "parent_id = $continent AND id <> 7";
 
         if($country)
         {
@@ -185,6 +185,7 @@ class PackApply extends Model
         $data['brand_id'] = I("brand_id");
         $data['car_type_id'] = I("car_type_id");
         $data['seat_num'] = intval(I("seat_num"),0);
+        $data['car_level'] = intval(I("car_level"),0);
         $data['car_year'] = I("car_year");
         $data['is_customer_insurance'] = I("is_customer_insurance");
 
@@ -232,7 +233,10 @@ class PackApply extends Model
      */
     public function getMyAllCar ($user_id)
     {
-        $all_car_info = M("pack_car_info") -> where("seller_id = $user_id") -> select();
+        $all_car_info = M("pack_car_info")->alias('i')
+            ->field("i.*,b.seat_num,b.car_level")
+            ->join("ruit_pack_car_bar b",'i.car_type_id = b.id','LEFT JOIN')
+            -> where("i.seller_id = $user_id") -> select();
 
         foreach($all_car_info as $key => $val)
         {
@@ -274,13 +278,17 @@ class PackApply extends Model
             dataJson(4004,"car_id不能为0或空",[]);
 
         $car_info = M("pack_car_info") -> where("car_id = $car_id AND seller_id = $seller_id") -> find();
+        $data = M("pack_car_bar") -> where("id = ".$car_info["car_id"]) -> find();
+        $car_info["car_level"] = $data["car_level"] ? $data["car_level"] : 0;
+//        print_r($car_info);die;
         if(!$car_info)
             $car_info = [];
         else
             $car_info = removeNull($car_info);
+
         if($car_info)
         {
-            $result = getCarInfoName($car_info["brand_id"],$car_info["car_type_id"]);
+            $result = getCarInfoName($car_info["brand_id"], $car_info["car_type_id"]);
             $car_info["brand_name"] = $result["brand_name"];
             $car_info["car_type_name"] = $result["car_type_name"];
             $car_img = explode("|",$car_info["car_img"]);

@@ -13,6 +13,7 @@ use app\common\logic\StoreLogic;
 use app\common\logic\UsersLogic;
 use app\common\logic\CommentLogic;
 use app\common\logic\CouponLogic;
+use think\Db;
 use think\Page;
 use service\MsgService;
 
@@ -1083,37 +1084,132 @@ class Pack extends Base {
     }
 
     //订单回收机制
-    public function recyclingOrder(){
-        $recycling_m=M('config')->where(array("name"=>"carset_order_time","inc_type"=>"car_setting_order"))->order("id desc")->select();
+    public  function  recycling_order($clock=null){
+        $recycling_m=M('config')->where(array("name"=>"carset_order_time","inc_type"=>"car_setting_order"))->order("id  desc")->select();
         //获取回收时间
         $recycling_time=$recycling_m[0]['value']*60;
-        //$recycling_time="30";
-        //在  已派单待接单的情况下  如果超过时间 则  回收订单
+        //在    已派单待接单的情况下    如果超过时间  则    回收订单
         $new_time=time();
         $save_data=array();
         $where['is_del']='0';
         $where['status']='2';
-        $where['allot_time']=array('exp','IS NOT NULL');
-        //$where['allot_time']=array('eq','0');
+        $where['allot_time']=array('exp','IS  NOT  NULL');
         $list=M('pack_order')->where($where)->select();
-        foreach($list as $k=>$v){
+
+        foreach($list  as  $k=>$v){
             $allot_time=$v['allot_time']+$recycling_time;
+            //则为分配过期订单        则修改订单的状态
             if($new_time>$allot_time){
-                //则为分配过期订单    则修改订单的状态
-                $save_data['status'] = '1';
-                $save_data['is_callback'] = '1';
-                $save_data['allot_seller_id'] = '';
-                $save_data['allot_time'] = null;
-                M('pack_order')->where(array("air_id" => $v['air_id']))->save($save_data);
-                sendJGMsg(6,returnUserId($v['air_id'], "allot_seller_id"),3);
+                $save_data['status']='1';
+                $save_data['is_callback']='1';
+                $save_data['allot_seller_id']='';
+                $save_data['allot_time']=null;
+                if($clock){
+                    $save_data['pre_num']=$v['pre_num']+1;
+                }
+                M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
             }
         }
-
-        $this->packMidstat();
     }
+
+    //下班时间自动机制
+    public  function  is_clock(){
+        $sending=I('sending',1);
+        $debug=I('debug',1);
+        $clock_info=M('Working_hours')->order("id  desc")->find();
+        //下班时间
+        if($clock_info['type']==0){
+            //自动回收
+            $this->recycling_order(1);
+            //自动分配
+            $map['status']=1;
+            $map['is_pay']=1;
+            $map['allot_seller_id']="";
+            $order_list=M('pack_order')->where($map)->select();
+            foreach($order_list  as  $k=>$v){
+                $this->give_seller($v,$sending,$debug);
+            }
+        }else{
+            $this->recycling_order();
+        }
+
+        $this->pack_midstat();
+    }
+
+
+    //分配司导
+    public  function  give_seller($order_info,$sending=null,$debug=null){
+        //模糊查询出行城市id
+        if($order_info['city']){
+            $reg_info=M('region')->where(array("name"=>array("like","%".$order_info['city']."%"),"level"=>"2"))->find();
+            $reg_id=$reg_info['id'];
+            $car_info['city']=$reg_id;
+        }
+        //大于等于座位数
+        if($order_info['req_car_seat_num']){
+            $car_info_1['b.seat_num']=array("egt",$order_info['req_car_seat_num']);
+        }
+        //舒适度小于等于        req_car_level
+        if($order_info['req_car_level']){
+            $car_info_1['b.car_level']=array("elt",$order_info['req_car_level']);
+        }
+        //  子查询
+        $subQuery  =  db("pack_car_info")->alias('c')
+            ->join('__PACK_CAR_BAR__ b','c.car_type_id  =  b.id','LEFT')
+            ->where($car_info_1)
+            ->field('c.seller_id,b.car_level,b.seat_num')
+            ->buildSql();
+
+        $data_arr= Db::table($subQuery.'  d')->join('ruit_seller s','d.seller_id  =  s.seller_id','LEFT')
+            ->where($car_info)
+//            ->order('if(i snull(s.plat_start),1,0),s.plat_start desc,s.seller_id DESC')
+            ->group('s.seller_id')
+            //->limit($Page->firstRow,$Page->listRows)
+            ->select();
+
+        //立即分配
+        if($sending){
+            $allot_seller_id=",";
+//            $seller_str="";
+            //如果存在满足条件的司导则修改订单
+            if(count($data_arr)>0){
+                foreach($data_arr as $k=>$v){
+                    $allot_seller_id.=$v['seller_id'].",";
+//                    $seller_str.="订单号为".$order_info['order_sn']."司导工号为 <span style='color:red'>".$v['drv_code']."</span> 分配成功<br/>";
+                }
+                //获取原自动分配订单佣金比率
+                $config_str=M('config')->where(array("name"=>"name_car"))->find();
+                if($order_info['pre_num']){
+                    //获取订单回收后重新分配的比率
+                    $carset_pre=M('config')->where(array("name"=>"carset_order_money"))->find();
+                    $carset_pre=$carset_pre['value']*$order_info['pre_num'];
+                    $per=$config_str['value']-$carset_pre;
+                    $data['commission_money']=$order_info['real_price']*$per/100;//佣金金额
+                    $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
+                    //如果司导金额大于用户实付金额  则跳过
+                    if($data['seller_money']>=$order_info['real_price']){
+                        return false;
+                    }
+                }else{
+                    $data['commission_money']=$order_info['real_price']*$config_str['value']/100;//佣金金额
+                    $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
+                }
+                $data['allot_seller_id']=$allot_seller_id;
+                $data['allot_time']=time();//分配时间
+                $data['status']='2';//待接单
+                $data['is_callback']='0';
+                M('pack_order')->where(array("air_id"=>$order_info['air_id']))->save($data);
+//                return $seller_str;
+            }
+
+        }else{
+            return $data_arr;
+        }
+
+    }
+
     //如果订单都拒绝
-    public function packMidstat()
-    {
+    public function pack_midstat(){
         $where['status']='2';
         $midstat_arr=array();
         $midstat_str=",";
@@ -1123,25 +1219,24 @@ class Pack extends Base {
             $allot_seller=explode(',',$v['allot_seller_id']);
             $allot_seller_new=array_filter($allot_seller);
             $seller_list=M('pack_midstat')->where(array("air_id"=>$v['air_id'],"is_refuse"=>'1'))->select();
-            foreach ($seller_list as $key=>$value){
-                $midstat_arr[]=$value['seller_id'];
-                $midstat_str.=$value['seller_id'].",";
-            }
-            //获取差集
-            $diff_num=array_diff($allot_seller_new,$midstat_arr);
-            if(count($diff_num)==0){
-                //说明商家都拒绝了       执行重新分配操作
-                $save_data['status']='1';
-                $save_data['is_callback']='1';
-                $save_data['allot_seller_id']='';
-                $save_data['allot_time']=null;
-                if(strlen($v['not_seller_id'])>0){
-                    $midstat_str = substr($midstat_str,1);
-                    $save_data['not_seller_id'].=$v['not_seller_id'].$midstat_str;
-                }else{
-                    $save_data['not_seller_id'].=$midstat_str;
+            if (!count($seller_list)) {
+                foreach ($seller_list as $key=>$value){
+                    $midstat_arr[]=$value['seller_id'];
+                    $midstat_str.=$value['seller_id'].",";
                 }
-                M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+
+                //获取差集
+                $diff_num=array_diff($allot_seller_new,$midstat_arr);
+                if(count($diff_num)==0){
+                    //说明商家都拒绝了       执行重新分配操作
+                    $save_data['status']='1';
+                    $save_data['is_callback']='1';
+                    $save_data['allot_seller_id']='';
+                    $save_data['allot_time']=null;
+                    $save_data['not_seller_id'].=$midstat_str;
+                    sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
+                    M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
+                }
             }
         }
     }
