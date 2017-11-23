@@ -141,9 +141,11 @@ function postCode() {
             // toRegister();
             location.href = url_send + "/index.php/api/user/reg_success"
             return false;
+        }else{
+            layer.msg("验证码错误",{"icon":2,time:1000});
+            return false;
         }
-        layer.msg("验证码错误",{"icon":2,time:1000})
-        return false;
+
     });
 }
 /**
