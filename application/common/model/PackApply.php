@@ -246,8 +246,8 @@ class PackApply extends Model
             $car_img = explode("|",$val["car_img"]);
 
             $val["car_img"] = array_filter($car_img) ? $car_img : [];
-            $data = M("pack_car_bar") -> where("id = ".$val["car_id"]) -> find();
-            $val["car_level"] = $data["car_level"] ? $data["car_level"] : 0;
+            //$data = M("pack_car_bar") -> where("id = ".$val["car_id"]) -> find();
+            //$val["car_level"] = $data["car_level"] ? $data["car_level"] : 0;
             $result[] = $val;
         }
         dataJson(1,"返回成功",$result);
