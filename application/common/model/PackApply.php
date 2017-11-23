@@ -232,7 +232,7 @@ class PackApply extends Model
      */
     public function getMyAllCar ($user_id)
     {
-        $all_car_info = M("pack_car_info") -> where("seller_id = $user_id") -> select();
+        $all_car_info = M("pack_car_bar") -> where("seller_id = $user_id") -> select();
 
         foreach($all_car_info as $key => $val)
         {
