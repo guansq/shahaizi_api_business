@@ -237,7 +237,6 @@ class PackApply extends Model
             ->field("i.*,b.seat_num,b.car_level")
             ->join("ruit_pack_car_bar b",'i.car_type_id = b.id','LEFT')
             -> where("i.seller_id = $user_id") -> select();
-        print_r($all_car_info);
         foreach($all_car_info as $key => $val)
         {
             $car_info = getCarInfoName2($val["brand_id"], $val["car_type_id"]);
@@ -248,7 +247,6 @@ class PackApply extends Model
             $val["car_img"] = array_filter($car_img) ? $car_img : [];
             $result[] = $val;
         }
-        print_r($result);die;
         dataJson(1,"返回成功",$result);
     }
 
