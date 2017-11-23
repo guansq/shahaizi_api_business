@@ -185,6 +185,7 @@ class PackApply extends Model
         $data['brand_id'] = I("brand_id");
         $data['car_type_id'] = I("car_type_id");
         $data['seat_num'] = intval(I("seat_num"),0);
+        $data['car_level'] = intval(I("car_level"),0);
         $data['car_year'] = I("car_year");
         $data['is_customer_insurance'] = I("is_customer_insurance");
 
@@ -232,7 +233,10 @@ class PackApply extends Model
      */
     public function getMyAllCar ($user_id)
     {
-        $all_car_info = M("pack_car_bar") -> where("seller_id = $user_id") -> select();
+        $all_car_info = M("pack_car_info")->alias('i')
+            ->field("i.*,b.seat_num,b.car_level")
+            ->join("ruit_pack_car_bar b",'i.car_type_id = b.id','LEFT JOIN')
+            -> where("seller_id = $user_id") -> select();
 
         foreach($all_car_info as $key => $val)
         {
