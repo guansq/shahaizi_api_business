@@ -275,8 +275,9 @@ class PackApply extends Model
             dataJson(4004,"car_id不能为0或空",[]);
 
         $car_info = M("pack_car_info") -> where("car_id = $car_id AND seller_id = $seller_id") -> find();
-        $data = M("pack_car_bar") -> where("id = ".$car_info["car_id"]) -> find();
+        $data = M("pack_car_bar") -> where("id = ".$car_info["car_type_id"]) -> find();
         $car_info["car_level"] = $data["car_level"] ? $data["car_level"] : 0;
+        $car_info["seat_num"] = $data["seat_num"] ? $data["seat_num"] : 0;
 //        print_r($car_info);die;
         if(!$car_info)
             $car_info = [];
@@ -291,6 +292,7 @@ class PackApply extends Model
             $car_img = explode("|",$car_info["car_img"]);
             $car_info["car_img"] = array_filter($car_img) ? $car_img : [];
         }
+        //print_r($car_info);die;
         dataJson(1,"返回成功", $car_info);
     }
 
