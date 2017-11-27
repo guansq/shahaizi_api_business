@@ -400,6 +400,8 @@ class PackApply extends Model
             dataJson(4004,"car_id不能为空！",[]);
 
         $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
+        $config = M("config")->where("id = $config_id")->find();
+        $cost_compensation = $config['name']+'###'+htmlspecialchars_decode($config['value']);
         $line_body =
         [
               "seller_id" => $seller_id,
@@ -407,6 +409,7 @@ class PackApply extends Model
               "config_id" => $config_id,
               "line_price" => $line_price,
               "cost_statement" => $cost_statement,
+              "cost_compensation" => $cost_compensation,//补偿说明
               "car_id" => $car_id,
               "cover_img" => $cover_img,
               "line_highlights" => $bright_dot,
