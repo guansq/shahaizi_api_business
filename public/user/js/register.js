@@ -10,7 +10,7 @@ var $inviteCode = $("#invite_Code");//邀请码
 var url_send = "http://business.api.shahaizi.shop";
 var $submit = $("#reg_sub");//注册
 var countdown = 60;
-var codeParams = {mobile: '',opt:'reg',"country_code":""};
+var codeParams = {mobile: '',opt:'reg2',"country_code":""};
 var postCodeParams={username: '',type:'reg',code:''};
 var registerParams = {
     user_name : '',
