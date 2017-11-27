@@ -1095,7 +1095,6 @@ class Pack extends Base {
         $where['status']='2';
         $where['allot_time']=array('exp','IS  NOT  NULL');
         $list=M('pack_order')->where($where)->select();
-
         foreach($list  as  $k=>$v){
             $allot_time=$v['allot_time']+$recycling_time;
             //则为分配过期订单        则修改订单的状态
@@ -1116,9 +1115,15 @@ class Pack extends Base {
     public  function  is_clock(){
         $sending=I('sending',1);
         $debug=I('debug',1);
+        $order_sn=I('order_sn');
         $clock_info=M('Working_hours')->order("id  desc")->find();
         //下班时间
         if($clock_info['type']==0){
+            if($order_sn){
+                $order_info=M('pack_order')->where(array("order_sn"=>$order_sn))->find();
+                $this->give_seller($order_info,$sending,$debug);
+                exit;
+            }
             //自动回收
             $this->recycling_order(1);
             //自动分配
@@ -1162,15 +1167,13 @@ class Pack extends Base {
 
         $data_arr= Db::table($subQuery.'  d')->join('ruit_seller s','d.seller_id  =  s.seller_id','LEFT')
             ->where($car_info)
-//            ->order('if(i snull(s.plat_start),1,0),s.plat_start desc,s.seller_id DESC')
             ->group('s.seller_id')
-            //->limit($Page->firstRow,$Page->listRows)
             ->select();
+
 
         //立即分配
         if($sending){
             $allot_seller_id=",";
-//            $seller_str="";
             //如果存在满足条件的司导则修改订单
             if(count($data_arr)>0){
                 foreach($data_arr as $k=>$v){
@@ -1183,29 +1186,39 @@ class Pack extends Base {
                     //获取订单回收后重新分配的比率
                     $carset_pre=M('config')->where(array("name"=>"carset_order_money"))->find();
                     $carset_pre=$carset_pre['value']*$order_info['pre_num'];
-                    $per=$config_str['value']-$carset_pre;
-                    $data['commission_money']=$order_info['real_price']*$per/100;//佣金金额
-                    $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
+                    //再分配    佣金/付款
+                    $new_per=$order_info['commission_money']/$order_info['real_price'];
+                    //四舍五入
+                    $kai_per=round($new_per-$carset_pre/100,2);
+                    $data['commission_money']=$order_info['real_price']*$kai_per;//佣金金额
+                    $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额*/
                     //如果司导金额大于用户实付金额  则跳过
                     if($data['seller_money']>=$order_info['real_price']){
-                        return false;
+                        $data['commission_money']=$order_info['commission_money'];
+                        $data['seller_money']=$order_info['seller_money'];
                     }
                 }else{
-                    $data['commission_money']=$order_info['real_price']*$config_str['value']/100;//佣金金额
-                    $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
+                    //否则  继续派送订单
+                    if($order_info['is_callback']){
+                        $data['commission_money']=$order_info['commission_money'];//佣金金额
+                        $data['seller_money']=$order_info['seller_money'];//司导金额
+                    }else{
+                        $data['commission_money']=$order_info['real_price']*$config_str['value']/100;//佣金金额
+                        $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
+                    }
+
+
                 }
                 $data['allot_seller_id']=$allot_seller_id;
                 $data['allot_time']=time();//分配时间
                 $data['status']='2';//待接单
                 $data['is_callback']='0';
                 M('pack_order')->where(array("air_id"=>$order_info['air_id']))->save($data);
-//                return $seller_str;
             }
 
         }else{
             return $data_arr;
         }
-
     }
 
     //如果订单都拒绝
