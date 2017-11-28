@@ -401,7 +401,9 @@ class PackApply extends Model
 
         $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
         $config = M("config")->where("id = $config_id")->find();
-        $cost_compensation = $config['name']+'###'+htmlspecialchars_decode($config['value']);
+
+         $cost_compensation = $config['name'].'###'.htmlspecialchars_decode($config['value']);
+
         $line_body =
         [
               "seller_id" => $seller_id,

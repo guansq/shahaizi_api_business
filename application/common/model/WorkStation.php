@@ -536,7 +536,7 @@ class WorkStation extends Model
         $data = $this->where($whereCondition) -> find();
         if($data["seller_id"])
         {
-            if($data["seller_id"] != $seller_id)
+            if( $data["seller_id"] != $seller_id )
                 jsonData(4004,"您已经错过该订单！",[]);
         }
 
