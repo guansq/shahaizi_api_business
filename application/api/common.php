@@ -141,10 +141,18 @@ function  getCarInfoName2($brand_id = 0, $type_id = 0)
 function  getCarInfoNameBaseCarId($car_id)
 {
     $car_data = M("pack_car_info") -> where("car_id = $car_id") -> find();
-    $pack_info = M("pack_car_bar") -> where("id in ({$car_data['brand_id']}, {$car_data['car_type_id']})") -> column("pid,car_info");
-    $pack_info = array_values($pack_info);
-    $pack_info["brand_name"] = $pack_info[0];
-    $pack_info["car_type_name"] = $pack_info[1];
+    if($car_data)
+    {
+        $pack_info = M("pack_car_bar") -> where("id in ({$car_data['brand_id']}, {$car_data['car_type_id']})") -> column("pid,car_info");
+        $pack_info = array_values($pack_info);
+        $pack_info["brand_name"] = $pack_info[0];
+        $pack_info["car_type_name"] = $pack_info[1];
+    }else
+    {
+        $pack_info["brand_name"] = "";
+        $pack_info["car_type_name"] = "";
+    }
+
     return $pack_info;
 }
 
