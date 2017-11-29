@@ -497,7 +497,6 @@ class Pack extends Base {
     {
         $is_json = I("is_json");
         $line_data = model("common/PackApply") -> getLineDetail($this -> user_id, 1);
-        //print_r($line_data);die;
         if(!$is_json)
         {
             $this -> assign("line_data",$line_data);

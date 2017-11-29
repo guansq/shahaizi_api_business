@@ -605,13 +605,22 @@ class PackApply extends Model
         $pack_line = M("pack_line") -> order("line_id desc")
             -> where("seller_id = $seller_id AND line_id = $line_id AND is_del = 0")
             -> find();
+        $map = [
+            1 => '经济型',//1=>jinji,2=>shushi         2=>'shushixing'
+            2 => '舒适型',
+            3 => '豪华型',
+        ];
+        if(!empty($pack_line['seller_id']) && !empty($pack_line['car_id'])){
+            $car_info = getCarInfoNameBaseCarId($pack_line["car_id"]);
+            $pack_line["car_name"] = $car_info["brand_name"]." ".$car_info["car_type_name"];
+            $pack_line["seat_num"] = $car_info['seat_num'];
+            $pack_line["car_level"] = $car_info['car_level'];
+        }else{
+            $pack_line["car_level"] = $map[$pack_line["car_level"]];
+        }
 
-        $car_info = getCarInfoNameBaseCarId($pack_line["car_id"]);
-
-        $pack_line["car_name"] = $car_info["brand_name"]." ".$car_info["car_type_name"];
         $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
         $pack_line["line_price"] =  $pack_line["line_price"];
-
         if(!$isReturn)
             dataJson(1, "返回成功！", $pack_line);
         else

@@ -147,12 +147,21 @@ function  getCarInfoNameBaseCarId($car_id)
         $pack_info = array_values($pack_info);
         $pack_info["brand_name"] = $pack_info[0];
         $pack_info["car_type_name"] = $pack_info[1];
+        $car_info = M("pack_car_bar")->where("id = {$car_data['car_type_id']}")->find();
+        $pack_info['seat_num'] = $car_info['seat_num'];
+        $map = [
+            1 => '经济型',//1=>jinji,2=>shushi         2=>'shushixing'
+            2 => '舒适型',
+            3 => '豪华型',
+        ];
+        $pack_info['car_level'] = $map[$car_info['car_level']];
     }else
     {
         $pack_info["brand_name"] = "";
         $pack_info["car_type_name"] = "";
+        $pack_info['seat_num'] = "";
+        $pack_info['car_level'] = "";
     }
-
     return $pack_info;
 }
 

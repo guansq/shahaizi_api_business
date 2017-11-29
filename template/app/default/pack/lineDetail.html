@@ -33,6 +33,14 @@
         <p class="title" id="rd_title">{$line_data.line_title}</p>
         <p class="num" id="rd_num">￥{$line_data.line_price}/天</p>
     </div>
+
+    <div class="shz-rd-feature">
+        <eq name='line_data.is_admin' value='0'>
+        <p class="title">品牌：{$line_data.car_name}</p>
+        </eq>
+        <p class="title">车型：{$line_data.seat_num}人座 {$line_data.car_level}</p>
+    </div>
+
     <div class="shz-rd-feature">
         <p class="title">体验亮点</p>
         <p class="content" id="rd_content">{$line_data.line_highlights}</p>
