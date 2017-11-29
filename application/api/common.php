@@ -165,6 +165,20 @@ function  getCarInfoNameBaseCarId($car_id)
     return $pack_info;
 }
 
+/**
+ * 根据car_id获取car信息
+ * @param $car_id
+ */
+function getCarInfoBaseCarId($car_id)
+{
+    $car_bar = M("pack_car_info") -> where("car_id = $car_id") -> find();
+    if($car_bar)
+        $car_data = M("pack_car_bar") -> where("id = {$car_bar['car_type_id']}") -> find();
+    else
+        $car_data = [];
+    return $car_data;
+}
+
 function getUpStartTime ($is_current_time = 0)
 {
     $config = M("config") -> where("inc_type = 'overtime'") -> column("name, value");
@@ -333,9 +347,9 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $appkey = "ae18520eca229fc7e23c5f86";
         $secert = "7e5df030845bb7bcdfce058d";
         $where = "user_id = $user_id";
-        $users = M("users") -> field("push_id,mobile") -> where($where) -> find();
+        $users = M("users") -> field("push_id,mobile,countroy_code") -> where($where) -> find();
         if($users["mobile"] && $code != 6)
-            sendSMSbyApi($users["mobile"],$text);
+            sendSMSbyApi($users["countroy_code"],$users["mobile"],$text);
 
         $registration_id = $users["push_id"];
         sendPush($registration_id,$appkey,$secert,$text);
