@@ -401,7 +401,9 @@ class PackApply extends Model
 
         $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
         $config = M("config")->where("id = $config_id")->find();
-        $cost_compensation = $config['name']+'###'+htmlspecialchars_decode($config['value']);
+
+         $cost_compensation = $config['name'].'###'.htmlspecialchars_decode($config['value']);
+
         $line_body =
         [
               "seller_id" => $seller_id,
@@ -596,6 +598,7 @@ class PackApply extends Model
     public function getLineDetail ($seller_id, $isReturn = 0)
     {
         $line_id = I("line_id");
+
         if(!$line_id)
             dataJson(4004,"line_id不能为空！" ,[]);
 
@@ -604,6 +607,7 @@ class PackApply extends Model
             -> find();
 
         $car_info = getCarInfoNameBaseCarId($pack_line["car_id"]);
+
         $pack_line["car_name"] = $car_info["brand_name"]." ".$car_info["car_type_name"];
         $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
         $pack_line["line_price"] =  $pack_line["line_price"];
