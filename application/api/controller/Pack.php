@@ -1156,7 +1156,7 @@ class Pack extends Base {
         }
         //舒适度小于等于        req_car_level
         if($order_info['req_car_level']){
-            $car_info_1['b.car_level']=array("elt",$order_info['req_car_level']);
+            $car_info_1['b.car_level']=array("egt",$order_info['req_car_level']);
         }
         //  子查询
         $subQuery  =  db("pack_car_info")->alias('c')
