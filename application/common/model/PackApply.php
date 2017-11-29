@@ -404,6 +404,7 @@ class PackApply extends Model
 
          $cost_compensation = $config['name'].'###'.htmlspecialchars_decode($config['value']);
 
+        $car_id && $car_bar_info = getCarInfoBaseCarId($car_id);
         $line_body =
         [
               "seller_id" => $seller_id,
@@ -418,7 +419,9 @@ class PackApply extends Model
               "line_detail" => $line_detail,
               "is_state" => 0,//新发布都改为待审核
               "play_day" => $play_day,
-              "city" => $seller_data["gps_name"]
+              "city" => $seller_data["gps_name"],
+              "seat_num" => $car_bar_info["seat_num"],
+              "car_level" => $car_bar_info["car_level"],
         ];
 
         if(!$line_id)
