@@ -632,9 +632,6 @@ class WorkStation extends Model
             }
         }
 
-
-
-
         $data["start_time"] = date("Y-m-d",$data["start_time"]);
         $data["end_time"] = date("Y-m-d",$data["end_time"]);
         $data["use_car_num"] = $this->useCarNum($data["use_car_adult"], $data["use_car_children"]);

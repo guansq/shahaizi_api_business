@@ -324,7 +324,10 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $appkey = "ae18520eca229fc7e23c5f86";
         $secert = "7e5df030845bb7bcdfce058d";
         $where = "user_id = $user_id";
-        $users = M("users") -> field("push_id") -> where($where) -> find();
+        $users = M("users") -> field("push_id,mobile") -> where($where) -> find();
+        if($users["mobile"] && $code != 6)
+            sendSMSbyApi($users["mobile"],$text);
+
         $registration_id = $users["push_id"];
         sendPush($registration_id,$appkey,$secert,$text);
     }elseif($user_type == 2)
