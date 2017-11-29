@@ -575,25 +575,64 @@ class WorkStation extends Model
             }
         }
         $data && $data["is_admin"] = $data["line_id"] ? $this->getAdminBaseLineId($data["line_id"]) : 1;
-        $cost_compensation = array_filter(explode("###",$data["cost_compensation"]));
+//        $cost_compensation = array_filter(explode("###",$data["cost_compensation"]));
 
-        if($cost_compensation)
-        {
-            if($cost_compensation[0] == "cover_img_k")
-                $data["cost_compensation_txt"] = "宽松";
-            elseif($cost_compensation[0] == "cover_img_z")
-                $data["cost_compensation_txt"] = "中等";
-            elseif($cost_compensation[0] == "cover_img_y")
-                $data["cost_compensation_txt"] = "严格";
-            elseif($cost_compensation[0] == "cover_img_n")
-                $data["cost_compensation_txt"] = "不退订";
+//        if($cost_compensation)
+//        {
+//            if($cost_compensation[0] == "cover_img_k")
+//                $data["cost_compensation_txt"] = "宽松";
+//            elseif($cost_compensation[0] == "cover_img_z")
+//                $data["cost_compensation_txt"] = "中等";
+//            elseif($cost_compensation[0] == "cover_img_y")
+//                $data["cost_compensation_txt"] = "严格";
+//            elseif($cost_compensation[0] == "cover_img_n")
+//                $data["cost_compensation_txt"] = "不退订";
+//
+//            $data["cost_compensation"] = $cost_compensation[1];
+//        }else
+//        {
+//            $data["cost_compensation_txt"] = "宽松";
+//            $data["cost_compensation"] = "";
+//        }
 
-            $data["cost_compensation"] = $cost_compensation[1];
-        }else
-        {
-            $data["cost_compensation_txt"] = "宽松";
-            $data["cost_compensation"] = "";
+
+        $data['cost_statement'] = '';//费用说明
+        $data['cost_compensation'] = '';//补偿改退
+        $data['cost_compensationLevel'] = '';//补偿改退的等级
+        $map = [
+            'cover_img_k' => '宽松',
+            'cover_img_z' => '中等',
+            'cover_img_y' => '严格',
+            'cover_img_n' => '不退订',
+        ];
+        if(in_array($data['type'],[1,2,6,7]) ){//1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游7快捷订单
+            if($data['car_product_id'])
+            {//车产品ID
+                $car_product = M('pack_car_product')->where("id={$data['car_product_id']}")->find();
+                $data['cost_statement'] = $car_product['cost_statement'];
+                $data['cost_compensation'] = $map[explode('###',$car_product['cost_compensation'])[0]];
+                $data['cost_compensationLevel'] = htmlspecialchars_decode(explode('###',$car_product['cost_compensation'])[1]);
+            }
         }
+        if(in_array($data['type'],[4,5]) ){//1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游7快捷订单
+            //if($info['car_product_id']){}
+            //$car_product = M('pack_car_product')->where("id={$info['car_product_id']}")->find();
+            $data['cost_statement'] = $data['cost_statement'];
+            $data['cost_compensationLevel'] = $map[explode('###',$data['cost_compensation'])[0]];
+            $data['cost_compensation'] = htmlspecialchars_decode(explode('###',$data['cost_compensation'])[1]);
+
+        }
+        if($data['type'] == 3){//线路单独进行取出退订政策和费用说明
+            if($data['line_id']){//线路ID
+                $car_line = M('pack_line')->where("line_id={$data['line_id']}")->find();
+                $data['cost_statement'] = $car_line['cost_statement'];
+                $cost_compensation = explode('###',$car_line['cost_compensation']);
+                $data['cost_compensationLevel'] = $map[$cost_compensation[0]];
+                $data['cost_compensation'] = htmlspecialchars_decode($cost_compensation[1]);
+            }
+        }
+
+
 
 
         $data["start_time"] = date("Y-m-d",$data["start_time"]);

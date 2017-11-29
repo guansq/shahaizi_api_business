@@ -294,6 +294,15 @@ function setAccountLog ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
     M("driver_withdrawals") -> add($data);
 }
 
+/*
+ * 发送短信
+ */
+function sendSMSbyApi($phone, $content){
+    $msgService = new \service\MsgService();
+    $str = '【傻孩子商家APP】'.$content;
+    $result = $msgService->sendSms($phone, $str);
+    return $result;
+}
 
 /**
  * 发送极光消息
@@ -342,8 +351,6 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         }
 
     }
-
-
 }
 
 function sendPush ($registration_id,$appkey,$secert,$text)
