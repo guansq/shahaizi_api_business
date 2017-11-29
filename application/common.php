@@ -495,6 +495,15 @@ function getArticleCatGrandson2($cat_id)
     }
 }
 
+/*
+ * 发送短信
+ */
+function sendSMSbyApi($phone, $content){
+    $msgService = new MsgService();
+    $str = '【傻孩子APP】'.$content;
+    $result = $msgService->sendSms($phone, $str);
+    return $result;
+}
 /**
  * 获取商品库存, 只有上架的商品才返回库存数量
  * @param type $goods_id 商品id
