@@ -142,7 +142,7 @@ class Users extends Model
 
         $seller_data = M("seller") -> field("user_money") -> where("seller_id =" . $seller_id) -> find();
 
-        setAccountLog($seller_id,$money,$seller_data["user_money"],"司导提现",0);
+        setAccountLog2($seller_id,$money * -1,$seller_data["user_money"] - $money,"司导提现",0);
 
         M("seller") -> where("seller_id =" . $seller_id) -> setDec("user_money", $money);
 
@@ -174,7 +174,7 @@ class Users extends Model
         $filterTime=I("filter",0);
         $where[] = "seller_id = ".$seller_id;
 
-        $currentDate = strtotime(date("Y-m-d",time()));
+        $currentDate = strtotime(date("Y-m-d",strtotime("+1 day")));
         if($filterTime == 1)//今天
         {
             $where[] = "change_time >= '".$currentDate."'";
@@ -190,30 +190,30 @@ class Users extends Model
         }elseif($filterTime == 3)
         {
             //本月
-            $currentMoth = date("Y-m-01");
+            $currentMoth = strtotime(date("Y-m-01"));
             $where[] = "change_time >= '".$currentMoth."' AND change_time <= '".$currentDate."'";
         }elseif($filterTime == 4)
         {
-            $thirtyDate = date("Y-m-d",strtotime("-30 day"));
+            $thirtyDate = strtotime(date("Y-m-d",strtotime("-30 day")));
             $where[] = "change_time >= '".$thirtyDate."' AND change_time <= '".$currentDate."'";
         }
         elseif($filterTime == 5)
         {
-            $sixtyDate = date("Y-m-d",strtotime("-60 day"));
+            $sixtyDate = strtotime(date("Y-m-d",strtotime("-60 day")));
             $where[] = "change_time >= '".$sixtyDate."' AND change_time <= '".$currentDate."'";
         }
         elseif($filterTime == 6)
         {
-            $nintyDate = date("Y-m-d",strtotime("-90 day"));
+            $nintyDate = strtotime(date("Y-m-d",strtotime("-90 day")));
             $where[] = "change_time >= '".$nintyDate."' AND change_time <= '".$currentDate."'";
         }elseif($filterTime == 7)
         {
-            $oneYearDate = date("Y-m-d",strtotime("-365 day"));
+            $oneYearDate = strtotime(date("Y-m-d",strtotime("-365 day")));
             $where[] = "change_time >= '".$oneYearDate."' AND change_time <= '".$currentDate."'";
         }
         elseif($filterTime == 8)
         {
-            $twoYearDate = date("Y-m-d",strtotime("-730 day"));
+            $twoYearDate = strtotime(date("Y-m-d",strtotime("-730 day")));
             $where[] = "change_time >= '".$twoYearDate."' AND change_time <= '".$currentDate."'";
         }
 
@@ -221,7 +221,7 @@ class Users extends Model
 
         foreach($result as $key => $val)
         {
-            $val["seller_money"]= floatval($val["seller_money"]) >= 0 ? "+".$val["seller_money"] : $val["seller_money"];
+            $val["add_money"]= floatval($val["add_money"]) >= 0 ? "+".$val["add_money"] : $val["add_money"];
             $val["change_time"] = date("Y-m-d", $val["change_time"]);
             $final[$key] = $val;
         }

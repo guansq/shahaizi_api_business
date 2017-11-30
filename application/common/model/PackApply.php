@@ -237,6 +237,7 @@ class PackApply extends Model
             ->field("i.*,b.seat_num,b.car_level")
             ->join("ruit_pack_car_bar b",'i.car_type_id = b.id','LEFT')
             -> where("i.seller_id = $user_id") -> select();
+
         foreach($all_car_info as $key => $val)
         {
             $car_info = getCarInfoName2($val["brand_id"], $val["car_type_id"]);
@@ -247,6 +248,7 @@ class PackApply extends Model
             $val["car_img"] = array_filter($car_img) ? $car_img : [];
             $result[] = $val;
         }
+
         dataJson(1,"返回成功",$result);
     }
 
@@ -313,6 +315,10 @@ class PackApply extends Model
         $data["seller_pointlat"] = I("seller_pointlat");
         $data["seller_pointlng"] = I("seller_pointlng");
 //        $order_data = $this->judgeComment($air_id);
+
+        $pack_seller = M("seller") -> where("seller_id = $seller_id") -> find();
+        $pack_order = M("pack_order") -> where("seller_id = $seller_id AND air_id = $air_id") -> find();
+        setAccountLog2($seller_id,$pack_order["seller_money"],$pack_seller["user_money"] + $pack_order["seller_money"],"订单收益");
 
         $is_confirm = $this -> addUserRecharge($air_id);
 
@@ -404,7 +410,7 @@ class PackApply extends Model
         $seller_data = M("seller") -> field("gps_name")-> where("seller_id = $seller_id") -> find();
         $config = M("config")->where("id = $config_id")->find();
 
-         $cost_compensation = $config['name'].'###'.htmlspecialchars_decode($config['value']);
+        $cost_compensation = $config['name'].'###'.htmlspecialchars_decode($config['value']);
 
         $car_id && $car_bar_info = getCarInfoBaseCarId($car_id);
         $line_body =
@@ -431,6 +437,7 @@ class PackApply extends Model
             $line_body["create_at"] = time();
             if (M("pack_line") -> add($line_body))
                 dataJson(1,"发布成功！",[]);
+
         }else
         {
             $line_body["update_at"] = time();
