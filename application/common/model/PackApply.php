@@ -509,8 +509,9 @@ class PackApply extends Model
             if($pack_order["seller_id"])
             {
                 $employee = getPlatformCharge(1);
-                $real_price = floatval($pack_order["real_price"]);
-                $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
+                $user_money = floatval($pack_order["seller_money"]);
+
+//                $user_money = $real_price + floatval($pack_order["add_recharge"]) - ($real_price * $employee/100);
                 $seller_money = M("seller") -> where("seller_id=".$pack_order["seller_id"]) -> find();
                 setAccountLog($pack_order["seller_id"],$user_money,round(floatval($seller_money["user_money"]) + $user_money ,2),"司导提现",$air_id);
                 M("seller") -> where("seller_id = {$pack_order["seller_id"]}") -> setInc('user_money',$user_money);//["user_money" => $user_money]
