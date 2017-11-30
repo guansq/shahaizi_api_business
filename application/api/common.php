@@ -317,6 +317,20 @@ function setAccountLog ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
     M("driver_withdrawals") -> add($data);
 }
 
+function setAccountLog2 ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
+{
+    $data =
+        [
+            "seller_id" => $seller_id,
+            "add_money" => $add_money,
+            "seller_money" => $seller_money,
+            "change_time" => time(),
+            "desc" => $desc,
+            "order_id" => $order_id
+        ];
+    M("account_log_seller") -> add($data);
+}
+
 /*
  * 发送短信
  */
