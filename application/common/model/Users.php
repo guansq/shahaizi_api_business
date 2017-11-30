@@ -221,7 +221,7 @@ class Users extends Model
 
         foreach($result as $key => $val)
         {
-            $val["seller_money"]= floatval($val["add_money"]) >= 0 ? "+".$val["add_money"] : $val["add_money"];
+            $val["add_money"]= floatval($val["add_money"]) >= 0 ? "+".$val["add_money"] : $val["add_money"];
             $val["change_time"] = date("Y-m-d", $val["change_time"]);
             $final[$key] = $val;
         }
