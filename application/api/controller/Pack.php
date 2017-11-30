@@ -337,6 +337,7 @@ class Pack extends Base {
      */
     public function confirmOrder()
     {
+
         model("common/PackApply") -> confirmOrder($this -> user_id);
     }
 

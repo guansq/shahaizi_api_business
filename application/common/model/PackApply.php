@@ -310,6 +310,8 @@ class PackApply extends Model
 
         $data["end_time"] = $time;
         $data["seller_confirm"] = 1;
+        $data["seller_pointlat"] = I("seller_pointlat");
+        $data["seller_pointlng"] = I("seller_pointlng");
 //        $order_data = $this->judgeComment($air_id);
 
         $is_confirm = $this -> addUserRecharge($air_id);
