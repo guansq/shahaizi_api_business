@@ -604,9 +604,9 @@ class WorkStation extends Model
 //        }
 
 
-        $data['cost_statement'] = '';//费用说明
-        $data['cost_compensation'] = '';//补偿改退
-        $data['cost_compensationLevel'] = '';//补偿改退的等级
+        //$data['cost_statement'] = '';//费用说明
+        //$data['cost_compensation'] = '';//补偿改退
+        //$data['cost_compensationLevel'] = '';//补偿改退的等级
         $map = [
             'cover_img_k' => '宽松',
             'cover_img_z' => '中等',
@@ -623,13 +623,11 @@ class WorkStation extends Model
             }
         }
         if(in_array($data['type'],[4,5]) ){//1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游7快捷订单
-            //if($info['car_product_id']){}
-            //$car_product = M('pack_car_product')->where("id={$info['car_product_id']}")->find();
             $data['cost_statement'] = $data['cost_statement'];
             $data['cost_compensationLevel'] = $map[explode('###',$data['cost_compensation'])[0]];
             $data['cost_compensation'] = htmlspecialchars_decode(explode('###',$data['cost_compensation'])[1]);
-
         }
+        //echo $data['cost_compensation'];die;
         if($data['type'] == 3){//线路单独进行取出退订政策和费用说明
             if($data['line_id']){//线路ID
                 $car_line = M('pack_line')->where("line_id={$data['line_id']}")->find();
