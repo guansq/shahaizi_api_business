@@ -138,8 +138,9 @@ function postCode() {
         data: postCodeParams
     }).done(function (res) {
         if (res.status == 1) {
+            $(".bomb_box").show();
             // toRegister();
-            location.href = url_send + "/index.php/api/user/reg_success"
+            // location.href = url_send + "/index.php/api/user/reg_success"
             return false;
         }else{
             layer.msg("验证码错误",{"icon":2,time:1000});
