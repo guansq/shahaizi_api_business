@@ -123,8 +123,8 @@ input, button {
 }
 .shz-rd-feature .content{
     margin-top: 12px;
-    line-height: 22px;
-    font-size: 1.5rem;
+    line-height: 23px;
+    font-size: 14px;
     color: #757575;
 }
 .shz-rd-title{
@@ -308,14 +308,334 @@ input, button {
     line-height: 22px;
     color: #A1A1A1;
 }
+/*修改++++++++++++++++++++++++++++++++++++++++*/
+.synopsis{
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    padding: 0 20px;
+    background: #ffffff;
+}
+.synopsis .text_ell{
+    float: left;
+    width: 85%;
+    line-height: 28px;
+    overflow: hidden;/*内容超出后隐藏*/
+    text-overflow: ellipsis;/*超出部分以省略号显示*/
+    white-space: nowrap;/*文本不进行换行*/
+}
+.synopsis .good_num{
+    float: left;
+    width: 15%;
+    text-align: right;
+    line-height: 28px;
+    font-size: 12px;
+}
+ .synopsis h3{
+    font-weight: normal;
+    font-size: 16px;
+    padding: 15px 0;
+}
+ .synopsis .pri{
+    padding: 0 0 10px 0;
+}
+.synopsis .xing_b{
+    float: right;
+    display: inline-block;
+}
+.synopsis .xing_b img{
+    width: 80px;
+    vertical-align: text-bottom;
+}
+.pl_15{
+    padding-left: 15px;
+    color: #333;
+    font-size: 14px;
+}
+.synopsis .syn_title{
+    display: inline-block;
+    width: 70%;
+    line-height: 23px;
+    font-size: 16px;
+}
 
+.synopsis .level{
+    line-height: 25px;
+}
+.synopsis .level img{
+    width: 90%;
+    padding-left: 10%;
+}
+.le_d{
+    float: left;
+    width: 70%;
+}
+.left_d .title-p{
+    overflow: hidden;
+    word-break: break-all;
+    line-height: 21px;
+}
+.rig_d{
+    float: right;
+    width: 30%;
+    padding: 10px 0;
+}
+.pb_10{
+    padding-bottom: 10px;
+}
+.pri {
+    font-size: 14px;
+}
+.pri .w30b{
+    display: inline-block;
+    width: 30%;
+}
+.col_ff7{
+    color: #FF7F19;
+}
+.price{
+    font-size: 16px;
+    font-weight: normal;
+}
 
+/*司导信息*/
+.cir_con{
+    padding: 18px 20px 20px;
+    margin-top: 10px;
+    background: #ffffff;
+    overflow: hidden;
+}
+.cir_con h1{
+    font-size: 17px;
+    font-weight: normal;
+    padding: 0 0 18px 0;
+}
 
+.driver_info .head_img{
+    width: 65px;
+    height: 65px;
+    vertical-align: middle;
+}
+.driver_info .dri_xx{
+    display: inline-block;
+    width: 75%;
+    float: right;
+    line-height: 23px;
+    padding: 8px 0;
+}
+.driver_info .dri_xx .dis_block{
+    display: block;
+}
 
+.dri_xx span{
+    padding: 0 5px 5px 0;
+}
+.dri_xx span:last-child{
+    padding: 0;
+}
+.dri_xx .drive_name{
+    color: #333333;
+    font-size: 15px;
+}
+.dri_xx .drive_id,.dri_xx .drive_addre{
+    color: #666666;
+    font-size: 13px;
+}
+.dri_xx .drive_id i,.dri_xx .drive_name i{
+    font-style: normal;
+    font-size: 13px;
+    color: #666666;
+}
+.dri_xx .drive_name i{
+    padding-right: 5px;
+}
+.dri_xx .drive_addre i{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: url("../image/icon_location@2x.png") no-repeat;
+    background-size: 100%;
+    vertical-align: sub;
+}
 
+.box2 li{
+    line-height: 30px;
+}
+.box2 .s-head,.box4 .s-head{
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+    font-size: 13px;
+    color: #666666;
+}
+.box2 .s-con{
+    font-size: 14px;
+    color: #222;
+}
 
+/*收到的评价*/
+.appraise h1 span,.dr_assess h1 span{
+    font-size: 15px;
+    color: #666666;
+    float: right;
+    padding-top: 2px;
+}
+.mt_10{
+    margin-top: 10px;
+}
+.dr_repeat{
+    padding: 20px 20px;
+    background: #ffffff;
+}
+.dr_repeat h1{
+    font-weight: normal;
+    font-size: 18px;
+    padding-bottom: 15px;
+}
+.line>h1{
+    padding-bottom: 0;
+}
+.line .days_num{
+    padding: 30px 0 5px;
+    text-align: center;
+}
+.line_title{
+    padding-top: 15px;
+    color: #666;
+    font-size: 15px;
+}
 
+.route_bomb{
+    background: #fff;
+}
+.route_bomb ul{
+    border: none;
+    padding-bottom: 0;
+}
+.route_bomb li{
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 20px;
+    line-height: 40px;
+}
+.route_bomb li:nth-last-of-type(1){
+    border: none;
+}
+.route_bomb li .s-con{
+    color: #2CD052;
+}
+.route_bomb .s-con i{
+    background: url(../image/arrow-right2.png) no-repeat;
+    background-size: 100%;
+    height: 14px;
+}
+.mt_10{
+    margin-top: 10px;
+}
 
+.box2 li{
+    line-height: 30px;
+}
+.box2 .s-head,.box4 .s-head{
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+    font-size: 13px;
+    color: #666666;
+}
+.box2 .s-con{
+    font-size: 14px;
+    color: #222;
+}
+.box4 li{
+    line-height: 35px;
+}
+.box4 ul{
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8e8e8;
+}
+.box4 .s-con{
+    float: right;
+    font-size: 14px;
+    color: #222;
+}
+.box4 .s-con i{
+    display: inline-block;
+    width: 8px;
+    height: 12px;
+    background: url("../image/arrow-right2.png") no-repeat;
+    background-size: 100%;
+    vertical-align: middle;
+    margin-top: -2px;
+    margin-left: 2px;
+}
+
+.mb_10{
+    margin-bottom: 10px;
+}
+.box5 p{
+    font-size: 14px;
+    color: #666;
+}
+
+.bomb_box{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    z-index: 100000;
+    font-size: 15px;
+}
+.bomb_con,.bomb_con2{
+    max-height: 90%;
+    overflow-y: auto;
+    overflow-x: auto;
+    display: none;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #ffffff;
+    width: 85%;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.title-h1{
+    font-size: 17px;
+    color: #333;
+    line-height: 30px;
+    text-align: center;
+}
+.title-h1 i{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: url("../image/icon_del@2x.png") no-repeat;
+    background-size: 100%;
+    float: right;
+    margin-top: 3px;
+}
+.bomb-div{
+    overflow: hidden;
+}
+.bomb-div h2{
+    font-size: 16px;
+    color: #333;
+    line-height: 28px;
+}
+
+.two-con-div{
+    padding: 10px 0;
+}
+.two-con-div p{
+    font-size: 14px;
+    color: #444;
+    line-height: 24px;
+}
 
 
 
