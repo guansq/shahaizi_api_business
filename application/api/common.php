@@ -336,7 +336,7 @@ function setAccountLog2 ($seller_id,$add_money,$seller_money,$desc,$order_id=0)
  */
 function sendSMSbyApi($phone, $content){
     $msgService = new \service\MsgService();
-    $str = '【傻孩子商家APP】'.$content;
+    $str = '【傻孩子商家APP】'.$content["content"];
     $result = $msgService->sendSms($phone, $str);
     return $result;
 }
@@ -352,7 +352,6 @@ function sendSMSbyApi($phone, $content){
 function sendJGMsg ($code,$user_id = 0,$user_type = 1)
 {
     require_once VENDOR_PATH."jpush/jpush/autoload.php";
-
     if(!$user_id)
         $user_id = 0;
     $text = pushMsgText($code);
@@ -363,8 +362,7 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $where = "user_id = $user_id";
         $users = M("users") -> field("push_id,mobile,countroy_code") -> where($where) -> find();
         if($users["mobile"] && $code != 6)
-            sendSMSbyApi($users["countroy_code"],$users["mobile"],$text);
-
+            sendSMSbyApi($users["countroy_code"].$users["mobile"],$text);
         $registration_id = $users["push_id"];
         sendPush($registration_id,$appkey,$secert,$text);
     }elseif($user_type == 2)
@@ -372,7 +370,9 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $appkey = "17f7ed4f812eeb340553963d";
         $secert = "7f49e6a381ee00c4b3a7507a";
         $where = "seller_id = $user_id";
-        $users = M("seller") -> field("device_no") -> where($where) -> find();
+        $users = M("seller") -> field("device_no,mobile,countroy_code") -> where($where) -> find();
+        if($users["mobile"] && $code != 6)
+            sendSMSbyApi($users["countroy_code"].$users["mobile"],$text);
         $registration_id = $users["device_no"];
         sendPush($registration_id,$appkey,$secert,$text);
     }elseif($user_type == 3)
@@ -385,12 +385,14 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         {
             foreach ( $user_id_data as $key => $val )
             {
-                $users = M("seller") -> field("device_no") -> where("seller_id = $val") -> find();
+                $users = M("seller") -> field("device_no,countroy_code,mobile") -> where("seller_id = $val") -> find();
                 sendPush($users["device_no"],$appkey,$secert,$text);
+                if($users["mobile"] && $code != 6)
+                    sendSMSbyApi($users["countroy_code"].$users["mobile"],$text);
             }
         }
-
     }
+
 }
 
 function sendPush ($registration_id,$appkey,$secert,$text)
@@ -413,7 +415,6 @@ function sendPush ($registration_id,$appkey,$secert,$text)
 //            ->setNotificationAlert('');
         try {
             $response = $push_payload->send();
-
 //            print_r($response);
         } catch (\JPush\Exceptions\APIConnectionException $e) {
             // try something here
