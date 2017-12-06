@@ -453,8 +453,9 @@ input, button {
     display: inline-block;
     width: 18px;
     height: 18px;
-    background: url("../image/icon_location@2x.png") no-repeat;
+    background: url(../image/location.jpg) no-repeat;
     background-size: 100%;
+    background-position: 40%;
     vertical-align: sub;
 }
 
@@ -524,7 +525,7 @@ input, button {
     color: #2CD052;
 }
 .route_bomb .s-con i{
-    background: url(../image/arrow-right2.png) no-repeat;
+    background: url(../image/icon_enter@2x.png) no-repeat;
     background-size: 100%;
     height: 14px;
 }
@@ -562,7 +563,7 @@ input, button {
     display: inline-block;
     width: 8px;
     height: 12px;
-    background: url("../image/arrow-right2.png") no-repeat;
+    background: url("../image/icon_enter@2x.png") no-repeat;
     background-size: 100%;
     vertical-align: middle;
     margin-top: -2px;
@@ -614,8 +615,8 @@ input, button {
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url("../image/icon_del@2x.png") no-repeat;
-    background-size: 100%;
+    background: url("../image/close.png") no-repeat;
+    background-size: 65%;
     float: right;
     margin-top: 3px;
 }
