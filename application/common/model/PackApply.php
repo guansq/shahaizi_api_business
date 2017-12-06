@@ -623,14 +623,30 @@ class PackApply extends Model
             2 => '舒适型',
             3 => '豪华型',
         ];
+
+
         if(!empty($pack_line['seller_id']) && !empty($pack_line['car_id'])){
             $car_info = getCarInfoNameBaseCarId($pack_line["car_id"]);
-            $pack_line["car_name"] = $car_info["brand_name"]." ".$car_info["car_type_name"];
-            $pack_line["seat_num"] = $car_info['seat_num'];
-            $pack_line["car_level"] = $car_info['car_level'];
+            $pack_line["brand_name"] = $car_info["brand_name"];
+            $pack_line["car_type_name"] = $car_info["car_type_name"];
+            $pack_line["car_level"] = $car_info['seat_num'].'人座'.$map[$car_info['car_level']];
         }else{
             $pack_line["car_level"] = $map[$pack_line["car_level"]];
         }
+        $map = [
+            'cover_img_k' => '宽松',
+            'cover_img_z' => '中等',
+            'cover_img_y' => '严格',
+            'cover_img_n' => '不退订',
+        ];
+        $pack_line['costStatement'] = $pack_line['cost_statement'];
+        $pack_line['costCompensationLevel'] = $map[explode('###',$pack_line['cost_compensation'])[0]];
+        $pack_line['costCompensation'] = explode('###',$pack_line['cost_compensation'])[1];
+        $where =[
+            'line_id'=>$line_id,
+            'deleted'=>0
+        ];
+        $pack_line['score'] = intval(M('order_comment')->where($where)->avg('pack_order_score'));
 
         $pack_line["line_detail"] =json_decode(htmlspecialchars_decode($pack_line["line_detail"]), true);
         $pack_line["line_price"] =  $pack_line["line_price"];

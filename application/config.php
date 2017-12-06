@@ -412,4 +412,7 @@ return [
 	'rate_list' => array(0 => 0, 3 => 3, 6 => 6, 7 => 7, 11 => 11, 13 => 13, 17 => 17),
     'buy_year'=>2015,
     'buy_version'=>0,
+
+    'APP_DEFAULT_STAR'=>5, // 系统默认星级
+    'APP_DEFAULT_USER_AVATAR'=>'http://img.shahaizi.cn/user_avatar.png', // 系统默认头像
 ];

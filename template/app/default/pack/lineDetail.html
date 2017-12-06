@@ -28,7 +28,7 @@
 </head>
 <body class="shz-back">
 <div class="shz-bottom">
-    <img class="shz-rd-pic" id="shz_rd_pic" src="{$line_data.cover_img}" alt="">
+    <img class="shz-rd-pic" id="shz_rd_pic" src="{$line.cover_img}" alt="">
 
     <!--<div class="shz-rd-top">-->
         <!--<p class="title" id="rd_title">{$line_data.line_title}</p>-->
@@ -38,9 +38,9 @@
     <div class="synopsis">
         <div class="le_d">
             <h3>
-                <p class="pb_10 title-p">{$line_data.line_title}</p>
+                <p class="pb_10 title-p">{$line.line_title}</p>
                 <div class="">
-                    <span class="col_ff7"><b class="price">￥{$line_data.line_price}</b></span>
+                    <span class="col_ff7"><b class="price">￥{$line.line_price}</b></span>
                 </div>
             </h3>
         </div>
@@ -49,12 +49,12 @@
           <!--<img src="/application/web/view/static/image/star_{$driver.plat_start|default=4}@2x.png" alt="">-->
         </span>
             <span class="level">
-            <img src="../image/arrow-right2.png" alt="">
+            <img src="/public/pack/image/heart_{$line.score|default=5}@2x.png" alt="">
         </span>
         </div>
     </div>
 
-    <div class="cir_con driver_info">
+    <!--<div class="cir_con driver_info">
         <h1>司导信息</h1>
         <div>
             <img class="head_img" src="{$driver.head_pic|default='http://img.shahaizi.cn/user_avatar.png'}" alt="">
@@ -64,7 +64,7 @@
                 <span class="dis_block drive_addre"><i></i>的科技股份古老宽度吗</span>
             </p>
         </div>
-    </div>
+    </div>-->
 
 
     <!--<div class="shz-rd-feature">-->
@@ -76,21 +76,16 @@
     <div class="cir_con box2">
         <h1>车辆信息</h1>
         <ul>
-            <li><span class="s-head">品牌</span><span class="s-con">{$line_data.car_name}</span></li>
-            <li><span class="s-head">车型</span><span class="s-con">{$line_data.seat_num}</span></li>
-            <li><span class="s-head">座位</span><span class="s-con">{$line_data.seat_num}人座{$line_data.car_level}</span></li>
-        </ul>
-    </div>
-    <div class="cir_con box2">
-        <h1>车辆信息</h1>
-        <ul>
-            <li><span class="s-head">车型</span><span class="s-con">{$line_data.seat_num}人座{$line_data.car_level}</span></li>
+            <li><span class="s-head">品牌</span><span class="s-con">{$line.brand_name}</span></li>
+            <li><span class="s-head">车型</span><span class="s-con">{$line.car_type_name}</span></li>
+            <li><span class="s-head">座位</span><span class="s-con">{$line.car_level}</span></li>
         </ul>
     </div>
 
+
     <div class="shz-rd-feature">
         <p class="title">体验亮点</p>
-        <p class="content" id="rd_content">{$line_data.line_highlights}</p>
+        <p class="content" id="rd_content">{$line.line_highlights}</p>
     </div>
     <div id="appraise" class="dr_repeat mt_10 dr_assess">
         <h1>
@@ -198,7 +193,7 @@
     <div class="route_bomb mt_10 box4 mb_10">
         <ul>
             <li><span class="s-head">费用说明</span><span id="fy_click" class="s-con">查看 <i></i></span></li>
-            <li><span class="s-head">退订政策</span><span id="zc_click" class="s-con">严格{$line.costCompensationLevel} <i></i></span></li>
+            <li><span class="s-head">退订政策</span><span id="zc_click" class="s-con">{$line.costCompensationLevel} <i></i></span></li>
         </ul>
     </div>
     <div class="cir_con box5">
@@ -215,7 +210,7 @@
             </h1>
             <div class="bomb-div">
                 <div class="two-con-div">
-                    {$line.costCompensation}豁达大度多多过所军过过过过
+                    {$line.costCompensation}
                 </div>
             </div>
         </div>
