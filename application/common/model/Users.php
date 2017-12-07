@@ -217,7 +217,7 @@ class Users extends Model
             $where[] = "change_time >= '".$twoYearDate."' AND change_time <= '".$currentDate."'";
         }
 
-        $result = M("account_log_seller") ->where(implode(" AND ",$where)) -> paginate($pagesize ? $pagesize : 10);
+        $result = M("account_log_seller") ->where(implode(" AND ",$where)) -> order("change_time desc") -> paginate($pagesize ? $pagesize : 10);
 
         foreach($result as $key => $val)
         {
