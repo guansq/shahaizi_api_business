@@ -370,9 +370,9 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         $appkey = "17f7ed4f812eeb340553963d";
         $secert = "7f49e6a381ee00c4b3a7507a";
         $where = "seller_id = $user_id";
-        $users = M("seller") -> field("device_no,mobile,countroy_code") -> where($where) -> find();
+        $users = M("seller") -> field("device_no,mobile,country_code") -> where($where) -> find();
         if($users["mobile"] && $code != 6)
-            sendSMSbyApi($users["countroy_code"].$users["mobile"],$text);
+            sendSMSbyApi($users["country_code"].$users["mobile"],$text);
         $registration_id = $users["device_no"];
         sendPush($registration_id,$appkey,$secert,$text);
     }elseif($user_type == 3)
@@ -385,10 +385,10 @@ function sendJGMsg ($code,$user_id = 0,$user_type = 1)
         {
             foreach ( $user_id_data as $key => $val )
             {
-                $users = M("seller") -> field("device_no,countroy_code,mobile") -> where("seller_id = $val") -> find();
+                $users = M("seller") -> field("device_no,country_code,mobile") -> where("seller_id = $val") -> find();
                 sendPush($users["device_no"],$appkey,$secert,$text);
                 if($users["mobile"] && $code != 6)
-                    sendSMSbyApi($users["countroy_code"].$users["mobile"],$text);
+                    sendSMSbyApi($users["country_code"].$users["mobile"],$text);
             }
         }
     }

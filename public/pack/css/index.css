@@ -35,9 +35,9 @@ input, button {
 .shz-back{
     background-color: #F0F0F0;
 }
-.shz-bottom{
-    margin-bottom: 50px;
-}
+/*.shz-bottom{*/
+    /*margin-bottom: 50px;*/
+/*}*/
 /*===================标题栏=======================*/
 .shz-header {
     line-height: 45px;
@@ -369,6 +369,7 @@ input, button {
 .le_d{
     float: left;
     width: 70%;
+    line-height: 21px;
 }
 .left_d .title-p{
     overflow: hidden;
@@ -562,7 +563,7 @@ input, button {
 .box4 .s-con i{
     display: inline-block;
     width: 8px;
-    height: 12px;
+    height: 14px;
     background: url("../image/icon_enter@2x.png") no-repeat;
     background-size: 100%;
     vertical-align: middle;
@@ -637,10 +638,50 @@ input, button {
     color: #444;
     line-height: 24px;
 }
+.days_num .wire{
+    display: inline-block;
+    width: 20%;
+    height: 1px;
+    background: #e8e8e8;
+    vertical-align: middle;
+}
+.days_num i{
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    background: url("../image/icon_shape.png") no-repeat;
+    background-size: 100%;
+    vertical-align: bottom;
+    margin: 0 1%;
+}
+.days_num .diji{
+    color: #000000;
+    font-size: 17px;
+    padding: 0 2.5%;
+}
+.days_con {
+    border-bottom: 1px solid #e8e8e8;
+}
+.days_con h2{
+    color: #666666;
+    font-size: 16px;
+    font-weight: normal;
+    padding: 15px 0 15px 0;
+}
+.days_con img{
+    width: 100%;
+}
+.days_con p{
+    padding: 10px 0 15px;
+    color: #666666;
+    font-size: 15px;
+    line-height: 24px;
+}
 
-
-
-
+html,body{
+    height: 100%;
+    min-height: 100%;
+}
 
 
 

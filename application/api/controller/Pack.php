@@ -1183,7 +1183,6 @@ class Pack extends Base {
             ->group('s.seller_id')
             ->select();
 
-
         //立即分配
         if($sending){
             $allot_seller_id=",";
@@ -1192,6 +1191,8 @@ class Pack extends Base {
                 foreach($data_arr as $k=>$v){
                     $allot_seller_id.=$v['seller_id'].",";
 //                    $seller_str.="订单号为".$order_info['order_sn']."司导工号为 <span style='color:red'>".$v['drv_code']."</span> 分配成功<br/>";
+                    //修改用户 拒绝状态
+                    M('pack_midstat')->where(array("air_id"=>$order_info['air_id'],"seller_id"=>$v['seller_id']))->save(array("is_refuse"=>0));
                 }
                 //获取原自动分配订单佣金比率
                 $config_str=M('config')->where(array("name"=>"name_car"))->find();
@@ -1201,9 +1202,9 @@ class Pack extends Base {
                     $carset_pre=$carset_pre['value']*$order_info['pre_num'];
                     //再分配    佣金/付款
                     $new_per=$order_info['commission_money']/$order_info['real_price'];
+                    $kai_per=$new_per-$carset_pre/100;
                     //四舍五入
-                    $kai_per=round($new_per-$carset_pre/100,2);
-                    $data['commission_money']=$order_info['real_price']*$kai_per;//佣金金额
+                    $data['commission_money']=round($order_info['real_price']*$kai_per);//佣金金额
                     $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额*/
                     //如果司导金额大于用户实付金额  则跳过
                     if($data['seller_money']>=$order_info['real_price']){
@@ -1213,10 +1214,10 @@ class Pack extends Base {
                 }else{
                     //否则  继续派送订单
                     if($order_info['is_callback']){
-                        $data['commission_money']=$order_info['commission_money'];//佣金金额
+                        $data['commission_money']=round($order_info['commission_money']);//佣金金额
                         $data['seller_money']=$order_info['seller_money'];//司导金额
                     }else{
-                        $data['commission_money']=$order_info['real_price']*$config_str['value']/100;//佣金金额
+                        $data['commission_money']=round($order_info['real_price']*$config_str['value']/100);//佣金金额
                         $data['seller_money']=$order_info['real_price']-$data['commission_money'];//司导金额
                     }
 
@@ -1226,6 +1227,7 @@ class Pack extends Base {
                 $data['allot_time']=time();//分配时间
                 $data['status']='2';//待接单
                 $data['is_callback']='0';
+                $data['midstat_status']=0;
                 M('pack_order')->where(array("air_id"=>$order_info['air_id']))->save($data);
             }
 
@@ -1256,11 +1258,20 @@ class Pack extends Base {
                 if(count($diff_num)==0){
                     //说明商家都拒绝了       执行重新分配操作
                     $save_data['status']='1';
-                    $save_data['is_callback']='1';
                     $save_data['allot_seller_id']='';
                     $save_data['allot_time']=null;
+                    $save_data['is_notice']=0;
                     $save_data['not_seller_id'].=$midstat_str;
-                    sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
+                    $clock_info=M('Working_hours')->order("id  desc")->find();
+                    //下班时间
+                    if($clock_info['type']==0){
+                        //下班时间
+                        $save_data['is_callback']='1';
+                        sendJGMsg(6,returnUserId($v['air_id'], "user_id"));
+                    }else{
+                        //上班时间   后台新增提醒
+                        $save_data['midstat_status']="1";
+                    }
                     M('pack_order')->where(array("air_id"=>$v['air_id']))->save($save_data);
                 }
             }
