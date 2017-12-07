@@ -125,7 +125,7 @@ return [
         // 模板引擎类型 支持 php think 支持扩展
         'type'         => 'Think',
         // 模板路径
-        'view_path'    => '',
+        'view_path'    => './template/app/default/',
         // 模板后缀
         'view_suffix'  => 'html',
         // 模板文件名分隔符
@@ -412,4 +412,7 @@ return [
 	'rate_list' => array(0 => 0, 3 => 3, 6 => 6, 7 => 7, 11 => 11, 13 => 13, 17 => 17),
     'buy_year'=>2015,
     'buy_version'=>0,
+
+    'APP_DEFAULT_STAR'=>5, // 系统默认星级
+    'APP_DEFAULT_USER_AVATAR'=>'http://img.shahaizi.cn/user_avatar.png', // 系统默认头像
 ];

@@ -12,6 +12,7 @@ use app\common\logic\OrderLogic;
 use app\common\logic\StoreLogic;
 use app\common\logic\UsersLogic;
 use app\common\logic\CommentLogic;
+use app\common\logic\OrderCommentLogic;
 use app\common\logic\CouponLogic;
 use think\Db;
 use think\Page;
@@ -498,9 +499,21 @@ class Pack extends Base {
     {
         $is_json = I("is_json");
         $line_data = model("common/PackApply") -> getLineDetail($this -> user_id, 1);
+        $where =[
+            'line_id'=>I("line_id"),
+            'deleted'=>0
+        ];
+        $commentLogic = new OrderCommentLogic();
+        $comment_data = $commentLogic->getListByWere($where);
+        $comments =[
+            'total'=>count($comment_data),
+            'list'=>$comment_data,
+        ];
+//        print_r($line_data['line_detail']);die;
         if(!$is_json)
         {
-            $this -> assign("line_data",$line_data);
+            $this->assign('comments',$comments);
+            $this -> assign("line",$line_data);
             return $this -> fetch();
         }
 

@@ -976,4 +976,51 @@ class UsersLogic extends Model
 
         return $visit_list;
     }
+
+    /**
+     * Author: WILL<314112362@qq.com>
+     * Describe:
+     * @param $user
+     * @param $userId
+     *
+     * avatar      头像.
+     * nickname    昵称.
+     * sex      性别 0=保密 1=男 2=女.
+     * level    等级.
+     * fansNum    粉丝数量.
+     * attentionNum    关注数量.
+     * praiseNum    被赞数量.
+     * collectNum    被收藏数量.
+     */
+    public static function getBaseInfoById($userId, $viewerId = 0, $isAnonymous = 0){
+
+        $baseFields = [
+            'user_id',
+            'head_pic',
+            'nickname',
+            'sex',
+            'level',
+            'attention_num',
+            'good_num',
+            'country',
+            'city',
+            'collection_num'
+        ];
+        $user = M('users')->field($baseFields)->find($userId);
+
+        $user = empty($user) ? [
+            'user_id' => $userId,
+            'head_pic' => config('APP_DEFAULT_USER_AVATAR'),
+            'nickname' => '',
+            'sex' => 0,
+            'level' => 0,
+            'attention_num' => 0,
+            'good_num' => 0,
+            'collection_num' => 0,
+        ] : $user;
+        if($isAnonymous){
+            $user['nickname'] = firstStr($user['nickname']);
+        }
+        return $user;
+    }
 }

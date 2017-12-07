@@ -28,41 +28,203 @@
 </head>
 <body class="shz-back">
 <div class="shz-bottom">
-    <img class="shz-rd-pic" id="shz_rd_pic" src="{$line_data.cover_img}" alt="">
-    <div class="shz-rd-top">
-        <p class="title" id="rd_title">{$line_data.line_title}</p>
-        <p class="num" id="rd_num">￥{$line_data.line_price}/天</p>
+    <img class="shz-rd-pic" id="shz_rd_pic" src="{$line.cover_img}" alt="">
+
+    <!--<div class="shz-rd-top">-->
+        <!--<p class="title" id="rd_title">{$line_data.line_title}</p>-->
+        <!--<p class="num" id="rd_num">￥{$line_data.line_price}</p>-->
+    <!--</div>-->
+<!--修改部分-->
+    <div class="synopsis">
+        <div class="le_d">
+            <h3>
+                <p class="pb_10 title-p">{$line.line_title}</p>
+                <div class="">
+                    <span class="col_ff7"><b class="price">￥{$line.line_price}</b></span>
+                </div>
+            </h3>
+        </div>
+        <div class="rig_d">
+        <span class="level">
+          <!--<img src="/application/web/view/static/image/star_{$driver.plat_start|default=4}@2x.png" alt="">-->
+        </span>
+            <span class="level">
+            <img src="/public/pack/image/heart_{$line.score|default=5}@2x.png" alt="">
+        </span>
+        </div>
     </div>
 
-    <div class="shz-rd-feature">
-        <eq name='line_data.is_admin' value='0'>
-        <p class="title">品牌：{$line_data.car_name}</p>
-        </eq>
-        <p class="title">车型：{$line_data.seat_num}人座 {$line_data.car_level}</p>
+    <!--<div class="cir_con driver_info">
+        <h1>司导信息</h1>
+        <div>
+            <img class="head_img" src="{$driver.head_pic|default='http://img.shahaizi.cn/user_avatar.png'}" alt="">
+            <p class="dri_xx">
+                <span class="dis_block drive_name"><i>姓名:</i>{$line_data.line_price}</span>
+                <span class="dis_block drive_id">工号:<i> {$line_data.line_price}</i></span>
+                <span class="dis_block drive_addre"><i></i>的科技股份古老宽度吗</span>
+            </p>
+        </div>
+    </div>-->
+
+
+    <!--<div class="shz-rd-feature">-->
+        <!--<eq name='line_data.is_admin' value='0'>-->
+        <!--<p class="title">品牌：{$line_data.car_name}</p>-->
+        <!--</eq>-->
+        <!--<p class="title">车型：{$line_data.seat_num}人座 {$line_data.car_level}</p>-->
+    <!--</div>-->
+    <div class="cir_con box2">
+        <h1>车辆信息</h1>
+        <ul>
+            <li><span class="s-head">品牌</span><span class="s-con">{$line.brand_name}</span></li>
+            <li><span class="s-head">车型</span><span class="s-con">{$line.car_type_name}</span></li>
+            <li><span class="s-head">座位</span><span class="s-con">{$line.car_level}</span></li>
+        </ul>
     </div>
+
 
     <div class="shz-rd-feature">
         <p class="title">体验亮点</p>
-        <p class="content" id="rd_content">{$line_data.line_highlights}</p>
+        <p class="content" id="rd_content">{$line.line_highlights}</p>
     </div>
-    <p class="shz-rd-title">线路详情</p>
-    <div id="shz-rd-det">
-        <foreach name="line_data.line_detail" item="lineDetail">
-            <div class="shz-rd-details">
-                <div class="title"><p class="line"></p><img src="/public/pack/image/zfx.png" alt=""><span>第{$lineDetail.date_num|number2chinese}天</span><img src="/public/pack/image/zfx.png" alt=""><p class="line"></p></div>
-                <p class="shz-rd-title" style="margin-left: -15px;">线路摘要</p>
-                <div class="route">
-                    {$lineDetail.summary}
-                </div>
-                <foreach name="lineDetail.port_detail" item="port_details">
-                    <div class="route">
-                        <p><span>第{$port_details.port_num|number2chinese}站</span><span style="margin-left:10px;">{$port_details.site_name}</span></p>
-                        <img src="{$port_details.port_coverImg}" alt="">
-                        <div>{$port_details.port_detail}</div>
-                    </div>
-                </foreach>
+    <div id="appraise" class="dr_repeat mt_10 dr_assess">
+        <h1>
+            收到的评价
+            <span>共{$comments.total}条</span>
+        </h1>
+        {volist name="comments.list" id="comment"}
+        {eq name="$comment.pid" value="0"}
+        <div class="ass_con">
+            {empty name="comment.owner.avatar"}
+            <img src="{$comment.owner.head_pic}" alt="">
+            {else /}
+            <img src="{$comment.owner.avatar}" alt="">
+            {/empty}
+
+            <div class="left_d">
+                <p>{$comment.owner.nickname|default='****'}</p>
+                <p><span>{$comment.commemt_time_fmt}</span> </p>
             </div>
-       </foreach>
+            <div class="right_d">
+                <p><img src="/application/web/view/static/image/heart_{$comment.pack_order_score|default=5}@2x.png" alt=""></p>
+                <p></p>
+            </div>
+            <p class="dr_text">
+                {$comment.content}
+            </p>
+            <!--回复内容-->
+            {volist name="comments.list" id="reply"}
+            {if $reply.pid eq $comment.order_commemt_id}
+            <div class="terrace">
+                <p class="ter_name">傻孩子回复：<span>{$reply.commemt_time_fmt}</span></p>
+                <p class="ter_con">{$reply.content}</p>
+            </div>
+            {/if}
+            {/volist}
+            <!-- end 回复内容-->
+            <div class="dr_imgbox">
+                {volist name="comment.imgs" id="img"}
+                {notempty name="img"}
+                <img src="{$img}" alt="">
+                {/notempty}
+                {/volist}
+            </div>
+        </div>
+        {/eq}
+        {/volist}
+
+        {if condition="$comments.total>2"}
+        <div class="look">
+            <a class="look_whole" href="javascript:void(0);">查看更多</a>
+        </div>
+        {/if}
+    </div>
+
+<!--线路详请改-->
+    <div class="cir_con line">
+        <h1>线路详情</h1>
+        {volist name="line.line_detail" id="day" key="k" }
+        <div class="days">
+            <p class="days_num">
+                <span class="wire"></span>
+                <i></i>
+                <span class="diji">第{$k}天</span>
+                <i></i>
+                <span class="wire"></span>
+            </p>
+            <p style="font-size: 16px">{$day.summary}</p>
+            {volist name="day.port_detail" id="port" }
+            <div class="days_con">
+                <h2>
+                    第{$port.port_num}站
+                    <span class="pl_15">{$port.site_name}</span>
+                </h2>
+                <img src="{$port.port_coverImg|default=''}" alt="">  <!--/application/web/view/static/image/2.png-->
+                <p>
+                    {$port.port_detail}
+                </p>
+            </div>
+            {/volist}
+        </div>
+        {/volist}
+    </div>
+
+
+    <!--<p class="shz-rd-title">线路详情</p>-->
+    <!--<div id="shz-rd-det">-->
+        <!--<foreach name="line_data.line_detail" item="lineDetail">-->
+            <!--<div class="shz-rd-details">-->
+                <!--<div class="title"><p class="line"></p><img src="/public/pack/image/zfx.png" alt=""><span>第{$lineDetail.date_num|number2chinese}天</span><img src="/public/pack/image/zfx.png" alt=""><p class="line"></p></div>-->
+                <!--<p class="shz-rd-title" style="margin-left: -15px;">线路摘要</p>-->
+                <!--<div class="route">-->
+                    <!--{$lineDetail.summary}-->
+                <!--</div>-->
+                <!--<foreach name="lineDetail.port_detail" item="port_details">-->
+                    <!--<div class="route">-->
+                        <!--<p><span>第{$port_details.port_num|number2chinese}站</span><span style="margin-left:10px;">{$port_details.site_name}</span></p>-->
+                        <!--<img src="{$port_details.port_coverImg}" alt="">-->
+                        <!--<div>{$port_details.port_detail}</div>-->
+                    <!--</div>-->
+                <!--</foreach>-->
+            <!--</div>-->
+       <!--</foreach>-->
+    <!--</div>-->
+
+    <div class="route_bomb mt_10 box4 mb_10">
+        <ul>
+            <li><span class="s-head">费用说明</span><span id="fy_click" class="s-con">查看 <i></i></span></li>
+            <li><span class="s-head">退订政策</span><span id="zc_click" class="s-con">{$line.costCompensationLevel} <i></i></span></li>
+        </ul>
+    </div>
+    <div class="cir_con box5">
+        <h1>温馨提示</h1>
+        <p>下单前可以先与客服联系哦</p>
+    </div>
+
+    <!--弹出框-->
+    <div class="bomb_box">
+        <div class="bomb_con">
+            <h1 class="title-h1">
+                退订政策
+                <i></i>
+            </h1>
+            <div class="bomb-div">
+                <div class="two-con-div">
+                    {$line.costCompensation}
+                </div>
+            </div>
+        </div>
+        <div class="bomb_con2">
+            <h1 class="title-h1">
+                费用说明
+                <i></i>
+            </h1>
+            <div class="bomb-div">
+                <div class="two-con-div">
+                    {$line.costStatement}
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -70,4 +232,38 @@
 </body>
 <script type="text/javascript" src="/public/pack/lib/jQuery/jquery-min.js"></script>
 <script type="text/javascript" src="/public/pack/js/route_details.js"></script>
+<script type="text/javascript">
+    // 费用说明
+    $("#zc_click").click(function(){
+        $(document).on("touchmove",function(e) {
+            if(e.target.className.indexOf("bomb_box") >= 0) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        })
+        $(".bomb_box").css("display", "block");
+        $(".bomb_con").css("display", "block");
+        $(".bomb_con2").css("display", "none");
+        var h = $(".bomb_con .bomb-div").height() + $(".bomb_con .title-h1").height();
+        $(".bomb_con").height(h);
+    })
+    $("#fy_click").click(function(){
+        $(document).on("touchmove",function(e) {
+            if(e.target.className.indexOf("bomb_box") >= 0) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        })
+        $(".bomb_box").css("display", "block");
+        $(".bomb_con").css("display", "none")
+        $(".bomb_con2").css("display", "block");
+        var h = $(".bomb_con2 .bomb-div").height() + $(".bomb_con2 .title-h1").height();
+        $(".bomb_con2").height(h);
+    })
+    $(".title-h1 i").click(function(){
+        $(".bomb_box").css("display", "none");
+    })
+</script>
 </html>

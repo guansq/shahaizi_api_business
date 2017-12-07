@@ -618,14 +618,14 @@ class WorkStation extends Model
             {//车产品ID
                 $car_product = M('pack_car_product')->where("id={$data['car_product_id']}")->find();
                 $data['cost_statement'] = $car_product['cost_statement'];
-                $data['cost_compensation'] = $map[explode('###',$car_product['cost_compensation'])[0]];
-                $data['cost_compensationLevel'] = htmlspecialchars_decode(explode('###',$car_product['cost_compensation'])[1]);
+                $data['cost_compensationLevel'] = $map[explode('###',$car_product['cost_compensation'])[0]];
+                $data['cost_compensation'] = explode('###',$car_product['cost_compensation'])[1];
             }
         }
         if(in_array($data['type'],[4,5]) ){//1是接机 2是送机 3线路订单 4单次接送 5私人订制 6按天包车游7快捷订单
             $data['cost_statement'] = $data['cost_statement'];
             $data['cost_compensationLevel'] = $map[explode('###',$data['cost_compensation'])[0]];
-            $data['cost_compensation'] = htmlspecialchars_decode(explode('###',$data['cost_compensation'])[1]);
+            $data['cost_compensation'] = explode('###',$data['cost_compensation'])[1];
         }
         //echo $data['cost_compensation'];die;
         if($data['type'] == 3){//线路单独进行取出退订政策和费用说明
@@ -634,7 +634,7 @@ class WorkStation extends Model
                 $data['cost_statement'] = $car_line['cost_statement'];
                 $cost_compensation = explode('###',$car_line['cost_compensation']);
                 $data['cost_compensationLevel'] = $map[$cost_compensation[0]];
-                $data['cost_compensation'] = htmlspecialchars_decode($cost_compensation[1]);
+                $data['cost_compensation'] = $cost_compensation[1];
             }
         }
 

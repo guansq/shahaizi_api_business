@@ -799,3 +799,12 @@ function urlsafe_b64encode($string)
     $data = str_replace(array('+','/','='),array('-','_',''),$data);
     return $data;
 }
+
+function firstStr($user_name){
+    $strlen = mb_strlen($user_name, 'utf-8');
+    $firstStr = mb_substr($user_name, 0, 1, 'utf-8');
+    //$lastStr = mb_substr($user_name, -1, 1, 'utf-8');
+    //$ret = $strlen == 2 ? $firstStr.str_repeat('*', mb_strlen($user_name, 'utf-8') - 1) : $firstStr.str_repeat("*", $strlen - 2).$lastStr;
+    $ret = "$firstStr******";
+    return $ret;
+}
