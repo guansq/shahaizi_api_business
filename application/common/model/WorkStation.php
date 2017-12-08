@@ -27,11 +27,12 @@ class WorkStation extends Model
     }
     public function getMyWorkStation ($seller_id)
     {
-        $where[]= "s.seller_id = 0 AND s.is_pay = 1 AND s.allot_seller_id AND p.is_refuse=0 like '%,".$seller_id.",%'";
+        $where[]= "s.seller_id = 0 AND s.is_pay = 1 AND s.allot_seller_id like '%,".$seller_id.",%'";
         $pagesize = I("pagesize");
 
-        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id AND p.seller_id = $seller_id","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc") -> paginate($pagesize ? $pagesize : 4);
+        $data = $this -> alias("s")-> join("__PACK_MIDSTAT__ p"," s.air_id = p.air_id AND p.seller_id = $seller_id AND p.is_refuse=0","left") -> field("s.*,p.is_read,p.is_refuse") -> where(implode(" AND ",$where)) ->order("p.is_read asc")-> paginate($pagesize ? $pagesize : 4);
 
+        //echo $data;die;
 //        echo $this -> getLastSql();die;
 //        $read = $this -> is_read ($seller_id);
 //            print_r($data);die;
